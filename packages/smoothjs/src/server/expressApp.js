@@ -1,0 +1,82 @@
+import path from 'path'
+import express from 'express'
+import errorHandler from 'errorhandler'
+import cors from 'cors'
+import { ApolloServer } from 'apollo-server-express'
+import { getContext } from './apollo'
+import ssr from './middlewares/ssr'
+
+export function createExpressApp({
+  config,
+  schema,
+  fragmentTypes,
+  webpackMiddleware,
+}) {
+  const app = express()
+
+  app.use(cors())
+
+  app.get('/favicon.ico', (req, res) => {
+    res.send(null)
+  })
+
+  app.use(
+    express.static(path.join(config.cachePath, 'static'), {
+      immutable: true,
+      maxage: 31536000000,
+    }),
+    express.static(config.staticPath, {
+      immutable: true,
+      maxage: 31536000000,
+    }),
+  )
+
+  if (webpackMiddleware) {
+    // const webpackMiddleware = webpack({ config, webpackCompiler })
+    // await webpackMiddleware.ready()
+    app.use(webpackMiddleware)
+  }
+
+  const apolloServer = new ApolloServer({ schema })
+
+  apolloServer.applyMiddleware({
+    app,
+    context: ({ req }) => getContext({ req, config }),
+  })
+
+  app.use(ssr({ config, schema, fragmentTypes }))
+
+  if (config.env === 'development') {
+    app.use((error, req, res, next) => {
+      const graphQLErrors =
+        (error.networkError ? error.networkError.errors : null) ||
+        error.graphQLErrors
+
+      if (graphQLErrors) {
+        const lines = ['Error: GraphQL & Apollo']
+        graphQLErrors.forEach((graphQLError, index) => {
+          lines.push(
+            `--- GraphQL Error #${index}: ${
+              graphQLError.path ? graphQLError.path.join(' > ') : 'validation'
+            }`,
+          )
+          lines.push(graphQLError.stack)
+          lines.push('   \n   \n')
+        })
+        lines.push('--- Original Error')
+        lines.push(error.stack)
+        error.stack = lines.join('\n')
+      }
+
+      // eslint-disable-next-line no-console
+      console.error(error.stack)
+      next(error)
+    })
+    app.use((error, req, res, next) => {
+      ssr({ config, schema, fragmentTypes, error })(req, res, next)
+    })
+    app.use(errorHandler({ log: false }))
+  }
+
+  return app
+}
