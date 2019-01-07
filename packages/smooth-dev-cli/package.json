@@ -1,0 +1,43 @@
+{
+  "name": "smooth-dev-cli",
+  "description": "CLI helpers for contributors working on Smooth.js",
+  "version": "0.1.0",
+  "repository": "https://github.com/smooth-code/smooth.js/tree/master/packages/smooth-dev",
+  "author": "Greg Bergé <berge.greg@gmail.com>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "cms",
+    "smooth",
+    "next",
+    "gatsby",
+    "wordpress",
+    "contentful"
+  ],
+  "engines": {
+    "node": ">=8"
+  },
+  "license": "MIT",
+  "scripts": {
+    "prebuild": "shx rm -rf lib",
+    "build": "babel --config-file ../../babel.config.js -d lib --ignore \"**/*.test.js\" src",
+    "prepublishOnly": "yarn run build"
+  },
+  "bin": {
+    "smooth-dev": "./lib/index.js"
+  },
+  "peerDependencies": {
+    "react": ">=16.3.0",
+    "react-dom": ">=16.3.0"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.0.0",
+    "chokidar": "^1.7.0",
+    "configstore": "^3.1.0",
+    "fs-extra": "^4.0.1",
+    "is-absolute": "^0.2.6",
+    "lodash": "^4.17.10",
+    "yargs": "^8.0.2"
+  }
+}
