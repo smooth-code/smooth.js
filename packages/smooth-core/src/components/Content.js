@@ -70,7 +70,7 @@ function getQuery({ type, fragment }) {
   `
 }
 
-export default function Content({
+export function Content({
   component: Component,
   slug,
   lang = null,

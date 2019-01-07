@@ -3,6 +3,7 @@ import path from 'path'
 import { promisify } from 'util'
 import cwd from 'cwd'
 import merge from 'merge-deep'
+import babelRequire from '../babel/require'
 import { getWebpackConfig } from './webpack'
 import { parsePlugins } from './plugins'
 
@@ -19,9 +20,7 @@ export async function getConfig() {
   }
 
   // eslint-disable-next-line global-require, import/no-dynamic-require
-  require('@babel/register')()
-  const getLocalConfig = require(absConfigPath)
-  require('@babel/register').revert()
+  const getLocalConfig = babelRequire(absConfigPath)
 
   const defaultConfig = {
     env: process.env.NODE_ENV || 'development',

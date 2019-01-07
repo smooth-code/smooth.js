@@ -7,6 +7,7 @@ import { definitions as baseDefinitions } from '../definitions'
 import { addBlockTypeDefinitions } from './blockType'
 import { addModelTypeDefinitions } from './modelType'
 import { applyAsyncHook } from '../../plugin'
+import babelRequire from '../../babel/require'
 
 function sanitizeDefinition(options) {
   return {
@@ -28,16 +29,14 @@ function mergeSchemaDefinitions(definitions) {
 
 export async function getDefinitionModules({ config }) {
   const files = await glob('**/*.js', { cwd: config.schemasPath })
-  require('@babel/register')()
   const defs = files.map(relativePath => {
     const absolutePath = path.join(config.schemasPath, relativePath)
     if (!config.cache) {
       delete require.cache[absolutePath]
     }
     // eslint-disable-next-line global-require, import/no-dynamic-require
-    return require(absolutePath)
+    return babelRequire(absolutePath)
   })
-  require('@babel/register').revert()
 
   return defs
 }

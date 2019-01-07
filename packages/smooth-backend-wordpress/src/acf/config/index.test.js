@@ -17,7 +17,7 @@ describe('#generateConfig', () => {
     `
 
     const ast = parse(typeDef)
-    const [, fieldGroup] = generateConfig(ast, helpers)
+    const [fieldGroup] = generateConfig(ast, helpers)
     expect(fieldGroup.key).toBe('sc_field_group_Book')
     expect(fieldGroup.title).toBe('Book')
     expect(fieldGroup.fields).toHaveLength(1)
@@ -108,7 +108,7 @@ describe('#generateConfig', () => {
         }
       `
       const ast = parse(typeDef)
-      const [, fieldGroup] = generateConfig(ast, helpers)
+      const [fieldGroup] = generateConfig(ast, helpers)
       const [field] = fieldGroup.fields
       expect(field).toEqual({
         name: 'field',
@@ -120,137 +120,4 @@ describe('#generateConfig', () => {
       })
     })
   })
-
-  // it('should convert types into config', () => {
-  //   const typeDef = gql`
-  //     type Header @block {
-  //       name: String! @field
-  //     }
-
-  //     type Footer @block {
-  //       name: String! @field
-  //     }
-
-  //     type Book @model {
-  //       name: String! @field
-  //     }
-  //   `
-
-  //   const ast = parse(typeDef)
-  //   expect(generateConfig(ast, helpers)).toMatchSnapshot()
-  // })
-
-  // describe('simple', () => {
-  //   it('should handle sub type', () => {
-  //     const typeDef = gql`
-  //       type MenuItem {
-  //         title: String @field
-  //         text: String @field
-  //       }
-
-  //       type Menu @model {
-  //         item: MenuItem @field
-  //       }
-  //     `
-  //     const ast = parse(typeDef)
-  //     expect(generateConfig(ast, helpers)[1]).toMatchSnapshot()
-  //   })
-
-  //   it('should handle sub model', () => {
-  //     const typeDef = gql`
-  //       type MenuItem @model {
-  //         title: String @field
-  //         text: String @field
-  //       }
-
-  //       type Menu @model {
-  //         item: MenuItem @field
-  //       }
-  //     `
-  //     const ast = parse(typeDef)
-  //     expect(generateConfig(ast, helpers)[2]).toMatchSnapshot()
-  //   })
-
-  //   it('should handle enum', () => {
-  //     const typeDef = gql`
-  //       enum MenuVariant {
-  //         blue
-  //         yellow
-  //       }
-
-  //       type Menu @model {
-  //         variant: MenuVariant @field
-  //       }
-  //     `
-  //     const ast = parse(typeDef)
-  //     expect(generateConfig(ast, helpers)[1]).toMatchSnapshot()
-  //   })
-  // })
-
-  // describe('array', () => {
-  //   it('should handle sub type', () => {
-  //     const typeDef = gql`
-  //       type MenuItem {
-  //         title: String @field
-  //         text: String @field
-  //       }
-
-  //       type Menu @model {
-  //         item: [MenuItem] @field
-  //       }
-  //     `
-  //     const ast = parse(typeDef)
-  //     expect(generateConfig(ast, helpers)[1]).toMatchSnapshot()
-  //   })
-
-  //   it('should handle sub model', () => {
-  //     const typeDef = gql`
-  //       type MenuItem @model {
-  //         title: String
-  //         text: String
-  //       }
-
-  //       type Menu @model {
-  //         item: [MenuItem] @field
-  //       }
-  //     `
-  //     const ast = parse(typeDef)
-  //     expect(generateConfig(ast, helpers)[2]).toMatchSnapshot()
-  //   })
-
-  //   it('should handle enum', () => {
-  //     const typeDef = gql`
-  //       enum MenuVariant {
-  //         blue
-  //         yellow
-  //       }
-
-  //       type Menu @model {
-  //         variant: [MenuVariant] @field
-  //       }
-  //     `
-  //     const ast = parse(typeDef)
-  //     expect(generateConfig(ast, helpers)[1]).toMatchSnapshot()
-  //   })
-  // })
-
-  // it('should complex types', () => {
-  //   const typeDef = gql`
-  //     enum MenuItemAppearance {
-  //       link
-  //       button
-  //     }
-
-  //     type MenuItem {
-  //       link: Link! @field
-  //       appearance: MenuItemAppearance! @field
-  //     }
-
-  //     type Menu @model {
-  //       items: [MenuItem!]! @field
-  //     }
-  //   `
-  //   const ast = parse(typeDef)
-  //   expect(generateConfig(ast, helpers)).toMatchSnapshot()
-  // })
 })

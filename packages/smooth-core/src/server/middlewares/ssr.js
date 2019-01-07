@@ -37,8 +37,6 @@ export default function ssrMiddleware({
       ErrorContext,
     } = nodeExtractor.requireEntrypoint()
 
-    console.log(AppContainer, DocumentContainer, ErrorContext)
-
     const webExtractor = new ChunkExtractor({ statsFile: webStats })
     const routerContext = {}
     const apolloClient = createApolloClient({

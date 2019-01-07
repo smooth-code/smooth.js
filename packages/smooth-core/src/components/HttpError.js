@@ -7,7 +7,7 @@ function getMessage(statusCode) {
   }
 }
 
-export default class HTTPError extends Error {
+export class HTTPError extends Error {
   constructor({ statusCode }) {
     super(getMessage(statusCode))
     this.statusCode = statusCode

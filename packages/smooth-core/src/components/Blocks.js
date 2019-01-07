@@ -60,7 +60,7 @@ export const blocksFragment = gql`
   ${blocks.map(({ getFragmentString }) => getFragmentString()).join('\n')}
 `
 
-export default function Blocks({ blocks: blocksProp }) {
+export function Blocks({ blocks: blocksProp }) {
   return blocksProp.map(({ type, ...props }, index) => {
     const block = blocksByName[type]
     if (!block) {

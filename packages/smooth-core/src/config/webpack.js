@@ -65,6 +65,7 @@ function getTargetConfig(target, { config }) {
       },
       resolve: {
         alias: {
+          'smooth-core': path.join(__dirname, '..'),
           __smooth_fragmentTypes: path.join(
             config.cachePath,
             'fragmentTypes.json',
@@ -74,7 +75,10 @@ function getTargetConfig(target, { config }) {
           __smooth_error: getScriptPath(config, '_error.js'),
         },
       },
-      externals: target === 'node' ? [nodeExternals()] : undefined,
+      externals:
+        target === 'node'
+          ? [nodeExternals({ whitelist: [/smooth-core/] })]
+          : undefined,
       output: {
         path: path.join(config.cachePath, target, 'static'),
         filename: prod ? '[name]-bundle-[chunkhash:8].js' : '[name].js',

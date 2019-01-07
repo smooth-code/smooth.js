@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 
-const Configstore = require(`configstore`)
-const pkg = require(`../package.json`)
-const _ = require(`lodash`)
-const path = require(`path`)
-const os = require(`os`)
-const watch = require(`./watch`)
+import Configstore from 'configstore'
+import _ from 'lodash'
+import os from 'os'
+import path from 'path'
+import yargs from 'yargs'
+import watch from './watch'
+import pkg from '../package.json'
 
-const argv = require(`yargs`)
+const { argv } = yargs
   .usage(`Usage: smooth-dev [options]`)
   .alias(`q`, `quiet`)
   .nargs(`q`, 0)
@@ -31,7 +32,7 @@ You typically only need to configure this once.`,
   .array(`packages`)
   .describe(`packages`, `Explicitly specify packages to copy`)
   .help(`h`)
-  .alias(`h`, `help`).argv
+  .alias(`h`, `help`)
 
 const conf = new Configstore(pkg.name)
 
@@ -39,6 +40,7 @@ const fs = require(`fs-extra`)
 const havePackageJsonFile = fs.existsSync(`package.json`)
 
 if (!havePackageJsonFile) {
+  // eslint-disable-next-line no-console
   console.error(`Current folder must have a package.json file!`)
   process.exit()
 }
@@ -56,6 +58,7 @@ if (pathToRepo) {
 const smoothLocation = conf.get(`smooth-location`)
 
 if (!smoothLocation) {
+  // eslint-disable-next-line no-console
   console.error(
     `
 You haven't set the path yet to your cloned
@@ -86,6 +89,7 @@ if (argv.copyAll) {
 }
 
 if (!argv.packages && _.isEmpty(packages)) {
+  // eslint-disable-next-line no-console
   console.error(
     `
 You haven't got any Smooth dependencies into your current package.json

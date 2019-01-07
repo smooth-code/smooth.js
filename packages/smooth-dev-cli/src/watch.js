@@ -1,11 +1,12 @@
-const chokidar = require(`chokidar`)
-const _ = require(`lodash`)
-const fs = require(`fs-extra`)
-const path = require(`path`)
+import chokidar from 'chokidar'
+import _ from 'lodash'
+import fs from 'fs-extra'
+import path from 'path'
 
 let numCopied = 0
 
 const quit = () => {
+  // eslint-disable-next-line no-console
   console.log(`Copied ${numCopied} files`)
   process.exit()
 }
@@ -14,12 +15,14 @@ const copyPath = (oldPath, newPath, quiet) =>
   new Promise((resolve, reject) => {
     fs.copy(oldPath, newPath, err => {
       if (err) {
+        // eslint-disable-next-line no-console
         console.error(err)
         return reject(err)
       }
 
       numCopied += 1
       if (!quiet) {
+        // eslint-disable-next-line no-console
         console.log(`Copied ${oldPath} to ${newPath}`)
       }
       return resolve()
@@ -66,7 +69,7 @@ function watch(root, packages, { scanOnce, quiet }) {
           path.relative(prefix, filePath),
         )
 
-        let localCopies = [copyPath(filePath, newPath, quiet)]
+        const localCopies = [copyPath(filePath, newPath, quiet)]
 
         allCopies = allCopies.concat(localCopies)
       }

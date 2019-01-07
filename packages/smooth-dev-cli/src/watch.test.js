@@ -1,18 +1,16 @@
-jest.mock(`chokidar`, () => {
-  return {
-    watch: jest.fn(),
-  }
-})
-jest.mock(`fs-extra`, () => {
-  return {
-    copy: jest.fn(),
-    existsSync: jest.fn(),
-  }
-})
-const chokidar = require(`chokidar`)
-const fs = require(`fs-extra`)
-const path = require(`path`)
-const watch = require(`./watch`)
+import chokidar from 'chokidar'
+import path from 'path'
+import fs from 'fs-extra'
+import watch from './watch'
+
+jest.mock(`chokidar`, () => ({
+  watch: jest.fn(),
+}))
+
+jest.mock(`fs-extra`, () => ({
+  copy: jest.fn(),
+  existsSync: jest.fn(),
+}))
 
 let on
 beforeEach(() => {
@@ -22,7 +20,7 @@ beforeEach(() => {
     const mock = {
       on: jest.fn().mockImplementation(() => mock),
     }
-    on = mock.on
+    ;({ on } = mock)
     return mock
   })
 })
@@ -68,29 +66,12 @@ describe(`watching`, () => {
       expect(fs.copy).toHaveBeenCalledWith(
         filePath,
         path.join(`node_modules`, `smooth`, `dist`, `index.js`),
-        expect.any(Function)
-      )
-    })
-
-    it(`copies cache-dir files`, () => {
-      watch(...args)
-
-      const filePath = path.join(
-        process.cwd(),
-        `packages/smooth/cache-dir/register-service-worker.js`
-      )
-      callEventCallback(`add`, filePath)
-
-      expect(fs.copy).toHaveBeenCalledTimes(2)
-      expect(fs.copy).toHaveBeenLastCalledWith(
-        filePath,
-        path.join(`.cache`, `register-service-worker.js`),
-        expect.any(Function)
+        expect.any(Function),
       )
     })
 
     it(`filters non-existant files/directories`, () => {
-      fs.existsSync.mockReset().mockImplementation(file => false)
+      fs.existsSync.mockReset().mockImplementation(() => false)
 
       watch(...args)
 
@@ -102,7 +83,7 @@ describe(`watching`, () => {
 
       expect(chokidar.watch).toHaveBeenCalledWith(
         [expect.stringContaining(`smooth`)],
-        expect.any(Object)
+        expect.any(Object),
       )
     })
   })

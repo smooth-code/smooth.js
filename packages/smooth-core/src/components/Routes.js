@@ -1,10 +1,10 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-import Content, { getContents } from './Content'
+import { Content, getContents } from './Content'
 
 const contents = getContents()
 
-export default function Routes() {
+export function Routes() {
   return (
     <Switch>
       {contents.map(content => (
