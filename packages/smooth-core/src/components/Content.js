@@ -3,7 +3,7 @@ import camelcase from 'camelcase'
 import gql from 'graphql-tag'
 import qs from 'query-string'
 import { Query } from 'react-apollo'
-import HttpError from './HttpError'
+import { HTTPError } from './HttpError'
 
 export function getContents() {
   const req = require.context(process.env.SMOOTH_CONTENTS_PATH, true, /\.js$/)
@@ -97,7 +97,7 @@ export function Content({
         }
 
         if (!data.content) {
-          throw new HttpError({ statusCode: 404 })
+          throw new HTTPError({ statusCode: 404 })
         }
 
         return <Component {...data.content} metadata={metadata} />

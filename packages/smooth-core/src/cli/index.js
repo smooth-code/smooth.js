@@ -3,8 +3,7 @@ import logUpdate from 'log-update'
 import createLogger from 'progress-estimator'
 import { getConfig } from '../config'
 import { start } from '../server'
-// import { Watcher, watchFs } from './watcher'
-import { watchSchema, watchWebpack } from '../build'
+import { watchSchema, buildSchema, watchWebpack } from '../build'
 
 let stdout = `Smooth CMS 👨‍🚀
 
@@ -81,12 +80,13 @@ async function devCommand() {
   watch({ config })
 }
 
-// async function buildCommand() {
-//   clearConsole()
-//   const config = await getConfig()
-//   await build({ config })
-//   await buildWebpack({ config })
-// }
+async function buildCommand() {
+  clearConsole()
+  const config = await getConfig()
+  await buildSchema({ config })
+  // eslint-disable-next-line no-console
+  console.log('Built!')
+}
 
 function startCommand(command) {
   command().catch(error => {
@@ -96,6 +96,6 @@ function startCommand(command) {
 }
 
 program.command('dev').action(() => startCommand(devCommand))
-// program.command('build').action(() => buildCommand(devCommand))
+program.command('build').action(() => buildCommand(devCommand))
 
 program.parse(process.argv)

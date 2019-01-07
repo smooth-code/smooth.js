@@ -1,0 +1,49 @@
+{
+  "errors": [],
+  "warnings": [],
+  "version": "4.28.3",
+  "hash": "782c1feecbc772ec895d",
+  "publicPath": "/static/node/",
+  "outputPath": "/Users/neoziro/Projects/smooth.js/examples/wordpress/.smooth/node/static",
+  "assetsByChunkName": {
+    "main": "main.js"
+  },
+  "assets": [
+    {
+      "name": "main.js",
+      "size": 37547,
+      "chunks": [
+        "main"
+      ],
+      "chunkNames": [
+        "main"
+      ]
+    }
+  ],
+  "filteredAssets": 0,
+  "entrypoints": {
+    "main": {
+      "chunks": [
+        "main"
+      ],
+      "assets": [
+        "main.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    }
+  },
+  "namedChunkGroups": {
+    "main": {
+      "chunks": [
+        "main"
+      ],
+      "assets": [
+        "main.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    }
+  },
+  "children": []
+}

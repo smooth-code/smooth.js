@@ -8,7 +8,7 @@ import { createCache } from './cache'
 import { Watcher, watchFs } from './watcher'
 import webpackMiddleware from './webpackMiddleware'
 
-async function buildSchema({ config }) {
+export async function buildSchema({ config }) {
   const cache = createCache({ config })
   const schemaDefinition = await createSchemaDefinition({ config })
   await applyAsyncHook(config, 'onBuild', { schemaDefinition })

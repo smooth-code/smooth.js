@@ -10,7 +10,7 @@ import { parsePlugins } from './plugins'
 const exists = promisify(fs.exists)
 
 export async function getConfig() {
-  const configPath = 'scms.config.js'
+  const configPath = 'smooth.config.js'
   const localCwd = cwd()
   const absConfigPath = path.resolve(localCwd, configPath)
   const configExists = await exists(absConfigPath)

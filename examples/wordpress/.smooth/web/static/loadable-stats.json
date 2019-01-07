@@ -1,0 +1,70 @@
+{
+  "errors": [],
+  "warnings": [],
+  "version": "4.28.3",
+  "hash": "a18a0cd1ea851b8855fe",
+  "publicPath": "/static/web/",
+  "outputPath": "/Users/neoziro/Projects/smooth.js/examples/wordpress/.smooth/web/static",
+  "assetsByChunkName": {
+    "main": [
+      "main.js",
+      "main.0b77a39ce7e4dcfaef20.hot-update.js"
+    ]
+  },
+  "assets": [
+    {
+      "name": "0b77a39ce7e4dcfaef20.hot-update.json",
+      "size": 46,
+      "chunks": [],
+      "chunkNames": []
+    },
+    {
+      "name": "main.0b77a39ce7e4dcfaef20.hot-update.js",
+      "size": 3130,
+      "chunks": [
+        "main"
+      ],
+      "chunkNames": [
+        "main"
+      ]
+    },
+    {
+      "name": "main.js",
+      "size": 2477329,
+      "chunks": [
+        "main"
+      ],
+      "chunkNames": [
+        "main"
+      ]
+    }
+  ],
+  "filteredAssets": 0,
+  "entrypoints": {
+    "main": {
+      "chunks": [
+        "main"
+      ],
+      "assets": [
+        "main.js",
+        "main.0b77a39ce7e4dcfaef20.hot-update.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    }
+  },
+  "namedChunkGroups": {
+    "main": {
+      "chunks": [
+        "main"
+      ],
+      "assets": [
+        "main.js",
+        "main.0b77a39ce7e4dcfaef20.hot-update.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    }
+  },
+  "children": []
+}
