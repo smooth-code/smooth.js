@@ -2,7 +2,7 @@
   "errors": [],
   "warnings": [],
   "version": "4.28.3",
-  "hash": "782c1feecbc772ec895d",
+  "hash": "a02573b64a8b0051a069",
   "publicPath": "/static/node/",
   "outputPath": "/Users/neoziro/Projects/smooth.js/examples/wordpress/.smooth/node/static",
   "assetsByChunkName": {
@@ -11,7 +11,7 @@
   "assets": [
     {
       "name": "main.js",
-      "size": 37547,
+      "size": 37268,
       "chunks": [
         "main"
       ],

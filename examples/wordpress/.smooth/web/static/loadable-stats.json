@@ -2,24 +2,24 @@
   "errors": [],
   "warnings": [],
   "version": "4.28.3",
-  "hash": "a18a0cd1ea851b8855fe",
+  "hash": "3b27d4ccbf9b5cc8aa46",
   "publicPath": "/static/web/",
   "outputPath": "/Users/neoziro/Projects/smooth.js/examples/wordpress/.smooth/web/static",
   "assetsByChunkName": {
     "main": [
       "main.js",
-      "main.0b77a39ce7e4dcfaef20.hot-update.js"
+      "main.25cdb051b9fdf72caf54.hot-update.js"
     ]
   },
   "assets": [
     {
-      "name": "0b77a39ce7e4dcfaef20.hot-update.json",
+      "name": "25cdb051b9fdf72caf54.hot-update.json",
       "size": 46,
       "chunks": [],
       "chunkNames": []
     },
     {
-      "name": "main.0b77a39ce7e4dcfaef20.hot-update.js",
+      "name": "main.25cdb051b9fdf72caf54.hot-update.js",
       "size": 3130,
       "chunks": [
         "main"
@@ -30,7 +30,7 @@
     },
     {
       "name": "main.js",
-      "size": 2477329,
+      "size": 2477050,
       "chunks": [
         "main"
       ],
@@ -47,7 +47,7 @@
       ],
       "assets": [
         "main.js",
-        "main.0b77a39ce7e4dcfaef20.hot-update.js"
+        "main.25cdb051b9fdf72caf54.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -60,7 +60,7 @@
       ],
       "assets": [
         "main.js",
-        "main.0b77a39ce7e4dcfaef20.hot-update.js"
+        "main.25cdb051b9fdf72caf54.hot-update.js"
       ],
       "children": {},
       "childAssets": {}

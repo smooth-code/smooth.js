@@ -86,8 +86,6 @@ export function Content({
     variables.preview = true
   }
 
-  const metadata = { lang }
-
   return (
     <Query query={getQuery({ type, fragment })} variables={variables}>
       {({ loading, error, data }) => {
@@ -100,7 +98,7 @@ export function Content({
           throw new HTTPError({ statusCode: 404 })
         }
 
-        return <Component {...data.content} metadata={metadata} />
+        return <Component {...data.content} />
       }}
     </Query>
   )

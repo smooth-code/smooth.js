@@ -21,13 +21,13 @@ export function createClient(baseUrl) {
           `${baseUrl}/wp-json/presspack/v1/content/`,
           { params },
         )
-        return data ? [data.acf] : []
+        return data ? [data] : []
       }
 
       const { data } = await axios.get(`${baseUrl}/wp-json/acf/v3/${type}`, {
         params,
       })
-      return data.map(entry => entry.acf)
+      return data
     },
     async getContent(options) {
       const results = await this.getContents(options)

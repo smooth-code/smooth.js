@@ -1,30 +1,36 @@
 const handlers = {
-  relation({ name, list }) {
-    if (list) {
-      return object => object[name].map(x => x.acf)
-    }
-    return object => object[name].acf
-  },
   shortText({ name, list }) {
     if (!list) return null
-    return object => object[name].split('\n')
+    return object => object.acf[name].split('\n')
   },
   longText({ name, list }) {
     if (!list) return null
-    return object => object[name].split('\n')
+    return object => object.acf[name].split('\n')
   },
 }
 
 function getFieldResolver(node, helpers, state) {
   const { types: t } = helpers
+  const name = t.getName(node)
+  if (name === 'metadata') {
+    return {
+      [name]: object => ({
+        id: object.id || object.ID,
+        slug: object.slug || object.post_name,
+      }),
+    }
+  }
   const infos = t.getFieldInfos(node, state.ast)
   if (!infos) return null
+  const defaultResolver = {
+    [name]: object => object.acf[name],
+  }
   const handler = handlers[infos.type.name]
-  if (!handler) return null
+  if (!handler) return defaultResolver
   const fn = handler(infos, helpers, state)
-  if (!fn) return null
+  if (!fn) return defaultResolver
   return {
-    [infos.name]: fn,
+    [name]: fn,
   }
 }
 
@@ -43,7 +49,7 @@ function getQueryFieldResolver(node, helpers, state) {
   const name = t.getName(node)
   const type = t.getName(node.type)
   return {
-    [name](object, { slug, lang, id, preview }) {
+    async [name](object, { slug, lang, id, preview }) {
       if (preview) {
         return state.apiClient.getContentPreview({
           type,

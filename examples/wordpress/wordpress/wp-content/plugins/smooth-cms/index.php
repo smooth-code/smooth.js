@@ -119,7 +119,7 @@ function get_content($data)
 		if (!$post) {
 			return null;
 		}
-		$controller = new ACF_To_REST_API_Posts_Controller($post->post_type);
+		$controller = new WP_REST_Posts_Controller($post->post_type);
     $request    = new WP_REST_Request('GET', "/acf/v3/{$post->post_type}/{$post->ID}");
 		$request->set_url_params(array('id' => $post->ID));
 		$data = $controller->get_item($request)->data;

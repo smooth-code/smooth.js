@@ -10,18 +10,32 @@ function getQueries(modelDefinitions) {
   })
 }
 
+const {
+  definitions: [
+    {
+      fields: [metadataField],
+    },
+  ],
+} = gql`
+  type Foo {
+    metadata: Metadata!
+  }
+`
+
 export function addModelTypeDefinitions(schemaDefinition) {
   const { typeDefs } = schemaDefinition
   const modelDefinitions = typeDefs.definitions.filter(
-    typeDefinition =>
-      t.isObjectTypeDefinition(typeDefinition) &&
-      t.hasDirective(typeDefinition, directive =>
+    type =>
+      t.isObjectTypeDefinition(type) &&
+      t.hasDirective(type, directive =>
         t.isName(directive.name, { value: 'model' }),
       ),
   )
 
+  modelDefinitions.forEach(type => type.fields.push(metadataField))
+
   const {
-    definitions: [modelDefinition],
+    definitions: [queryDefinition],
   } = gql`
     type Query {
       ping: Boolean
@@ -29,7 +43,7 @@ export function addModelTypeDefinitions(schemaDefinition) {
     }
   `
 
-  typeDefs.definitions.push(modelDefinition)
+  typeDefs.definitions.push(queryDefinition)
 
   return schemaDefinition
 }

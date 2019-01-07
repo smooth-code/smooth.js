@@ -81,7 +81,6 @@ async function devCommand() {
 }
 
 async function buildCommand() {
-  clearConsole()
   const config = await getConfig()
   await buildSchema({ config })
   // eslint-disable-next-line no-console
