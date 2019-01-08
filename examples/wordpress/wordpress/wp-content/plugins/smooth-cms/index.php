@@ -64,18 +64,13 @@ add_filter('preview_post_link', function ($link) {
 
 // Recursively add ACF into post objects
 
-add_filter( 'acf/rest_api/recursive/types', function( $types ) {
-	return $types;
+add_filter('acf/rest_api/page/get_fields', function($data) {
+	if (!empty($data)) {
+		array_walk_recursive( $data, 'get_fields_recursive' );
+	}
+
+	return $data;
 });
-
-// add_filter( 'acf/rest_api/page/get_fields', function( $data ) {
-// 	print_r($data);
-// 	if ( ! empty( $data ) ) {
-// 		array_walk_recursive( $data, 'get_fields_recursive' );
-// 	}
-
-// 	return $data;
-// } );
 
 function get_fields_recursive( $item ) {
 	if ( is_object( $item ) ) {
@@ -84,9 +79,9 @@ function get_fields_recursive( $item ) {
 			$item->acf = $fields;					
 			array_walk_recursive( $item->acf, 'get_fields_recursive' );
 		}
-	} else if (is_array($item)) {
-		array_walk_recursive( $item['acf'], 'get_fields_recursive' );
 	}
+
+	return $item;
 }
 
 // Get page by path
@@ -96,6 +91,11 @@ add_action('rest_api_init', function () {
 	register_rest_route( $namespace, '/content', array(
 		'methods'  => 'GET',
 		'callback' => 'get_content',
+	));
+
+	register_rest_route( $namespace, '/contents', array(
+		'methods'  => 'GET',
+		'callback' => 'get_contents',
 	));
 });
 
@@ -108,23 +108,37 @@ add_action('rest_api_init', function () {
  */
 function get_content($data)
 {
+	$params = $data->get_params();
+	$postType = $data['type'];
+	$slug = $data['slug'];
+	$lang = $data['lang'];
+	$post = get_page_by_path($slug, OBJECT, $postType);
+	if ($lang) {
+		$post = get_page(icl_object_id($post->ID, $postType, true, $lang));
+	}
+	if (!$post) {
+		return null;
+	}
+	$controller = new WP_REST_Posts_Controller($post->post_type);
+	$request = new WP_REST_Request('GET');
+	$request->set_url_params(array('id' => $post->ID));
+	return $controller->get_item($request);
+}
+
+
+/**
+ * This fixes the wordpress rest-api so we can just lookup pages by their full
+ * path (not just their name). This allows us to use React Router.
+ *
+ * @return WP_Error|WP_REST_Response
+ */
+function get_contents($data)
+{
 		$params = $data->get_params();
-		$postType = $data['type'];
-		$slug = $data['slug'];
-		$lang = $data['lang'];
-		$post = get_page_by_path($slug, OBJECT, $postType);
-		if ($lang) {
-			$post = get_page(icl_object_id($post->ID, $postType, true, $lang));
-		}
-		if (!$post) {
-			return null;
-		}
-		$controller = new WP_REST_Posts_Controller($post->post_type);
-    $request    = new WP_REST_Request('GET', "/acf/v3/{$post->post_type}/{$post->ID}");
-		$request->set_url_params(array('id' => $post->ID));
-		$data = $controller->get_item($request)->data;
-		get_fields_recursive($data);
-		return $data;
+		$controller = new WP_REST_Posts_Controller($params['type']);
+		$request = new WP_REST_Request('GET');
+		$response = $controller->get_items($request);
+		return $response;
 }
 
 add_action('rest_api_init', function () {
