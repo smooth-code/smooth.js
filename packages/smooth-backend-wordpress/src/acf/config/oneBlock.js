@@ -7,9 +7,18 @@ export default function oneBlock(node, helpers, state) {
 
   const name = g.getName(node)
   const id = `blocks_${name}`
-  return a.layout(
-    id,
-    name,
-    allFields(node, helpers, { ...state, parentId: id }),
-  )
+  const description = node.description ? node.description.value : null
+  const fields = allFields(node, helpers, { ...state, parentId: id })
+
+  if (description) {
+    fields.unshift(
+      a.field(`${id}__informations`, 'informations', {
+        label: 'Informations',
+        type: 'message',
+        message: description,
+      }),
+    )
+  }
+
+  return a.layout(id, name, fields)
 }

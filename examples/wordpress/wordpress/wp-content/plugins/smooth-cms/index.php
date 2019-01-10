@@ -12,13 +12,15 @@
 
 define('ALLOW_UNFILTERED_UPLOADS', true);
 
+
 // Disable Gutenberg
 
-// disable for posts
+// Disable Gutenberg for posts
 add_filter('use_block_editor_for_post', '__return_false', 10);
 
-// disable for post types
+// Disable Gutenberg for post types
 add_filter('use_block_editor_for_post_type', '__return_false', 10);
+
 
 // Load ACF config
 
@@ -31,9 +33,10 @@ if( function_exists('acf_add_local_field_group') ) {
   }
 }
 
+
 // Load Post types
 
-function create_posttype() {
+function smooth_create_post_type() {
   $json = file_get_contents(__DIR__ . '/cpt.json');
   $post_types = json_decode($json, true); 
 
@@ -49,10 +52,10 @@ function create_posttype() {
   }
 }
 
-add_action( 'init', 'create_posttype' );
+add_action('init', 'smooth_create_post_type');
 
 
-// Modify preview post link to add page_id & preview_rest_nonce
+// Modify preview link
 
 add_filter('preview_post_link', function ($link) {
 	$post = get_post();
@@ -84,7 +87,7 @@ function get_fields_recursive( $item ) {
 	return $item;
 }
 
-// Get page by path
+// Add custom API endpoints
 
 add_action('rest_api_init', function () {
 	$namespace = 'presspack/v1';
@@ -96,6 +99,11 @@ add_action('rest_api_init', function () {
 	register_rest_route( $namespace, '/contents', array(
 		'methods'  => 'GET',
 		'callback' => 'get_contents',
+	));
+
+	register_rest_route( $namespace, '/preview/(?P<id>\d+)', array(
+		'methods'  => 'GET',
+		'callback' => 'get_preview_for_url',
 	));
 });
 
@@ -140,14 +148,6 @@ function get_contents($data)
 		$response = $controller->get_items($request);
 		return $response;
 }
-
-add_action('rest_api_init', function () {
-	$namespace = 'presspack/v1';
-	register_rest_route( $namespace, '/preview/(?P<id>\d+)', array(
-		'methods'  => 'GET',
-		'callback' => 'get_preview_for_url',
-	));
-});
 
 
 /**

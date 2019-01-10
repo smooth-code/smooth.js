@@ -1,11 +1,11 @@
 const handlers = {
   shortText({ name, list }) {
     if (!list) return null
-    return object => object.acf[name].split('\n')
+    return object => (object.acf[name] ? object.acf[name].split('\n') : null)
   },
   longText({ name, list }) {
     if (!list) return null
-    return object => object.acf[name].split('\n')
+    return object => (object.acf[name] ? object.acf[name].split('\n') : null)
   },
 }
 
@@ -23,7 +23,7 @@ function getFieldResolver(node, helpers, state) {
   const infos = t.getFieldInfos(node, state.ast)
   if (!infos) return null
   const defaultResolver = {
-    [name]: object => object.acf[name],
+    [name]: object => object.acf[name] || null,
   }
   const handler = handlers[infos.type.name]
   if (!handler) return defaultResolver

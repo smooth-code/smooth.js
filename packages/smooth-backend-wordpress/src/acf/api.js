@@ -1,17 +1,23 @@
 import axios from 'axios'
+import qs from 'qs'
 
-function getParams({ lang, type }) {
+function getParams({ lang, type, filter }) {
   const params = {}
   if (lang) params.lang = lang
   if (type) params.type = type
+  if (filter) params.filter = filter
   return params
+}
+
+function paramsSerializer(params) {
+  return qs.stringify(params, { arrayFormat: 'brackets' })
 }
 
 export function createClient(baseUrl) {
   return {
-    async getContents({ type, slug, lang }) {
+    async getContents({ type, slug, lang, filter }) {
       type = type.toLowerCase()
-      const params = getParams({ lang, type })
+      const params = getParams({ lang, type, filter })
 
       if (slug) {
         params.slug = slug
@@ -19,12 +25,13 @@ export function createClient(baseUrl) {
           `${baseUrl}/wp-json/presspack/v1/content/`,
           { params },
         )
+        if (data.status !== 'publish') return []
         return data ? [data] : []
       }
 
       const { data } = await axios.get(
         `${baseUrl}/wp-json/presspack/v1/contents/`,
-        { params },
+        { params, paramsSerializer },
       )
       return data
     },
@@ -38,7 +45,7 @@ export function createClient(baseUrl) {
         `${baseUrl}/wp-json/presspack/v1/preview/${id}/`,
         { params },
       )
-      return data ? data.acf : null
+      return data
     },
   }
 }

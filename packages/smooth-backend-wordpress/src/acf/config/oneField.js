@@ -1,6 +1,5 @@
 import { singularize, humanize } from 'smooth-core/utils'
 import allFields from './allFields'
-import { indexByKey } from './util'
 
 function enumValuesToChoices(nodes, helpers) {
   const { gql: g } = helpers
@@ -129,8 +128,8 @@ const handlers = {
     const { acf: a, gql: g } = helpers
     const layouts = type.types.map(subType => {
       const subName = g.getName(subType.typeDefinitionNode)
-      const label = humanize(name)
-      const id = `${state.parentId}_${name}`
+      const label = humanize(subName)
+      const id = `${state.parentId}_${subName}`
       return a.layout(
         id,
         subName,
@@ -144,7 +143,7 @@ const handlers = {
 
     return {
       type: 'flexible_content',
-      layouts: indexByKey(layouts),
+      layouts,
     }
   },
 }

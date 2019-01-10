@@ -5,7 +5,7 @@ function getBlockPropsResolvers(blockDefinitions) {
   return blockDefinitions.reduce((resolvers, def) => {
     const name = def.name.value
     resolvers[`${name}_props`] = object => {
-      if (object.acf_fc_layout === name) return object
+      if (object.acf_fc_layout === name) return { acf: object }
       return null
     }
     return resolvers
