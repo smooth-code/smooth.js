@@ -2,8 +2,15 @@ import { createExpressApp } from './expressApp'
 import { createHttpServer } from './httpServer'
 
 let server
-export function start({ config, schema, fragmentTypes, webpackMiddleware }) {
+export function start({
+  config,
+  dev,
+  schema,
+  fragmentTypes,
+  webpackMiddleware,
+}) {
   const app = createExpressApp({
+    dev,
     config,
     schema,
     fragmentTypes,

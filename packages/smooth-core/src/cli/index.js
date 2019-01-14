@@ -1,12 +1,19 @@
+import path from 'path'
 import program from 'commander'
 import logUpdate from 'log-update'
 import createLogger from 'progress-estimator'
 import { getConfig } from '../config'
 import { start } from '../server'
-import { watchSchema, buildSchema, watchWebpack } from '../build'
+import {
+  watchSchema,
+  buildSchema,
+  watchWebpack,
+  buildSchemaDefinition,
+  buildWebpack,
+} from '../build'
 
 let stdout = `Smooth CMS 👨‍🚀
-
+ 
 
 
 
@@ -51,6 +58,7 @@ function watch({ config }) {
     })
 
     start({
+      dev: true,
       schema,
       fragmentTypes,
       config,
@@ -75,26 +83,51 @@ function clearConsole() {
 
 async function devCommand() {
   clearConsole()
-  const config = await getConfig()
+  const config = await getConfig({ dev: true })
   logUpdate.done()
   watch({ config })
 }
 
 async function buildCommand() {
-  const config = await getConfig()
+  const config = await getConfig({ dev: false })
+  console.log('Building schema')
+  console.time('Build schema')
   await buildSchema({ config })
+  console.timeEnd('Build schema')
+  console.log('Building webpack')
+  console.time('Build webpack')
+  await buildWebpack({ config })
+  console.timeEnd('Build webpack')
   // eslint-disable-next-line no-console
   console.log('Built!')
 }
 
-function startCommand(command) {
+async function startCommand() {
+  const config = await getConfig({ dev: false })
+  const { schema } = await buildSchemaDefinition({ config })
+  // eslint-disable-next-line global-require, import/no-dynamic-require
+  const fragmentTypes = require(path.join(
+    config.cachePath,
+    'fragmentTypes.json',
+  ))
+  start({
+    dev: false,
+    schema,
+    fragmentTypes,
+    config,
+  })
+  console.log('Started 🚀')
+}
+
+function runCmd(command) {
   command().catch(error => {
     // eslint-disable-next-line no-console
     console.error(error)
   })
 }
 
-program.command('dev').action(() => startCommand(devCommand))
-program.command('build').action(() => buildCommand(devCommand))
+program.command('dev').action(() => runCmd(devCommand))
+program.command('build').action(() => runCmd(buildCommand))
+program.command('start').action(() => runCmd(startCommand))
 
 program.parse(process.argv)

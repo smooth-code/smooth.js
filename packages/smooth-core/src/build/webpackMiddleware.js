@@ -1,5 +1,4 @@
 export default function webpackMiddleware({ config }, onCreateCompiler) {
-  if (config.env === 'production') return []
   const webpackDevMiddleware = require('webpack-dev-middleware')
   const webpackHotMiddleware = require('webpack-hot-middleware')
   const webpack = require('webpack')

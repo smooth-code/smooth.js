@@ -5,43 +5,47 @@ function getPropsAttribute(name) {
   return `${name}_props`
 }
 
-function getPropsQuery({ fragment, name }) {
-  const propsFragmentDefinition = fragment.definitions.find(
-    node =>
-      node.kind === 'FragmentDefinition' &&
-      node.typeCondition.kind === 'NamedType' &&
-      node.typeCondition.name.value === name,
-  )
+function getPropsQuery(fragmentDefinition, propsAttribute) {
   return /* GraphQL */ `
-    ${getPropsAttribute(name)} {
-      ...${propsFragmentDefinition.name.value}
+    ${propsAttribute} {
+      ...${fragmentDefinition.name.value}
     }
   `
+}
+
+function getBlockConfig(m, filePath) {
+  const { blockFragment: fragment = null, default: component } = m
+
+  if (!fragment) return null
+  const fragmentDefinition = fragment.definitions.find(
+    node =>
+      node.kind === 'FragmentDefinition' &&
+      node.typeCondition.kind === 'NamedType',
+  )
+  if (!fragmentDefinition) {
+    throw new Error(`Fragment not found in ${filePath}`)
+  }
+  if (!component) {
+    throw new Error(`Default export not found in ${filePath}`)
+  }
+  const name = fragmentDefinition.typeCondition.name.value
+  const propsAttribute = getPropsAttribute(name)
+  return {
+    name,
+    component,
+    getFragmentString() {
+      return fragment.loc.source.body
+    },
+    propsAttribute,
+    propsQuery: getPropsQuery(fragmentDefinition, propsAttribute),
+  }
 }
 
 function getBlocks() {
   const req = require.context(process.env.SMOOTH_BLOCKS_PATH, true, /\.js$/)
   return req
     .keys()
-    .map(filePath => {
-      const m = req(filePath)
-      const { blockFragment: fragment = null, default: component } = m
-
-      if (!fragment) return null
-
-      const { name } = component
-      const propsAttribute = getPropsAttribute(name)
-
-      return {
-        name,
-        component,
-        getFragmentString() {
-          return fragment.loc.source.body
-        },
-        propsAttribute,
-        propsQuery: fragment ? getPropsQuery({ fragment, name }) : null,
-      }
-    })
+    .map(filePath => getBlockConfig(req(filePath), filePath))
     .filter(Boolean)
 }
 

@@ -7,7 +7,7 @@ import { ApolloProvider, getDataFromTree } from 'react-apollo'
 import { renderToString } from 'react-dom/server'
 import { ChunkExtractor } from '@loadable/server'
 import asyncHandler from 'express-async-handler'
-import { getContext, createApolloClient } from '../apollo'
+import { getContext, createApolloClient } from './apollo'
 
 export default function ssrMiddleware({
   config,

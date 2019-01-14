@@ -5,38 +5,47 @@ import qs from 'query-string'
 import { Query } from 'react-apollo'
 import { HTTPError } from './HttpError'
 
+function getContentConfig(m, filePath) {
+  const {
+    contentFragment: fragment = null,
+    slug = null,
+    default: component,
+  } = m
+
+  if (!fragment) return null
+
+  const fragmentDefinition = fragment.definitions.find(
+    node =>
+      node.kind === 'FragmentDefinition' &&
+      node.typeCondition.kind === 'NamedType',
+  )
+
+  if (!fragmentDefinition) {
+    throw new Error(`Fragment not found in ${filePath}`)
+  }
+
+  const name = fragmentDefinition.typeCondition.name.value
+
+  if (name !== 'Page' && !slug) {
+    throw new Error(`Please provide a slug in model ${name}`)
+  }
+
+  const path = slug ? `/:lang(.{2})?/${slug}/:slug+` : '/:lang(.{2})?/:slug*'
+
+  return {
+    hasSlug: Boolean(slug),
+    type: name,
+    path,
+    component,
+    fragment,
+  }
+}
+
 export function getContents() {
   const req = require.context(process.env.SMOOTH_CONTENTS_PATH, true, /\.js$/)
   return req
     .keys()
-    .map(filePath => {
-      const m = req(filePath)
-      const {
-        contentFragment: fragment = null,
-        slug = null,
-        default: component,
-      } = m
-
-      if (!fragment) return null
-
-      const { name } = component
-
-      if (name !== 'Page' && !slug) {
-        throw new Error(`Please provide a slug in model ${name}`)
-      }
-
-      const path = slug
-        ? `/:lang(.{2})?/${slug}/:slug+`
-        : '/:lang(.{2})?/:slug*'
-
-      return {
-        hasSlug: Boolean(slug),
-        type: name,
-        path,
-        component,
-        fragment,
-      }
-    })
+    .map(filePath => getContentConfig(req(filePath), filePath))
     .sort((a, b) => (a.hasSlug === b.hasSlug ? 0 : a.hasSlug ? -1 : 1))
     .filter(Boolean)
 }

@@ -1,3 +1,4 @@
+import webpack from 'webpack'
 import { applyAsyncHook } from '../plugin'
 import {
   createSchemaDefinition,
@@ -8,11 +9,16 @@ import { createCache } from './cache'
 import { Watcher, watchFs } from './watcher'
 import webpackMiddleware from './webpackMiddleware'
 
+export async function buildSchemaDefinition({ config }) {
+  const schemaDefinition = await createSchemaDefinition({ config })
+  const schema = makeExecutableSchema(schemaDefinition)
+  return { schemaDefinition, schema }
+}
+
 export async function buildSchema({ config }) {
   const cache = createCache({ config })
-  const schemaDefinition = await createSchemaDefinition({ config })
+  const { schemaDefinition, schema } = await buildSchemaDefinition({ config })
   await applyAsyncHook(config, 'onBuild', { schemaDefinition })
-  const schema = makeExecutableSchema(schemaDefinition)
   const fragmentTypes = await getFragmentTypes({ schema })
   cache.writeCacheFile('fragmentTypes.json', JSON.stringify(fragmentTypes))
   return { schema, fragmentTypes }
@@ -26,7 +32,7 @@ export function watchSchema({ logger, ...options }) {
   return watcher
 }
 
-async function buildWebpack({ config }) {
+export async function buildWebpack({ config }) {
   const compiler = webpack(config.webpackConfig)
   return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
@@ -70,15 +76,4 @@ export function watchWebpack({ logger, config }) {
   watcher.middleware = middleware
 
   return watcher
-}
-
-export async function build({ config, dev }) {
-  const cache = createCache({ config })
-  const options = { config, cache, dev }
-  const [{ schema, fragmentTypes }] = await Promise.all(
-    dev
-      ? [buildSchema(options)]
-      : [buildSchema(options), buildWebpack(options)],
-  )
-  return { schema, fragmentTypes }
 }

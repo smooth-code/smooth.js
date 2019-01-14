@@ -9,7 +9,7 @@ import { parsePlugins } from './plugins'
 
 const exists = promisify(fs.exists)
 
-export async function getConfig() {
+export async function getConfig({ dev }) {
   const configPath = 'smooth.config.js'
   const localCwd = cwd()
   const absConfigPath = path.resolve(localCwd, configPath)
@@ -43,7 +43,7 @@ export async function getConfig() {
 
   const localConfig = getLocalConfig
   const config = merge({}, defaultConfig, localConfig)
-  config.webpackConfig = await getWebpackConfig({ config })
+  config.webpackConfig = await getWebpackConfig({ config, dev })
   config.plugins = parsePlugins(config.plugins)
   return config
 }

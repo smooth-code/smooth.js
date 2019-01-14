@@ -4,9 +4,10 @@ import errorHandler from 'errorhandler'
 import cors from 'cors'
 import { ApolloServer } from 'apollo-server-express'
 import { getContext } from './apollo'
-import ssr from './middlewares/ssr'
+import ssr from './ssr'
 
 export function createExpressApp({
+  dev,
   config,
   schema,
   fragmentTypes,
@@ -21,10 +22,14 @@ export function createExpressApp({
   })
 
   app.use(
-    express.static(path.join(config.cachePath, 'static'), {
+    '/web',
+    express.static(path.join(config.cachePath, 'web'), {
       immutable: true,
       maxage: 31536000000,
     }),
+  )
+
+  app.use(
     express.static(config.staticPath, {
       immutable: true,
       maxage: 31536000000,
@@ -32,8 +37,6 @@ export function createExpressApp({
   )
 
   if (webpackMiddleware) {
-    // const webpackMiddleware = webpack({ config, webpackCompiler })
-    // await webpackMiddleware.ready()
     app.use(webpackMiddleware)
   }
 
@@ -72,11 +75,12 @@ export function createExpressApp({
       console.error(error.stack)
       next(error)
     })
-    app.use((error, req, res, next) => {
-      ssr({ config, schema, fragmentTypes, error })(req, res, next)
-    })
-    app.use(errorHandler({ log: false }))
   }
+
+  app.use((error, req, res, next) => {
+    ssr({ config, schema, fragmentTypes, error, dev })(req, res, next)
+  })
+  app.use(errorHandler({ log: false }))
 
   return app
 }

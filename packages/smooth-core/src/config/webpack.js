@@ -24,9 +24,7 @@ function getScriptPath(config, script) {
   return fileExistsSync(customPath) ? customPath : defaultPath
 }
 
-function getTargetConfig(target, { config }) {
-  const dev = config.env === 'development'
-  const prod = config.env === 'production'
+function getTargetConfig(target, { config, dev }) {
   const mainEntry = path.join(__dirname, '../client', `main-${target}.js`)
   const isServer = target === 'node'
   const defaultLoaders = {
@@ -81,8 +79,8 @@ function getTargetConfig(target, { config }) {
           : undefined,
       output: {
         path: path.join(config.cachePath, target, 'static'),
-        filename: prod ? '[name]-bundle-[chunkhash:8].js' : '[name].js',
-        publicPath: `/static/${target}/`,
+        filename: dev ? '[name].js' : '[name]-bundle-[chunkhash:8].js',
+        publicPath: `/${target}/static/`,
         libraryTarget: target === 'node' ? 'commonjs2' : undefined,
       },
       plugins: [
@@ -100,9 +98,9 @@ function getTargetConfig(target, { config }) {
   )
 }
 
-export async function getWebpackConfig({ config }) {
+export async function getWebpackConfig({ config, dev }) {
   return [
-    getTargetConfig('web', { config }),
-    getTargetConfig('node', { config }),
+    getTargetConfig('web', { config, dev }),
+    getTargetConfig('node', { config, dev }),
   ]
 }
