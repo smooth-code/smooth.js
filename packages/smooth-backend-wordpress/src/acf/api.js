@@ -25,7 +25,7 @@ export function createClient(baseUrl) {
           `${baseUrl}/wp-json/presspack/v1/content/`,
           { params },
         )
-        if (data.status !== 'publish') return []
+        if (data && data.status !== 'publish') return []
         return data ? [data] : []
       }
 

@@ -8,6 +8,16 @@
 * License: MIT
 */
 
+// Change permalinks
+
+function change_permalinks() {
+	global $wp_rewrite;
+	$wp_rewrite->set_permalink_structure('/%postname%/');
+	$wp_rewrite->flush_rules();
+}
+
+add_action('init', 'change_permalinks');
+
 // Enable all uploads
 
 define('ALLOW_UNFILTERED_UPLOADS', true);
@@ -60,7 +70,7 @@ add_action('init', 'smooth_create_post_type');
 add_filter('preview_post_link', function ($link) {
 	$post = get_post();
 	$path = parse_url($link, PHP_URL_PATH);
-	$link = 'http://localhost:3000' . $path . '?id=' . $post->ID . '&preview=1';
+	$link = '%BASE_URL%' . $path . '?id=' . $post->ID . '&preview=1';
 	return $link;
 });
 
@@ -142,11 +152,14 @@ function get_content($data)
  */
 function get_contents($data)
 {
-		$params = $data->get_params();
-		$controller = new WP_REST_Posts_Controller($params['type']);
-		$request = new WP_REST_Request('GET');
-		$response = $controller->get_items($request);
-		return $response;
+	$params = $data->get_params();
+	$type = $params['type'];
+	unset($params['type']);
+	$controller = new WP_REST_Posts_Controller($type);
+	$request = new WP_REST_Request('GET');
+	$request->set_url_params($params);
+	$response = $controller->get_items($request);
+	return $response;
 }
 
 
@@ -157,15 +170,22 @@ function get_contents($data)
  */
 function get_preview_for_url($data)
 {
-		$postId    = $data['id'];
+		$postId = $data['id'];
     $postType  = get_post_type($postId);
 		$revision = array_shift(wp_get_post_revisions($postId));
 		if (!$revision) {
 			return null;
 		}
 		$revisionId = $revision->ID;
-    $controller = new ACF_To_REST_API_Posts_Controller($postType);
-    $request    = new WP_REST_Request('GET', "/acf/v3/{$postType}/{$revisionId}");
-    $request->set_url_params(array('id' => $revisionId));
-    return $controller->get_item($request);
+    $controller = new WP_REST_Revisions_Controller($postType);
+    $request    = new WP_REST_Request('GET');
+    $request->set_url_params(array('id' => $revisionId, 'parent' => $postId));
+		return $controller->get_item($request);
 }
+
+add_filter( 'rest_prepare_revision', function( $response, $post ) {
+	$data = $response->get_data();
+	$fields = get_fields_recursive($post);
+	$data['acf'] = $fields->acf;
+	return rest_ensure_response( $data );
+}, 10, 2 );

@@ -21,7 +21,9 @@ function getFieldResolver(node, helpers, state) {
     }
   }
   const infos = t.getFieldInfos(node, state.ast)
-  if (!infos) return null
+  if (!infos) {
+    return null
+  }
   const defaultResolver = {
     [name]: object => object.acf[name] || null,
   }

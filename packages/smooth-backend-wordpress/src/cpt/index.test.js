@@ -32,7 +32,7 @@ describe('#onBuild', () => {
 
     expect(fs.writeFile).toHaveBeenCalledTimes(1)
     expect(fs.writeFile.mock.calls[0][0]).toBe(
-      '/tmp/wp-content/plugins/smooth-cms/cpt.json',
+      '/tmp/wp-content/plugins/smooth-js/cpt.json',
     )
     expect(JSON.parse(fs.writeFile.mock.calls[0][1])).toEqual([
       {

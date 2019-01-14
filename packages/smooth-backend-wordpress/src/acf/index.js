@@ -1,13 +1,10 @@
 import path from 'path'
-import fs from 'fs'
-import { promisify } from 'util'
 import { mergeResolvers } from 'smooth-core/graphql'
 import { createResolvers } from './resolvers'
 import { generateConfig } from './config'
 import * as types from './types'
 import { createClient } from './api'
-
-const writeFile = promisify(fs.writeFile)
+import { writeFile, getPluginDir } from '../util'
 
 export function onCreateSchemaDefinition(params) {
   const acfResolvers = createResolvers(params)
@@ -23,10 +20,8 @@ export async function onBuild({ schemaDefinition, options, types: gqlTypes }) {
     acf: types,
   })
 
-  const acfConfigPath = path.join(
-    options.basePath,
-    'wp-content/plugins/smooth-cms/acf.json',
-  )
+  const pluginDir = await getPluginDir(options.basePath)
+  const acfConfigPath = path.join(pluginDir, 'acf.json')
 
   await writeFile(acfConfigPath, JSON.stringify(acfConfig, null, 2))
 }

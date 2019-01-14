@@ -22,6 +22,7 @@ services:
     ports:
       - '8000:80'
     environment:
+      WP_DEFAULT_THEME: smooth-js
       WORDPRESS_DB_HOST: mysql:3306
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress

@@ -1,9 +1,10 @@
 import fs from 'fs'
 import path from 'path'
-import mkdirp from 'mkdirp'
+import rawMkdirp from 'mkdirp'
 import util from 'util'
 
 const writeFile = util.promisify(fs.writeFile)
+const mkdirp = util.promisify(rawMkdirp)
 
 export function createCache({ config }) {
   return {
