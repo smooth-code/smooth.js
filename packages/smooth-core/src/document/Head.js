@@ -4,10 +4,10 @@ import Context from './Context'
 export default function Head({ children }) {
   return (
     <Context.Consumer>
-      {({ extractor, helmet, sheet }) => (
+      {({ extractor, helmet, styles }) => (
         <head>
           {extractor.getLinkElements()}
-          {sheet.getStyleElement()}
+          {styles}
           {helmet.title.toComponent()}
           {helmet.meta.toComponent()}
           {helmet.link.toComponent()}

@@ -1,6 +1,8 @@
 import React from 'react'
-import ErrorPage from '__smooth_error'
+import loadable from '@loadable/component'
 import Status from './router/Status'
+
+const ErrorPage = loadable(() => import('__smooth_error'))
 
 export default class ErrorBoundary extends React.Component {
   state = { error: this.props.error }

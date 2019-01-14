@@ -23,17 +23,27 @@ export function createExpressApp({
 
   app.use(
     '/web',
-    express.static(path.join(config.cachePath, 'web'), {
-      immutable: true,
-      maxage: 31536000000,
-    }),
+    express.static(
+      path.join(config.cachePath, 'web'),
+      dev
+        ? {}
+        : {
+            immutable: true,
+            maxage: 31536000000,
+          },
+    ),
   )
 
   app.use(
-    express.static(config.staticPath, {
-      immutable: true,
-      maxage: 31536000000,
-    }),
+    express.static(
+      config.staticPath,
+      dev
+        ? {}
+        : {
+            immutable: true,
+            maxage: 31536000000,
+          },
+    ),
   )
 
   if (webpackMiddleware) {

@@ -10,7 +10,7 @@ export default function webpackMiddleware({ config }, onCreateCompiler) {
     compiler,
     config.webpackDevMiddleware({
       logLevel: 'error',
-      publicPath: '/dist/web/',
+      publicPath: '/web/static/',
       writeToDisk(filePath) {
         return /node\/static/.test(filePath) || /loadable-stats/.test(filePath)
       },

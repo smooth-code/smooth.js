@@ -2,12 +2,15 @@ import path from 'path'
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { StaticRouter } from 'react-router-dom'
-import { ServerStyleSheet } from 'styled-components'
 import { ApolloProvider, getDataFromTree } from 'react-apollo'
 import { renderToString } from 'react-dom/server'
 import { ChunkExtractor } from '@loadable/server'
 import asyncHandler from 'express-async-handler'
 import { getContext, createApolloClient } from './apollo'
+
+function enhanceApp(options = {}, App) {
+  return options.enhanceApp ? options.enhanceApp(App) : App
+}
 
 export default function ssrMiddleware({
   config,
@@ -55,18 +58,30 @@ export default function ssrMiddleware({
       </ErrorContext.Provider>
     )
 
-    // Styled components
-    const sheet = new ServerStyleSheet()
-    jsx = sheet.collectStyles(jsx)
-
     // Loadable components
     jsx = webExtractor.collectChunks(jsx)
 
     await getDataFromTree(jsx)
     const apolloState = apolloClient.cache.extract()
 
+    function renderPage(options) {
+      const App = enhanceApp(options, ({ children }) => children)
+      return renderToString(<App>{jsx}</App>)
+    }
+
+    const context = {
+      pathname: req.url,
+      query: req.query,
+      asPath: req.originalUrl,
+      req,
+      res,
+      renderPage,
+    }
+
+    const initialProps = await DocumentContainer.getInitialProps(context)
+
     // Render app HTML
-    const appHtml = renderToString(jsx)
+    const appHtml = renderPage()
 
     // Handle React router status
     if (routerContext.status) {
@@ -85,11 +100,11 @@ export default function ssrMiddleware({
     const html = renderToString(
       <DocumentContainer
         appHtml={appHtml}
-        sheet={sheet}
         extractor={webExtractor}
         helmet={helmet}
         apolloState={apolloState}
         error={error}
+        {...initialProps}
       />,
     )
 

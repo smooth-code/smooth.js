@@ -1,7 +1,6 @@
 const common = {
   presets: ['@babel/preset-react'],
   plugins: [
-    'babel-plugin-styled-components',
     '@loadable/babel-plugin',
     '@babel/plugin-proposal-class-properties',
   ],

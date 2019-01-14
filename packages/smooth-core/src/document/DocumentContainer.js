@@ -9,3 +9,10 @@ export default function DocumentContainer(props) {
     </Context.Provider>
   )
 }
+
+DocumentContainer.getInitialProps = async context => {
+  if (Document.getInitialProps) {
+    return Document.getInitialProps(context)
+  }
+  return {}
+}
