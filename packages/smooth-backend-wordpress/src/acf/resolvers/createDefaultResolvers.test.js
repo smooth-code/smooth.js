@@ -19,11 +19,10 @@ describe('createDefaultResolvers', () => {
     expect(resolvers.Query.book).toBeDefined()
     expect(resolvers.Book).toBeDefined()
     expect(
-      resolvers.BookCard.book({ book: { acf: { name: 'Hello' } } }),
-    ).toEqual({ name: 'Hello' })
-    expect(resolvers.BookCard.multiple({ multiple: 'hello\nyou' })).toEqual([
-      'hello',
-      'you',
-    ])
+      resolvers.BookCard.book({ acf: { book: { acf: { name: 'Hello' } } } }),
+    ).toEqual({ acf: { name: 'Hello' } })
+    expect(
+      resolvers.BookCard.multiple({ acf: { multiple: 'hello\nyou' } }),
+    ).toEqual(['hello', 'you'])
   })
 })

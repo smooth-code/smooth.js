@@ -1,15 +1,13 @@
-import fs from 'fs'
 import { applyAsyncHook } from 'smooth-core/plugin'
 import { gql, createSchemaDefinitionMock } from 'smooth-core/graphql'
+import { getPluginDir, writeFile } from '../util'
 import { onBuild } from '.'
 
-jest.mock('fs')
+jest.mock('../util')
 
 describe('#onBuild', () => {
   beforeEach(() => {
-    fs.writeFile.mockImplementation((filepath, value, cb) => {
-      cb(null)
-    })
+    getPluginDir.mockImplementation(async () => '/plugins')
   })
 
   it('should generate config', async () => {
@@ -26,15 +24,15 @@ describe('#onBuild', () => {
       }
     `
 
-    await applyAsyncHook({ plugins: [plugin] }, 'onBuild', {
+    const config = { plugins: [plugin] }
+
+    await applyAsyncHook(config, 'onBuild', {
       schemaDefinition: createSchemaDefinitionMock({ typeDefs }),
     })
 
-    expect(fs.writeFile).toHaveBeenCalledTimes(1)
-    expect(fs.writeFile.mock.calls[0][0]).toBe(
-      '/tmp/wp-content/plugins/smooth-js/cpt.json',
-    )
-    expect(JSON.parse(fs.writeFile.mock.calls[0][1])).toEqual([
+    expect(writeFile).toHaveBeenCalledTimes(1)
+    expect(writeFile.mock.calls[0][0]).toBe('/plugins/cpt.json')
+    expect(JSON.parse(writeFile.mock.calls[0][1])).toEqual([
       {
         config: {
           label: 'Awesome books',
