@@ -1,4 +1,26 @@
+function formatDate(value) {
+  return value
+    .split('/')
+    .reverse()
+    .join('-')
+}
+
 const handlers = {
+  date({ name }) {
+    return object => {
+      const value = object.acf[name]
+      if (typeof value !== 'string' || value === '') return null
+      return new Date(formatDate(value))
+    }
+  },
+  dateTime({ name }) {
+    return object => {
+      const value = object.acf[name]
+      if (typeof value !== 'string' || value === '') return null
+      const [date, time, period] = value.split(' ')
+      return new Date(`${formatDate(date)} ${time} ${period} UTC`)
+    }
+  },
   shortText({ name, list }) {
     if (!list) return null
     return object => (object.acf[name] ? object.acf[name].split(',') : null)
