@@ -1,7 +1,7 @@
 const handlers = {
   shortText({ name, list }) {
     if (!list) return null
-    return object => (object.acf[name] ? object.acf[name].split('\n') : null)
+    return object => (object.acf[name] ? object.acf[name].split(',') : null)
   },
   longText({ name, list }) {
     if (!list) return null
