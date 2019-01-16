@@ -1,3 +1,6 @@
 .smooth
 /wordpress/wp-content/plugins/smooth-js
 /wordpress/wp-content/themes/smooth-js
+/wordpress/wp-content/themes/twenty*
+/wordpress/wp-content/themes/akismet
+/wordpress/wp-content/themes/hello.php

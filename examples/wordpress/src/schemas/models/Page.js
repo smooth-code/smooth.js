@@ -6,6 +6,8 @@ export const typeDefs = gql`
     book: Book @field
     specificBook: Book
     allBooks: [Book]
+    date: Date @field
+    dateTime: DateTime @field
   }
 `
 

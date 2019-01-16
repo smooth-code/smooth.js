@@ -4,6 +4,8 @@ import gql from 'graphql-tag'
 export const contentFragment = gql`
   fragment PageFragment on Page {
     title
+    date
+    dateTime
     book {
       metadata {
         slug
@@ -22,7 +24,14 @@ export const contentFragment = gql`
   }
 `
 
-export default function Page({ title, book, specificBook, allBooks }) {
+export default function Page({
+  title,
+  book,
+  specificBook,
+  allBooks,
+  ...props
+}) {
+  console.log(props)
   return (
     <div>
       <h2>Title</h2>
