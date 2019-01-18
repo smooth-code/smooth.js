@@ -76,17 +76,17 @@ const handlers = {
       choices: enumValuesToChoices(typeDefinitionNode.values, helpers),
     }
   },
-  relation({ list, type: { model } }) {
+  relation({ list, type: { content } }) {
     if (list) {
       return {
         type: 'relationship',
         filters: ['search'],
-        post_type: [model],
+        post_type: [content],
       }
     }
     return {
       type: 'post_object',
-      post_type: [model],
+      post_type: [content],
     }
   },
   object(

@@ -4,7 +4,7 @@ import createDefaultResolvers from './createDefaultResolvers'
 describe('createDefaultResolvers', () => {
   it('should create default resolvers', () => {
     const typeDefs = gql`
-      type Book @model {
+      type Book @content {
         name: String! @field
       }
 
@@ -22,7 +22,7 @@ describe('createDefaultResolvers', () => {
       resolvers.BookCard.book({ acf: { book: { acf: { name: 'Hello' } } } }),
     ).toEqual({ acf: { name: 'Hello' } })
     expect(
-      resolvers.BookCard.multiple({ acf: { multiple: 'hello\nyou' } }),
+      resolvers.BookCard.multiple({ acf: { multiple: 'hello,you' } }),
     ).toEqual(['hello', 'you'])
   })
 })

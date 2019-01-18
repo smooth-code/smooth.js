@@ -1,14 +1,14 @@
 import React from 'react'
-import App from '__smooth_app'
+import Routes from './Routes'
 import ErrorBoundary from './ErrorBoundary'
 import ErrorContext from './ErrorContext'
 
-export default function AppContainer() {
+export default function Root() {
   return (
     <ErrorContext.Consumer>
       {({ error }) => (
         <ErrorBoundary error={error}>
-          <App />
+          <Routes />
         </ErrorBoundary>
       )}
     </ErrorContext.Consumer>

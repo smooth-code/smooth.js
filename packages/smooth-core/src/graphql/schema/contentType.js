@@ -2,8 +2,8 @@ import gql from 'graphql-tag'
 import camelcase from 'camelcase'
 import * as t from '../types'
 
-function getQueries(modelDefinitions) {
-  return modelDefinitions.map(def => {
+function getQueries(contentDefinitions) {
+  return contentDefinitions.map(def => {
     const name = t.getName(def)
     const queryName = camelcase(name)
     return `${queryName}(slug: String!, lang: String, id: String, preview: Boolean): ${name}`
@@ -22,24 +22,24 @@ const {
   }
 `
 
-export function addModelTypeDefinitions(schemaDefinition) {
+export function addContentTypeDefinitions(schemaDefinition) {
   const { typeDefs } = schemaDefinition
-  const modelDefinitions = typeDefs.definitions.filter(
+  const contentDefinitions = typeDefs.definitions.filter(
     type =>
       t.isObjectTypeDefinition(type) &&
       t.hasDirective(type, directive =>
-        t.isName(directive.name, { value: 'model' }),
+        t.isName(directive.name, { value: 'content' }),
       ),
   )
 
-  modelDefinitions.forEach(type => type.fields.push(metadataField))
+  contentDefinitions.forEach(type => type.fields.push(metadataField))
 
   const {
     definitions: [queryDefinition],
   } = gql`
     type Query {
       ping: Boolean
-      ${getQueries(modelDefinitions).join('\n')}
+      ${getQueries(contentDefinitions).join('\n')}
     }
   `
 

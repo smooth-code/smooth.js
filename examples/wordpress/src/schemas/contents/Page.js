@@ -1,13 +1,15 @@
 import gql from 'graphql-tag'
 
 export const typeDefs = gql`
-  type Page @model {
+  type Page @content {
     title: String @field
     book: Book @field
     specificBook: Book
     allBooks: [Book]
     date: Date @field
     dateTime: DateTime @field
+    link: Link @field
+    blocks: [Block] @field
   }
 `
 

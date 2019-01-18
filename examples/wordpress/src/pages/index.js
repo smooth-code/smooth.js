@@ -1,8 +1,9 @@
 import React from 'react'
 import gql from 'graphql-tag'
+import { BlockFragment, Blocks } from 'smooth-core/blocks'
 
 export const contentFragment = gql`
-  fragment PageFragment on Page {
+  fragment PageProps on Page {
     title
     date
     dateTime
@@ -21,23 +22,24 @@ export const contentFragment = gql`
       }
       name
     }
+    link {
+      url
+    }
+    blocks {
+      ...BlockFragment
+    }
   }
+
+  ${BlockFragment}
 `
 
-export default function Page({
-  title,
-  book,
-  specificBook,
-  allBooks,
-  ...props
-}) {
-  console.log(props)
+export default function Page({ title, book, specificBook, allBooks, blocks }) {
   return (
     <div>
       <h2>Title</h2>
       <div>{title}</div>
       <h2>ACF book</h2>
-      <div>{book.name}</div>
+      <div>{book && book.name}</div>
       <h2>Specific book</h2>
       <div>{specificBook && specificBook.name}</div>
       <h2>All books</h2>
@@ -46,6 +48,7 @@ export default function Page({
           <li key={b.metadata.id}>{b.name}</li>
         ))}
       </ul>
+      <Blocks blocks={blocks} />
     </div>
   )
 }

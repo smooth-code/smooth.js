@@ -1,5 +1,5 @@
 import oneBlock from './oneBlock'
-import oneModel from './oneModel'
+import oneContent from './oneContent'
 
 export function generateConfig(ast, helpers) {
   const state = { ast }
@@ -9,9 +9,9 @@ export function generateConfig(ast, helpers) {
 
   state.blockLayouts = layouts
 
-  const modelFieldGroups = ast.definitions
-    .map(def => oneModel(def, helpers, state))
+  const contentFieldGroups = ast.definitions
+    .map(def => oneContent(def, helpers, state))
     .filter(x => x)
 
-  return modelFieldGroups
+  return contentFieldGroups
 }

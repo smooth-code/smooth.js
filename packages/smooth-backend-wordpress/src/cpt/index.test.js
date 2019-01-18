@@ -19,7 +19,7 @@ describe('#onBuild', () => {
     }
 
     const typeDefs = gql`
-      type AwesomeBook @model {
+      type AwesomeBook @content {
         name: String!
       }
     `

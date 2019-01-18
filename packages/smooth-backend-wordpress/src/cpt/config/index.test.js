@@ -12,7 +12,7 @@ function generateConfigFromTypeDefs(typeDefs) {
 describe('#generateConfig', () => {
   it('should infer label', () => {
     const typeDefs = gql`
-      type AwesomeBook @model {
+      type AwesomeBook @content {
         name: String!
       }
     `
@@ -23,7 +23,7 @@ describe('#generateConfig', () => {
 
   it('should support custom icon', () => {
     const typeDefs = gql`
-      type AwesomeBook @model(icon: "settings") {
+      type AwesomeBook @content(icon: "settings") {
         name: String!
       }
     `
@@ -34,7 +34,7 @@ describe('#generateConfig', () => {
 
   it('should support custom label', () => {
     const typeDefs = gql`
-      type AwesomeBook @model(label: "Books") {
+      type AwesomeBook @content(label: "Books") {
         name: String!
       }
     `
@@ -45,7 +45,7 @@ describe('#generateConfig', () => {
 
   it('should support custom slug', () => {
     const typeDefs = gql`
-      type AwesomeBook @model(slug: "book") {
+      type AwesomeBook @content(slug: "book") {
         name: String!
       }
     `
@@ -54,7 +54,7 @@ describe('#generateConfig', () => {
     expect(first.name).toBe('book')
   })
 
-  it('should ignore other definition than models', () => {
+  it('should ignore other definition than contents', () => {
     const typeDefs = gql`
       type AwesomeBook {
         name: String!

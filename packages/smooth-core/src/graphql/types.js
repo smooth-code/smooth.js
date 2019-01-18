@@ -64,10 +64,10 @@ export function getArgv(node, name) {
   return arg ? getValue(arg) : null
 }
 
-export function getModelSlug(node) {
-  const modelDirective = getDirective(node, 'model')
-  if (!modelDirective) return null
-  const slugArgument = getArg(modelDirective, 'slug')
+export function getContentSlug(node) {
+  const contentDirective = getDirective(node, 'content')
+  if (!contentDirective) return null
+  const slugArgument = getArg(contentDirective, 'slug')
   return slugArgument
     ? getValue(slugArgument)
     : slugify(getName(node), { lower: true })
@@ -125,11 +125,11 @@ function getFieldType(type, directive, ast) {
   if (!typeDefinition) return null
 
   if (isObjectTypeDefinition(typeDefinition)) {
-    const model = getModelSlug(typeDefinition)
-    if (model) {
+    const content = getContentSlug(typeDefinition)
+    if (content) {
       return {
         name: 'relation',
-        model,
+        content,
         typeNode: type,
         typeDefinitionNode: typeDefinition,
       }

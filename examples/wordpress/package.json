@@ -4,8 +4,7 @@
     "graphql-tag": "^2.10.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
-    "smooth-backend-wordpress": "../../packages/smooth-backend-wordpress",
-    "smooth-core": "../../packages/smooth-core",
-    "smooth-dev-cli": "../../packages/smooth-dev-cli"
+    "smooth-backend-wordpress": "^0.1.1-alpha.2",
+    "smooth-core": "^0.1.1-alpha.2"
   }
 }

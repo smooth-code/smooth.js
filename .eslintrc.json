@@ -14,7 +14,13 @@
     "no-underscore-dangle": [
       "error",
       {
-        "allow": ["__SMOOTH_ERROR__", "__APOLLO_STATE__", "__schema"]
+        "allow": [
+          "__SMOOTH_ERROR__",
+          "__APOLLO_STATE__",
+          "__schema",
+          "__smooth_pages",
+          "__smooth_blocks"
+        ]
       }
     ],
     "react/jsx-filename-extension": ["error", { "extensions": [".js"] }],

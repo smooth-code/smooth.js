@@ -35,7 +35,7 @@ export default function ssrMiddleware({
     })
 
     const {
-      AppContainer,
+      Root,
       DocumentContainer,
       ErrorContext,
     } = nodeExtractor.requireEntrypoint()
@@ -52,7 +52,7 @@ export default function ssrMiddleware({
       <ErrorContext.Provider value={{ error }}>
         <ApolloProvider client={apolloClient}>
           <StaticRouter location={req.url} context={routerContext}>
-            <AppContainer error={error} />
+            <Root error={error} />
           </StaticRouter>
         </ApolloProvider>
       </ErrorContext.Provider>

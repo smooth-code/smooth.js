@@ -71,6 +71,8 @@ function getTargetConfig(target, { config, dev }) {
           __smooth_app: getScriptPath(config, '_app.js'),
           __smooth_document: getScriptPath(config, '_document.js'),
           __smooth_error: getScriptPath(config, '_error.js'),
+          __smooth_blocks: config.blocksPath,
+          __smooth_pages: config.pagesPath,
         },
       },
       externals:
@@ -85,8 +87,8 @@ function getTargetConfig(target, { config, dev }) {
       },
       plugins: [
         new webpack.EnvironmentPlugin({
-          SMOOTH_BLOCKS_PATH: config.blocksPath,
-          SMOOTH_CONTENTS_PATH: config.contentsPath,
+          __smooth_blocks: config.blocksPath,
+          __smooth_pages: config.pagesPath,
         }),
         new LoadablePlugin(),
         ...(target === 'web' && dev

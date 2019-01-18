@@ -2,7 +2,7 @@ import React from 'react'
 import gql from 'graphql-tag'
 
 export const contentFragment = gql`
-  fragment BookFragment on Book {
+  fragment BookProps on Book {
     name
   }
 `

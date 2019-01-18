@@ -30,7 +30,7 @@ export async function getConfig({ dev }) {
     staticPath: path.join(localCwd, 'static'),
     srcPath: path.join(localCwd, 'src'),
     blocksPath: path.join(localCwd, 'src/blocks'),
-    contentsPath: path.join(localCwd, 'src/contents'),
+    pagesPath: path.join(localCwd, 'src/pages'),
     schemasPath: path.join(localCwd, 'src/schemas'),
     server: {
       port: 3000,

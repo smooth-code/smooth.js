@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { ApolloProvider } from 'react-apollo'
 import { loadableReady } from '@loadable/component'
 import { createApolloClient } from './apollo'
-import AppContainer from './AppContainer'
+import Root from './Root'
 import ErrorContext from './ErrorContext'
 
 loadableReady(() => {
@@ -13,7 +13,7 @@ loadableReady(() => {
     <ErrorContext.Provider value={{ error: window.__SMOOTH_ERROR__ }}>
       <ApolloProvider client={createApolloClient()}>
         <BrowserRouter>
-          <AppContainer />
+          <Root />
         </BrowserRouter>
       </ApolloProvider>
     </ErrorContext.Provider>,

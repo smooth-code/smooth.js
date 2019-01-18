@@ -18,7 +18,12 @@ const imageSizeResolver = name => object => ({
   height: object.sizes[`${name}-height`],
 })
 
-export function createResolvers({ types: t, options, schemaDefinition }) {
+export function createResolvers({
+  types: t,
+  options,
+  schemaDefinition,
+  config,
+}) {
   const apiClient = createClient(options.baseUrl)
   const { typeDefs } = schemaDefinition
   const blockDefinitions = typeDefs.definitions.filter(
@@ -44,6 +49,10 @@ export function createResolvers({ types: t, options, schemaDefinition }) {
       medium: imageSizeResolver('medium'),
       large: imageSizeResolver('large'),
     },
-    ...createDefaultResolvers(schemaDefinition, { types: t }, { apiClient }),
+    ...createDefaultResolvers(
+      schemaDefinition,
+      { types: t },
+      { apiClient, config, options },
+    ),
   }
 }

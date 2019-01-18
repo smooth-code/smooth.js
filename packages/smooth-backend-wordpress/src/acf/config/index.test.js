@@ -9,9 +9,9 @@ function parse(typeDefs) {
 }
 
 describe('#generateConfig', () => {
-  it('should handle model', () => {
+  it('should handle content', () => {
     const typeDef = gql`
-      type Book @model {
+      type Book @content {
         name: String! @field
       }
     `
@@ -65,10 +65,10 @@ describe('#generateConfig', () => {
         },
       ],
       [
-        'OtherModel @field',
+        'OtherContent @field',
         {
           type: 'post_object',
-          post_type: ['othermodel'],
+          post_type: ['othercontent'],
         },
       ],
       [
@@ -79,7 +79,7 @@ describe('#generateConfig', () => {
           sub_fields: [
             {
               instructions: null,
-              key: 'sc_field_models_Model_field_foo',
+              key: 'sc_field_contents_Content_field_foo',
               label: 'Foo',
               name: 'foo',
               required: 0,
@@ -90,7 +90,7 @@ describe('#generateConfig', () => {
       ],
     ])('%s', (value, expected) => {
       const typeDef = gql`
-        type Model @model {
+        type Content @content {
           field: ${value}
         }
 
@@ -103,7 +103,7 @@ describe('#generateConfig', () => {
           foo: String @field
         }
 
-        type OtherModel @model {
+        type OtherContent @content {
           foo: String @field
         }
       `
@@ -113,7 +113,7 @@ describe('#generateConfig', () => {
       expect(field).toEqual({
         name: 'field',
         label: 'Field',
-        key: 'sc_field_models_Model_field',
+        key: 'sc_field_contents_Content_field',
         instructions: null,
         required: 0,
         ...expected,

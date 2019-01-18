@@ -1,24 +1,24 @@
-function formatDate(value) {
-  return value
-    .split('/')
-    .reverse()
-    .join('-')
-}
+import { toRelativeUrl, formatDate, formatDateTime } from './util'
 
 const handlers = {
-  date({ name }) {
-    return object => {
-      const value = object.acf[name]
-      if (typeof value !== 'string' || value === '') return null
-      return new Date(formatDate(value))
-    }
+  date({ name, list }) {
+    if (list) return null
+    return object => formatDate(object.acf[name])
   },
-  dateTime({ name }) {
+  dateTime({ name, list }) {
+    if (list) return null
+    return object => formatDateTime(object.acf[name])
+  },
+  link({ name, list }, helpers, state) {
+    const { baseUrl } = state.options
+    if (list) return null
     return object => {
-      const value = object.acf[name]
-      if (typeof value !== 'string' || value === '') return null
-      const [date, time, period] = value.split(' ')
-      return new Date(`${formatDate(date)} ${time} ${period} UTC`)
+      const link = object.acf[name]
+      if (!link) return null
+      return {
+        ...link,
+        url: toRelativeUrl(baseUrl, link.url),
+      }
     }
   },
   shortText({ name, list }) {
@@ -119,7 +119,7 @@ function one(node, helpers, state) {
 
   if (
     t.isObjectTypeDefinition(node) &&
-    (t.getDirective(node, 'model') || t.getDirective(node, 'block'))
+    (t.getDirective(node, 'content') || t.getDirective(node, 'block'))
   ) {
     const name = t.getName(node)
     return {

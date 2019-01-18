@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export const typeDefs = gql`
-  type Movie @model {
+  type Movie @content {
     title: String! @field
     description: String! @field
     link: Link! @field

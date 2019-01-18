@@ -4,7 +4,7 @@ import { createResolvers } from '.'
 describe('createResolvers', () => {
   it('should create all resolvers', () => {
     const typeDefs = gql`
-      type Book @model {
+      type Book @content {
         name: String! @field
       }
 

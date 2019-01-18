@@ -5,7 +5,7 @@ import { concatenateTypeDefs, makeExecutableSchema } from 'graphql-tools'
 import { parse } from 'graphql'
 import { definitions as baseDefinitions } from '../definitions'
 import { addBlockTypeDefinitions } from './blockType'
-import { addModelTypeDefinitions } from './modelType'
+import { addContentTypeDefinitions } from './contentType'
 import { applyAsyncHook } from '../../plugin'
 import babelRequire from '../../babel/require'
 
@@ -46,7 +46,7 @@ export function createSchemaDefinitionMock(...definitions) {
     [...baseDefinitions, ...definitions].map(sanitizeDefinition),
   )
   addBlockTypeDefinitions(schemaDefinition)
-  addModelTypeDefinitions(schemaDefinition)
+  addContentTypeDefinitions(schemaDefinition)
   return schemaDefinition
 }
 
@@ -56,7 +56,7 @@ export async function createSchemaDefinition({ config }) {
     [...baseDefinitions, ...projectDefinitions].map(sanitizeDefinition),
   )
   addBlockTypeDefinitions(schemaDefinition)
-  addModelTypeDefinitions(schemaDefinition)
+  addContentTypeDefinitions(schemaDefinition)
   await applyAsyncHook(config, 'onCreateSchemaDefinition', { schemaDefinition })
   return schemaDefinition
 }

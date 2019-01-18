@@ -130,7 +130,7 @@ describe('types', () => {
   describe('#getFieldType', () => {
     it('should return field type', () => {
       const typeDef = getType(gql`
-        type Book @model {
+        type Book @content {
           name: String @field(type: longText)
         }
       `)
@@ -153,7 +153,7 @@ describe('types', () => {
 
     it('should support required', () => {
       const typeDef = getType(gql`
-        type Book @model {
+        type Book @content {
           name: String! @field(type: longText)
         }
       `)
@@ -176,7 +176,7 @@ describe('types', () => {
 
     it('should support list', () => {
       const typeDef = getType(gql`
-        type Book @model {
+        type Book @content {
           name: [String!]! @field
         }
       `)
@@ -204,7 +204,7 @@ describe('types', () => {
           romance
         }
 
-        type Book @model {
+        type Book @content {
           category: BookCategory @field
         }
       `
@@ -247,7 +247,7 @@ describe('types', () => {
 
     it('should support union', () => {
       const ast = gql`
-        type Composition @model {
+        type Composition @content {
           blocks: [XBlock!]! @field
         }
 

@@ -9,5 +9,5 @@ export const typeDefs = gql`
 
   directive @block on OBJECT
   directive @field(type: FieldType, label: String) on FIELD_DEFINITION
-  directive @model(icon: String, slug: String, label: String) on OBJECT
+  directive @content(icon: String, slug: String, label: String) on OBJECT
 `
