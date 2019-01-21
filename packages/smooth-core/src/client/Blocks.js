@@ -1,6 +1,7 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import {
+  getFragment,
   getFragmentDefinition,
   getFragmentString,
   getComponent,
@@ -8,12 +9,10 @@ import {
   getDefinitionName,
 } from './util'
 
-function getBlock(filePath, mod) {
-  const { blockFragment: fragment } = mod
-  if (!fragment) return null
-
+function getBlock(filePath, exp) {
+  const fragment = getFragment(exp, 'blockFragment', filePath)
   const fragmentDefinition = getFragmentDefinition(fragment)
-  const Component = getComponent(mod, filePath)
+  const Component = getComponent(exp, filePath)
   const type = getDefinitionType(fragmentDefinition)
   const name = getDefinitionName(fragmentDefinition)
   const propsAttribute = `${type}_props`
