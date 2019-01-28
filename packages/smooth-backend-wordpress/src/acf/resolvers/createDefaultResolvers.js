@@ -71,7 +71,11 @@ function getFieldResolvers(nodes, helpers, state) {
 function getQueryFieldResolver(node, helpers, state) {
   const { types: t } = helpers
   const name = t.getName(node)
-  const type = t.getName(node.type)
+  const typeDef = t.findTypeDefinition(node.type, state.ast)
+  if (!typeDef) {
+    return {}
+  }
+  const type = t.getContentSlug(typeDef)
   return {
     async [name](object, { slug, lang, id, preview }) {
       if (preview) {
