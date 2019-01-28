@@ -50,12 +50,12 @@ export function createExpressApp({
     app.use(webpackMiddleware)
   }
 
-  const apolloServer = new ApolloServer({ schema })
-
-  apolloServer.applyMiddleware({
-    app,
+  const apolloServer = new ApolloServer({
+    schema,
     context: ({ req }) => getContext({ req, config }),
   })
+
+  apolloServer.applyMiddleware({ app })
 
   app.use(ssr({ config, schema, fragmentTypes }))
 
