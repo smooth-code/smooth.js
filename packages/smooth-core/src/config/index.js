@@ -33,7 +33,7 @@ export async function getConfig({ dev }) {
     pagesPath: path.join(localCwd, 'src/pages'),
     schemasPath: path.join(localCwd, 'src/schemas'),
     server: {
-      port: 3000,
+      port: process.env.PORT || 3000,
     },
     webpackConfig: null,
     plugins: [],
