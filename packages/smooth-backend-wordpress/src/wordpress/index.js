@@ -10,12 +10,12 @@ const themeTpl = fs.readFileSync(path.join(themeDir, 'index.php'), 'utf-8')
 
 export async function onBuild({ options }) {
   const pluginDistDir = await getPluginDir(options.basePath)
-  const pluginContent = pluginTpl.replace(/%BASE_URL%/g, options.homeUrl)
+  const pluginContent = pluginTpl.replace(/%HOME_URL%/g, options.homeUrl)
   const pluginPath = path.join(pluginDistDir, 'index.php')
   await writeFile(pluginPath, pluginContent)
 
   const themeDistDir = await getThemeDir(options.basePath)
-  const themeContent = themeTpl.replace(/%BASE_URL%/g, options.homeUrl)
+  const themeContent = themeTpl.replace(/%HOME_URL%/g, options.homeUrl)
   const themePath = path.join(themeDistDir, 'index.php')
   await copyDir(themeDir, themeDistDir, {
     filter: filename => !/index\.php/.test(filename),
