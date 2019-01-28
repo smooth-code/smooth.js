@@ -1,7 +1,7 @@
 <?php
 
 /**
-* Plugin Name: Smooth CMS
+* Plugin Name: Smooth.js
 * Version: 1.0.0
 * Author: Smooth Code
 * Author URI: http://www.smooth-code.com
@@ -62,7 +62,15 @@ function smooth_create_post_type() {
   }
 }
 
+function smooth_set_home_url() {
+	$wp_home = getenv('WP_HOME');
+	$home_url = $wp_home ? $wp_home : '%HOME_URL%';
+
+	update_option( 'home', $wp_home );
+}
+
 add_action('init', 'smooth_create_post_type');
+add_action('init', 'smooth_set_home_url');
 
 
 // Modify preview link
@@ -70,10 +78,11 @@ add_action('init', 'smooth_create_post_type');
 add_filter('preview_post_link', function ($link) {
 	$post = get_post();
 	$path = parse_url($link, PHP_URL_PATH);
-	$link = '%BASE_URL%' . $path . '?id=' . $post->ID . '&preview=1';
+	$wp_home = getenv('WP_HOME');
+	$home_url = $wp_home ? $wp_home : '%HOME_URL%';
+	$link = $home_url . $path . '?id=' . $post->ID . '&preview=1';
 	return $link;
 });
-
 
 // Recursively add ACF into post objects
 

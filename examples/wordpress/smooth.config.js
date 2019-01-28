@@ -1,7 +1,7 @@
 import path from 'path'
 
 module.exports = {
-  baseUrl: 'http://localhost:3000',
+  server: { port: 3001 },
   plugins: [
     {
       resolve: require.resolve('smooth-backend-wordpress'),

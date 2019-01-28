@@ -10,14 +10,14 @@ const handlers = {
     return object => formatDateTime(object.acf[name])
   },
   link({ name, list }, helpers, state) {
-    const { baseUrl } = state.options
+    const { homeUrl } = state.options
     if (list) return null
     return object => {
       const link = object.acf[name]
       if (!link) return null
       return {
         ...link,
-        url: toRelativeUrl(baseUrl, link.url),
+        url: toRelativeUrl(homeUrl, link.url),
       }
     }
   },

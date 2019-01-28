@@ -1,5 +1,8 @@
 {
   "private": true,
+  "scripts": {
+    "dev": "WP_HOME=http://localhost:3001 smooth dev"
+  },
   "dependencies": {
     "graphql-tag": "^2.10.0",
     "react": "^16.7.0",
