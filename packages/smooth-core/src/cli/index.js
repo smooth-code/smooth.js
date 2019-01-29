@@ -126,8 +126,21 @@ function runCmd(command) {
   })
 }
 
-program.command('dev').action(() => runCmd(devCommand))
-program.command('build').action(() => runCmd(buildCommand))
-program.command('start').action(() => runCmd(startCommand))
+program
+  .command('dev')
+  .description(
+    'Starts the application in development mode (hot-code reloading, error reporting, etc)',
+  )
+  .action(() => runCmd(devCommand))
+program
+  .command('build')
+  .description('Compiles the application for production deployment')
+  .action(() => runCmd(buildCommand))
+program
+  .command('start')
+  .description(
+    'Starts the application in production mode.\nThe application should be compiled with `smooth build` first.',
+  )
+  .action(() => runCmd(startCommand))
 
 program.parse(process.argv)
