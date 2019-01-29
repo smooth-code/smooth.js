@@ -1,4 +1,7 @@
-[![Smooth.js](https://raw.githubusercontent.com/smooth-code/smooth.js/master/resources/logo-colored-light.png)](https://smoothjs.org)
+<h1 align="center">
+  <img src="https://raw.githubusercontent.com/smooth-code/smooth.js/master/resources/logo-colored-light.png" alt="Smooth.js" title="Smooth.js" width="400">
+</h1>
+<p align="center" style="font-size: 1.2rem;">Code driven CMS powered by GraphQL & React.</p>
 
 [![NPM version](https://img.shields.io/npm/v/smooth-core.svg)](https://www.npmjs.com/package/smooth-core)
 [![CircleCI](https://circleci.com/gh/smooth-code/smooth.js.svg?style=svg)](https://circleci.com/gh/smooth-code/smooth.js)
