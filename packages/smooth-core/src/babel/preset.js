@@ -6,7 +6,7 @@ const common = {
   ],
 }
 
-const nodeConfig = {
+const nodeConfig = opts => ({
   ...common,
   presets: [
     ...common.presets,
@@ -18,12 +18,13 @@ const nodeConfig = {
         targets: {
           node: 'current',
         },
+        ...opts['preset-env'],
       },
     ],
   ],
-}
+})
 
-const webConfig = {
+const webConfig = opts => ({
   ...common,
   presets: [
     ...common.presets,
@@ -33,18 +34,23 @@ const webConfig = {
         modules: false,
         loose: true,
         useBuiltIns: 'entry',
+        ...opts['preset-env'],
       },
     ],
   ],
-}
+  plugins: [
+    ...common.plugins,
+    ['@babel/plugin-transform-runtime', opts['transform-runtime']],
+  ],
+})
 
 function isWebTarget(caller) {
   return Boolean(caller && caller.name === 'babel-loader')
 }
 
-module.exports = api => {
+module.exports = (api, opts = {}) => {
   if (api.caller(isWebTarget)) {
-    return webConfig
+    return webConfig(opts)
   }
-  return nodeConfig
+  return nodeConfig(opts)
 }
