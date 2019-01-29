@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "smooth dev",
+    "build": "smooth build",
+    "start": "smooth start"
+  },
+  "dependencies": {
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "smooth-core": "^0.1.1-alpha.8",
+    "styled-components": "^4.1.3"
+  }
+}

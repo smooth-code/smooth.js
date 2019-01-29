@@ -1,1 +1,1 @@
-# Smooth.js
+packages/smooth-core/README.md
