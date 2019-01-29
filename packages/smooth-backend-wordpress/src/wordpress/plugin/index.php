@@ -59,6 +59,15 @@ function smooth_create_post_type() {
 		
 			return $data;
 		} );
+ 
+		// Enable meta_key to be able to sort items
+		add_filter( "rest_{$post_type['name']}_query", function ($query_vars, $request) {
+			$meta_key = $request->get_param('meta_key');
+			if (isset($meta_key)) {
+					$query_vars["meta_key"] = $meta_key;
+			}
+			return $query_vars;
+		}, 10, 2);
   }
 }
 

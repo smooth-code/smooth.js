@@ -1,23 +1,23 @@
 import axios from 'axios'
 import qs from 'qs'
 
-function getParams({ lang, type, filter }) {
+function getParams({ lang, type, query }) {
   const params = {}
   if (lang) params.lang = lang
   if (type) params.type = type
-  if (filter) params.filter = filter
+  if (query) Object.assign(params, query)
   return params
 }
 
 function paramsSerializer(params) {
-  return qs.stringify(params, { arrayFormat: 'brackets' })
+  return qs.stringify(params, { arrayFormat: 'indices' })
 }
 
 export function createClient(baseUrl) {
   return {
-    async getContents({ type, slug, lang, filter }) {
+    async getContents({ type, slug, lang, query }) {
       type = type.toLowerCase()
-      const params = getParams({ lang, type, filter })
+      const params = getParams({ lang, type, query })
 
       if (slug) {
         params.slug = slug
