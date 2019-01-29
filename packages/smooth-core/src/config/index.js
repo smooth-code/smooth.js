@@ -9,18 +9,24 @@ import { parsePlugins } from './plugins'
 
 const exists = promisify(fs.exists)
 
-export async function getConfig({ dev }) {
-  const configPath = 'smooth.config.js'
-  const localCwd = cwd()
-  const absConfigPath = path.resolve(localCwd, configPath)
-  const configExists = await exists(absConfigPath)
+async function mergeLocalConfig(configPath, defaultConfig) {
+  const configExists = await exists(configPath)
 
   if (!configExists) {
-    throw new Error(`Error: config not found "${configPath}"`)
+    return defaultConfig
   }
 
   // eslint-disable-next-line global-require, import/no-dynamic-require
-  const getLocalConfig = babelRequire(absConfigPath)
+  const localConfig = babelRequire(configPath)
+  const config = merge(defaultConfig, localConfig)
+  if (localConfig.webpack) config.webpack = localConfig.webpack
+  if (localConfig.webpackDevMiddleware)
+    config.webpackDevMiddleware = localConfig.webpackDevMiddleware
+  return config
+}
+
+export async function getConfig({ dev }) {
+  const localCwd = cwd()
 
   const defaultConfig = {
     env: process.env.NODE_ENV || 'development',
@@ -41,8 +47,11 @@ export async function getConfig({ dev }) {
     webpackDevMiddleware: x => x,
   }
 
-  const localConfig = getLocalConfig
-  const config = merge({}, defaultConfig, localConfig)
+  const config = await mergeLocalConfig(
+    path.resolve(localCwd, 'smooth.config.js'),
+    defaultConfig,
+  )
+
   config.webpackConfig = await getWebpackConfig({ config, dev })
   config.plugins = parsePlugins(config.plugins)
   return config

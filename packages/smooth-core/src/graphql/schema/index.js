@@ -1,4 +1,6 @@
+import fs from 'fs'
 import merge from 'merge-deep'
+import { promisify } from 'util'
 import path from 'path'
 import glob from 'tiny-glob'
 import { concatenateTypeDefs, makeExecutableSchema } from 'graphql-tools'
@@ -8,6 +10,8 @@ import { addBlockTypeDefinitions } from './blockType'
 import { addContentTypeDefinitions } from './contentType'
 import { applyAsyncHook } from '../../plugin'
 import babelRequire from '../../babel/require'
+
+const exists = promisify(fs.exists)
 
 function sanitizeDefinition(options) {
   return {
@@ -28,6 +32,8 @@ function mergeSchemaDefinitions(definitions) {
 }
 
 export async function getDefinitionModules({ config }) {
+  const schemasExists = await exists(config.schemasPath)
+  if (!schemasExists) return []
   const files = await glob('**/*.js', { cwd: config.schemasPath })
   const defs = files.map(relativePath => {
     const absolutePath = path.join(config.schemasPath, relativePath)
