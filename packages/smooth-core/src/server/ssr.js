@@ -12,6 +12,15 @@ function enhanceApp(options = {}, App) {
   return options.enhanceApp ? options.enhanceApp(App) : App
 }
 
+function clearCache() {
+  const keys = Object.keys(require.cache)
+  keys.forEach(key => {
+    if (key.match(/node\/static\//)) {
+      delete require.cache[key]
+    }
+  })
+}
+
 export default function ssrMiddleware({
   config,
   schema,
@@ -28,6 +37,10 @@ export default function ssrMiddleware({
       config.cachePath,
       'web/static/loadable-stats.json',
     )
+
+    if (config.env !== 'production') {
+      clearCache()
+    }
 
     const nodeExtractor = new ChunkExtractor({
       statsFile: nodeStats,
