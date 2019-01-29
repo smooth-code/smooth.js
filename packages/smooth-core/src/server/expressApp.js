@@ -35,6 +35,7 @@ export function createExpressApp({
   )
 
   app.use(
+    '/static',
     express.static(
       config.staticPath,
       dev
