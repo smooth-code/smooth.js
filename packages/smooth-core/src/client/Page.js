@@ -13,7 +13,7 @@ function getIndexPath(isIndex, name) {
 
 function getRoutePath(isIndex, isContent, name) {
   if (isContent) return isIndex ? '/:slug*' : `/${name}/:slug+`
-  return getIndexPath()
+  return getIndexPath(isIndex, name)
 }
 
 function getPage(filePath) {
