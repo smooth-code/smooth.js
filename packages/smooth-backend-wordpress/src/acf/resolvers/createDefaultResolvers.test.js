@@ -4,8 +4,15 @@ import createDefaultResolvers from './createDefaultResolvers'
 describe('createDefaultResolvers', () => {
   it('should create default resolvers', () => {
     const typeDefs = gql`
+      type Group {
+        shortText: String @field(type: shortText)
+        shortTextArray: [String] @field(type: shortText)
+        image: Image @field
+      }
+
       type Book @content {
         name: String! @field
+        group: Group @field
       }
 
       type BookCard @block {
@@ -24,5 +31,10 @@ describe('createDefaultResolvers', () => {
     expect(
       resolvers.BookCard.multiple({ acf: { multiple: 'hello,you' } }),
     ).toEqual(['hello', 'you'])
+    expect(resolvers.Group.image({ image: false })).toBe(null)
+    expect(resolvers.Group.shortText({ shortText: 'Hello' })).toBe('Hello')
+    expect(
+      resolvers.Group.shortTextArray({ shortTextArray: 'Hello,foo,bar' }),
+    ).toEqual(['Hello', 'foo', 'bar'])
   })
 })

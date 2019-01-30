@@ -1,19 +1,27 @@
 import { toRelativeUrl, formatDate, formatDateTime } from './util'
 
+function acfField(object, name) {
+  if (object.acf) {
+    return object.acf[name] || null
+  }
+
+  return object[name] || null
+}
+
 const handlers = {
   date({ name, list }) {
     if (list) return null
-    return object => formatDate(object.acf[name])
+    return object => formatDate(acfField(object, name))
   },
   dateTime({ name, list }) {
     if (list) return null
-    return object => formatDateTime(object.acf[name])
+    return object => formatDateTime(acfField(object, name))
   },
   link({ name, list }, helpers, state) {
     const { homeUrl } = state.options
     if (list) return null
     return object => {
-      const link = object.acf[name]
+      const link = acfField(object, name)
       if (!link) return null
       return {
         ...link,
@@ -23,11 +31,17 @@ const handlers = {
   },
   shortText({ name, list }) {
     if (!list) return null
-    return object => (object.acf[name] ? object.acf[name].split(',') : null)
+    return object => {
+      const value = acfField(object, name)
+      return value ? value.split(',') : null
+    }
   },
   longText({ name, list }) {
     if (!list) return null
-    return object => (object.acf[name] ? object.acf[name].split('\n') : null)
+    return object => {
+      const value = acfField(object, name)
+      return value ? value.split('\n') : null
+    }
   },
 }
 
@@ -47,7 +61,7 @@ function getFieldResolver(node, helpers, state) {
     return null
   }
   const defaultResolver = {
-    [name]: object => object.acf[name] || null,
+    [name]: object => acfField(object, name),
   }
   const handler = handlers[infos.type.name]
   if (!handler) return defaultResolver
@@ -121,10 +135,7 @@ function one(node, helpers, state) {
     }
   }
 
-  if (
-    t.isObjectTypeDefinition(node) &&
-    (t.getDirective(node, 'content') || t.getDirective(node, 'block'))
-  ) {
+  if (t.isObjectTypeDefinition(node)) {
     const name = t.getName(node)
     return {
       [name]: getFieldResolvers(node.fields, helpers, state),
