@@ -18,7 +18,7 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "shx rm -rf lib",
-    "build": "babel --root-mode upward -d lib --copy-files --ignore \"**/*.test.js\" src",
+    "build": "babel --root-mode upward -d lib --ignore \"**/*.test.js\" --copy-files src",
     "prepublishOnly": "yarn run build"
   },
   "peerDependencies": {
