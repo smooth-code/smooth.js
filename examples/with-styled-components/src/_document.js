@@ -1,4 +1,3 @@
-/* eslint-disable react/no-danger, jsx-a11y/html-has-lang */
 import React from 'react'
 import Document from 'smooth-core/document'
 import { ServerStyleSheet } from 'styled-components'

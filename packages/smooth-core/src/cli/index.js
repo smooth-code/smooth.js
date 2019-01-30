@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import path from 'path'
 import program from 'commander'
 import logUpdate from 'log-update'
