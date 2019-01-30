@@ -35,6 +35,11 @@ export function createResolvers({
   )
 
   return {
+    ...createDefaultResolvers(
+      schemaDefinition,
+      { types: t },
+      { apiClient, config, options },
+    ),
     Block: {
       type(object) {
         return object.acf_fc_layout
@@ -49,10 +54,5 @@ export function createResolvers({
       medium: imageSizeResolver('medium'),
       large: imageSizeResolver('large'),
     },
-    ...createDefaultResolvers(
-      schemaDefinition,
-      { types: t },
-      { apiClient, config, options },
-    ),
   }
 }
