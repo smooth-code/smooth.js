@@ -6,6 +6,7 @@ export function postType(name, label = null, icon = null) {
       public: true,
       show_in_rest: true,
       menu_icon: icon,
+      supports: ['title', 'editor', 'revisions'],
     },
   }
 }

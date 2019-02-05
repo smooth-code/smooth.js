@@ -39,6 +39,7 @@ describe('#onBuild', () => {
           menu_icon: null,
           public: true,
           show_in_rest: true,
+          supports: ['title', 'editor', 'revisions'],
         },
         name: 'awesomebook',
       },

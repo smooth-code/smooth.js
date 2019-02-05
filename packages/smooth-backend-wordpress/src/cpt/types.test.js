@@ -9,6 +9,7 @@ describe('types', () => {
           menu_icon: 'icon',
           public: true,
           show_in_rest: true,
+          supports: ['title', 'editor', 'revisions'],
         },
         name: 'name',
       })
