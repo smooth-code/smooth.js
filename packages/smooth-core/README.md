@@ -167,7 +167,6 @@ _Note: Don't name the `static` directory anything else. The name is required and
   <summary><b>Examples</b></summary>
   <ul>
     <li><a href="/examples/head-elements">Head elements</a></li>
-    <li><a href="/examples/layout-component">Layout component</a></li>
   </ul>
 </details>
 
@@ -176,7 +175,7 @@ _Note: Don't name the `static` directory anything else. The name is required and
 We expose a built-in component for appending elements to the `<head>` of the page.
 
 ```jsx
-import { Head } from 'smooth-core/head'
+import Head from 'smooth-core/head'
 
 export default () => (
   <div>

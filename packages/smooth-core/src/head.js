@@ -1,1 +1,1 @@
-export { Helmet as Head } from 'react-helmet'
+export { Helmet as default } from 'react-helmet'
