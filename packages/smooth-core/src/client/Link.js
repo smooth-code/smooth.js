@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link as BaseLink } from 'react-router-dom'
+import { Link as BaseLink, NavLink as BaseNavLink } from 'react-router-dom'
 import PageContext from './PageContext'
 
 function computeTo(to, lang) {
@@ -9,10 +9,18 @@ function computeTo(to, lang) {
   return to
 }
 
-export default function Link(props) {
-  return (
+function createLink(Component) {
+  return props => (
     <PageContext.Consumer>
-      {({ lang }) => <BaseLink {...props} to={computeTo(props.to, lang)} />}
+      {pageContext => (
+        <Component
+          {...props}
+          to={computeTo(props.to, pageContext ? pageContext.lang : null)}
+        />
+      )}
     </PageContext.Consumer>
   )
 }
+
+export const Link = createLink(BaseLink)
+export const NavLink = createLink(BaseNavLink)
