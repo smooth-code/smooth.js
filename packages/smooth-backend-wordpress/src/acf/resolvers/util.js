@@ -2,7 +2,9 @@ const endBackslashRegExp = /\/+$/
 
 export function toRelativeUrl(baseUrl, url) {
   const regexp = new RegExp(`^${baseUrl.replace(endBackslashRegExp, '')}`)
-  return `${url.replace(regexp, '')}` || '/'
+  const finalUrl = `${url.replace(regexp, '')}` || '/'
+  if (finalUrl.startsWith(':')) return url
+  return finalUrl
 }
 
 function formatDateString(value) {

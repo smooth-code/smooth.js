@@ -78,5 +78,14 @@ describe('util', () => {
         ),
       ).toBe('/foo?url=http://smooth-code.com')
     })
+
+    it('should avoid replacing url containing port', () => {
+      expect(
+        toRelativeUrl(
+          'http://smooth-code.com',
+          'http://smooth-code.com:8000/foo',
+        ),
+      ).toBe('http://smooth-code.com:8000/foo')
+    })
   })
 })
