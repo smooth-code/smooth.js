@@ -207,3 +207,21 @@ add_filter( 'rest_prepare_revision', function( $response, $post ) {
 	$data['acf'] = $fields->acf;
 	return rest_ensure_response( $data );
 }, 10, 2 );
+
+// API Caching
+
+// Skip cache for preview
+add_filter( 'rest_cache_skip', function($skip, $request_uri) {
+	if (!$skip && false !== stripos( $request_uri, 'wp-json/presspack/v1/preview')) {
+		return true;
+	}
+	
+	return $skip;
+}, 10, 2 );
+
+// Clear cache when a post (all types) is saved
+add_action('save_post', function($post_id) {
+  if (class_exists('WP_REST_Cache')) {
+    WP_REST_Cache::empty_cache();
+  }
+});
