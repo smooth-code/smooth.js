@@ -93,6 +93,8 @@ export function getKnownType(type) {
       return 'shortText'
     case 'Image':
       return 'image'
+    case 'Media':
+      return 'media'
     case 'Link':
       return 'link'
     case 'Boolean':

@@ -10,6 +10,7 @@ export const typeDefs = gql`
     dateTime: DateTime @field
     link: Link @field
     blocks: [Block] @field
+    file: Media @field
   }
 `
 

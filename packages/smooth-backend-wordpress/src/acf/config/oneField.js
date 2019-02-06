@@ -57,6 +57,10 @@ const handlers = {
     if (list) return { type: 'gallery' }
     return { type: 'image' }
   },
+  media(infos) {
+    preventList(infos)
+    return { type: 'file' }
+  },
   link(infos) {
     preventList(infos)
     return { type: 'link' }

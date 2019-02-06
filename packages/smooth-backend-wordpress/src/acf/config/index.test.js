@@ -43,6 +43,7 @@ describe('#generateConfig', () => {
       ['Int @field', { type: 'number' }],
       ['Float @field', { type: 'number' }],
       ['Image @field', { type: 'image' }],
+      ['Media @field', { type: 'file' }],
       ['[Image] @field', { type: 'gallery' }],
       ['Link @field', { type: 'link' }],
       [
