@@ -1,6 +1,7 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { BlockFragment, Blocks } from 'smooth-core/blocks'
+import { Link } from 'smooth-core/router'
 
 export const contentFragment = gql`
   fragment PageProps on Page {
@@ -19,6 +20,7 @@ export const contentFragment = gql`
     allBooks {
       metadata {
         id
+        slug
       }
       name
     }
@@ -45,7 +47,9 @@ export default function Page({ title, book, specificBook, allBooks, blocks }) {
       <h2>All books</h2>
       <ul>
         {allBooks.map(b => (
-          <li key={b.metadata.id}>{b.name}</li>
+          <li key={b.metadata.id}>
+            <Link to={`/books/${b.metadata.slug}`}>{b.name}</Link>
+          </li>
         ))}
       </ul>
       <Blocks blocks={blocks} />

@@ -1,1 +1,1 @@
-export * from 'react-router-dom'
+export { default as Link } from './client/Link'

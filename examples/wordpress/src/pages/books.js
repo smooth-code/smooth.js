@@ -7,8 +7,6 @@ export const contentFragment = gql`
   }
 `
 
-export const slug = 'books'
-
 export default function Book({ name }) {
   return <div>{name}</div>
 }

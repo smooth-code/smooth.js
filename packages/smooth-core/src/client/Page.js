@@ -2,6 +2,7 @@ import React from 'react'
 import loadable from '@loadable/component'
 import App from '__smooth_app'
 import Content from './Content'
+import PageContext from './PageContext'
 
 function getFileName(filePath) {
   return filePath.replace(/^\.\//, '').replace(/\.js$/, '')
@@ -59,7 +60,11 @@ export default function Page({ page, lang, ...props }) {
       {exp => {
         const Component = page.isContent ? Content : exp.default
         const appProps = { lang, page, exp, ...props }
-        return <App {...appProps} Component={Component} />
+        return (
+          <PageContext.Provider value={{ lang, page }}>
+            <App {...appProps} Component={Component} />
+          </PageContext.Provider>
+        )
       }}
     </page.LoadableComponent>
   )

@@ -76,6 +76,46 @@ So far, we get:
 - Server rendering and indexing of `./pages`
 - Static file serving. `./static/` is mapped to `/static/` (given you [create a `./static/` directory](#static-file-serving-eg-images) inside your project)
 
+### Content
+
+#### Link to another content
+
+To link a content, you have to know two things: the slug and the name of the content page.
+
+You can find the content slug in metadata and the name of the content page is just the name of the page file.
+
+The `Link` component take care of the language for you, you can safely use it to create a link to another page.
+
+```js
+import React from 'react'
+import gql from 'graphql-tag'
+import { Link } from 'smooth-core/router'
+
+export const contentFragment = gql`
+  fragment PageProps on Page {
+    books {
+      metadata {
+        id
+        slug
+      }
+      name
+    }
+  }
+`
+
+export default function Page({ books }) {
+  return (
+    <ul>
+      {allBooks.map(book => (
+        <li key={book.metadata.id}>
+          <Link to={`/books/${book.metadata.slug}`}>{book.name}</Link>
+        </li>
+      ))}
+    </ul>
+  )
+}
+```
+
 ### Automatic code splitting
 
 Every `import` you declare gets bundled and served with each page. That means pages never load unnecessary code!
