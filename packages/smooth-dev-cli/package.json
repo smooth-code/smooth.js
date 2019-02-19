@@ -33,11 +33,11 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.3.1",
-    "chokidar": "^2.1.0",
+    "chokidar": "^2.1.2",
     "configstore": "^4.0.0",
     "fs-extra": "^7.0.1",
     "is-absolute": "^1.0.0",
     "lodash": "^4.17.10",
-    "yargs": "^12.0.5"
+    "yargs": "^13.2.1"
   }
 }
