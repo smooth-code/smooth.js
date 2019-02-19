@@ -5547,9 +5547,9 @@ https-proxy-agent@^2.2.1:
     debug "^3.1.0"
 
 humanize-duration@^3.15.3:
-  version "3.16.0"
-  resolved "https://registry.yarnpkg.com/humanize-duration/-/humanize-duration-3.16.0.tgz#c7ec3b898305f007c63893f891870b2b5a2e0a7d"
-  integrity sha512-LDnNSe8EkJjhRsijWgUK12UK7ivbCww2R3LW9quKdBDoQjeAewqnGHch5AJTCOny1cPLhnXTzvniXVP3B9O6Ew==
+  version "3.17.0"
+  resolved "https://registry.yarnpkg.com/humanize-duration/-/humanize-duration-3.17.0.tgz#a2cec75f9329ce68f8797b23d31d1f988992d11b"
+  integrity sha512-9em7CXFa0my1DF3aIQg0sTRyAX2znEOMHolUvu9nSTUjS+bRD32y0MH+Hnm3Xu0cSWrxpYb2isXSfH9pF2LP8g==
 
 humanize-ms@^1.2.1:
   version "1.2.1"
