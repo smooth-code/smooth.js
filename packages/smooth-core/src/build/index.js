@@ -20,14 +20,15 @@ export async function buildSchema({ config }) {
   const { schemaDefinition, schema } = await buildSchemaDefinition({ config })
   await applyAsyncHook(config, 'onBuild', { schemaDefinition })
   const fragmentTypes = await getFragmentTypes({ schema })
-  cache.writeCacheFile('fragmentTypes.json', JSON.stringify(fragmentTypes))
+  await cache.writeCacheFile(
+    'fragmentTypes.json',
+    JSON.stringify(fragmentTypes),
+  )
   return { schema, fragmentTypes }
 }
 
 export function watchSchema({ logger, ...options }) {
-  const watcher = new Watcher(async () =>
-    logger(buildSchema(options), 'Schemas'),
-  )
+  const watcher = new Watcher(async () => logger(buildSchema(options)))
   watchFs(options.config.srcPath, () => watcher.tick())
   return watcher
 }
@@ -45,7 +46,7 @@ export async function buildWebpack({ config }) {
   })
 }
 
-export function watchWebpack({ logger, config }) {
+export function watchWebpack({ config, logger }) {
   const resolver = {
     done: result => {
       if (resolver.resolve) {
@@ -54,23 +55,26 @@ export function watchWebpack({ logger, config }) {
       }
     },
     task: async () => {
-      resolver.done()
+      if (resolver.resolve) return
       resolver.promise = new Promise(resolve => {
         resolver.resolve = resolve
       })
-      return logger(resolver.promise, 'Webpack')
+      return logger(resolver.promise)
     },
   }
 
   const watcher = new Watcher(resolver.task)
+  watcher.tick()
 
   const middleware = webpackMiddleware({ config }, compiler => {
     compiler.hooks.done.tap('smooth', (compiler, stats) => {
       resolver.done(stats)
     })
-    compiler.hooks.invalid.tap('smooth', () => watcher.tick())
-    compiler.hooks.run.tap('smooth', () => watcher.tick())
-    compiler.hooks.watchRun.tap('smooth', () => watcher.tick())
+    compiler.hooks.invalid.tap('smooth', (filename, changeTime) => {
+      if (!filename.match(/\/\.smooth\//)) {
+        watcher.tick()
+      }
+    })
   })
 
   watcher.middleware = middleware

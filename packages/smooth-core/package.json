@@ -29,8 +29,8 @@
     "smooth": "./bin/smooth"
   },
   "peerDependencies": {
-    "react": ">=16.3.0",
-    "react-dom": ">=16.3.0"
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "dependencies": {
     "@babel/core": "^7.3.3",
@@ -66,7 +66,6 @@
     "graphql-tag": "^2.10.1",
     "graphql-tools": "^4.0.4",
     "humanize-string": "^1.0.2",
-    "log-update": "^2.3.0",
     "merge-deep": "^3.0.2",
     "pluralize": "^7.0.0",
     "progress-estimator": "^0.2.2",

@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import path from 'path'
 import program from 'commander'
-import logUpdate from 'log-update'
 import createLogger from 'progress-estimator'
 import { getConfig } from '../config'
 import { start } from '../server'
@@ -13,50 +12,30 @@ import {
   buildWebpack,
 } from '../build'
 
-let stdout = `Smooth CMS 👨‍🚀
- 
-
-
-
-`
-function createCustomLogFunction(line) {
-  function logFunction(str) {
-    const lines = stdout.split('\n')
-    lines[line] = str
-    stdout = lines.join('\n')
-    logUpdate(stdout)
-  }
-
-  logFunction.clear = logUpdate.clear
-  logFunction.done = () => {}
-  return logFunction
-}
-
-function createCustomLogger(line) {
-  return createLogger({ logFunction: createCustomLogFunction(line) })
-}
+const logger = createLogger()
 
 function watch({ config }) {
+  let webpackWatcher
+
   const schemaWatcher = watchSchema({
     config,
-    logger: createCustomLogger(2),
+    logger: promise => logger(promise, 'Build schemas'),
   })
 
-  const logServer = createCustomLogFunction(5)
-
-  let count = 0
-  function done() {
-    count += 1
-    if (count === 2) {
-      logServer('Project ready 🚀')
-    }
-  }
-
   schemaWatcher.on('done', ({ schema, fragmentTypes }) => {
-    const webpackWatcher = watchWebpack({
-      config,
-      logger: createCustomLogger(3),
-    })
+    if (!webpackWatcher) {
+      webpackWatcher = watchWebpack({
+        config,
+        logger: promise => logger(promise, 'Build webpack'),
+      })
+
+      webpackWatcher.once('done', () => {
+        console.log('🚀 Ready on http://localhost:3000')
+      })
+
+      // eslint-disable-next-line no-console
+      webpackWatcher.on('error', console.error)
+    }
 
     start({
       dev: true,
@@ -65,13 +44,8 @@ function watch({ config }) {
       config,
       webpackMiddleware: webpackWatcher.middleware,
     })
-
-    webpackWatcher.on('done', done)
-    // eslint-disable-next-line no-console
-    webpackWatcher.on('error', console.error)
   })
 
-  schemaWatcher.on('done', done)
   // eslint-disable-next-line no-console
   schemaWatcher.on('error', console.error)
 }
@@ -84,8 +58,8 @@ function clearConsole() {
 
 async function devCommand() {
   clearConsole()
+  console.log('> smooth.js 👨‍🚀')
   const config = await getConfig({ dev: true })
-  logUpdate.done()
   watch({ config })
 }
 

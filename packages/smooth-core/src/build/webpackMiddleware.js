@@ -1,3 +1,5 @@
+const ignored = ['.git', /\/\.smooth\//, 'node_modules']
+
 export default function webpackMiddleware({ config }, onCreateCompiler) {
   const webpackDevMiddleware = require('webpack-dev-middleware')
   const webpackHotMiddleware = require('webpack-hot-middleware')
@@ -9,8 +11,9 @@ export default function webpackMiddleware({ config }, onCreateCompiler) {
   const devMiddlewareInstance = webpackDevMiddleware(
     compiler,
     config.webpackDevMiddleware({
-      logLevel: 'error',
       publicPath: '/web/static/',
+      logLevel: 'error',
+      watchOptions: { ignored, aggregateTimeout: 300 },
       writeToDisk(filePath) {
         return /node\/static/.test(filePath) || /loadable-stats/.test(filePath)
       },
