@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import loadable from '@loadable/component'
 import App from '__smooth_app'
 import Content from '__smooth_content'
+import { applyHook } from '../plugin/browser'
 import PageContext from './PageContext'
 
 function getFileName(filePath) {
@@ -62,16 +63,29 @@ export default function Page({
   match,
   location,
 }) {
-  const Component = useRef()
+  const PageComponent = useRef()
+  const ContentComponent = useRef()
   return (
     <page.LoadableComponent>
       {pageModule => {
-        if (!Component.current) {
-          Component.current = page.isContent
-            ? function ContentWrapper() {
-                return <Content Component={pageModule.default} />
-              }
-            : pageModule.default
+        if (page.isContent) {
+          ContentComponent.current =
+            ContentComponent.current ||
+            (props => {
+              const Component = pageModule.default
+              const element = <Component {...props} />
+              return applyHook(
+                'wrapContentElement',
+                { element, props },
+                'element',
+              )
+            })
+
+          PageComponent.current =
+            PageComponent.current ||
+            (() => <Content Component={ContentComponent.current} />)
+        } else {
+          ContentComponent.current = pageModule.default
         }
 
         const pageContext = {
@@ -83,7 +97,7 @@ export default function Page({
         }
         return (
           <PageContext.Provider value={pageContext}>
-            <App {...pageContext} Component={Component.current} />
+            <App {...pageContext} Component={PageComponent.current} />
           </PageContext.Provider>
         )
       }}

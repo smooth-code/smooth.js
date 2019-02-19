@@ -5,6 +5,7 @@ import createLogger from 'progress-estimator'
 import { getConfig } from '../config'
 import { start } from '../server'
 import {
+  buildBrowserPlugins,
   watchSchema,
   buildSchema,
   watchWebpack,
@@ -60,6 +61,7 @@ async function devCommand() {
   clearConsole()
   console.log('> smooth.js 👨‍🚀')
   const config = await getConfig({ dev: true })
+  await logger(buildBrowserPlugins({ config }), 'Build plugins')
   watch({ config })
 }
 

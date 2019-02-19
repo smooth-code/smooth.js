@@ -6,8 +6,6 @@ import { Link } from 'smooth-core/router'
 export const contentFragment = gql`
   fragment PageProps on Page {
     title
-    date
-    dateTime
     book {
       metadata {
         slug

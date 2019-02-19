@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom'
 import { Query as ApolloQuery } from 'react-apollo'
 import PageContext from '../client/PageContext'
 import { HTTPError } from '../router'
+import { applyHook } from '../plugin/browser'
 import {
   getFragmentDefinition,
   getFragment,
@@ -23,8 +24,13 @@ function getQuery(page) {
   const type = getDefinitionType(fragmentDefinition)
   const queryField = getQueryField(type)
   const fragmentName = getDefinitionName(fragmentDefinition)
+  const fields = applyHook(
+    'onSelectContentFields',
+    { fields: [`...${fragmentName}`] },
+    'fields',
+  )
 
-  return gql`
+  const query = gql`
     query Content(
       $lang: String
       $slug: String!
@@ -37,12 +43,14 @@ function getQuery(page) {
         id: $id
         preview: $preview
       ) {
-        ...${fragmentName}
+        ${fields}
       }
     }
 
     ${fragment}
   `
+
+  return query
 }
 
 function getVariables(location, lang, slug = 'index') {

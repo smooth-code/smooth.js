@@ -68,6 +68,7 @@ function getTargetConfig(target, { config, dev }) {
             config.cachePath,
             'fragmentTypes.json',
           ),
+          __smooth_plugins: path.join(config.cachePath, 'browser-plugins.js'),
           __smooth_app: getScriptPath(config, '_app.js'),
           __smooth_document: getScriptPath(config, '_document.js'),
           __smooth_error: getScriptPath(config, '_error.js'),
