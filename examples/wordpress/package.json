@@ -4,10 +4,10 @@
     "dev": "WP_HOME=http://localhost:3001 smooth dev"
   },
   "dependencies": {
-    "graphql-tag": "^2.10.0",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
-    "smooth-backend-wordpress": "*",
-    "smooth-core": "*"
+    "graphql-tag": "^2.10.1",
+    "react": "^16.8.2",
+    "react-dom": "^16.8.2",
+    "smooth-backend-wordpress": "latest",
+    "smooth-core": "latest"
   }
 }

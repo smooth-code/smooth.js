@@ -1,6 +1,6 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { BlockFragment, Blocks } from 'smooth-core/blocks'
+import { BlockFragment, Blocks } from 'smooth-core/content'
 import { Link } from 'smooth-core/router'
 
 export const contentFragment = gql`
