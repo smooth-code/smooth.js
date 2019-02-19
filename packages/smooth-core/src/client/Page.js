@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import loadable from '@loadable/component'
 import App from '__smooth_app'
-import Content from './Content'
+import Content from '__smooth_content'
 import PageContext from './PageContext'
 
 function getFileName(filePath) {
@@ -54,15 +54,36 @@ export function getPages() {
     .sort(sortPages)
 }
 
-export default function Page({ page, lang, ...props }) {
+export default function Page({
+  page,
+  lang,
+  indexUrl,
+  history,
+  match,
+  location,
+}) {
+  const Component = useRef()
   return (
     <page.LoadableComponent>
-      {exp => {
-        const Component = page.isContent ? Content : exp.default
-        const appProps = { lang, page, exp, ...props }
+      {pageModule => {
+        if (!Component.current) {
+          Component.current = page.isContent
+            ? function ContentWrapper() {
+                return <Content Component={pageModule.default} />
+              }
+            : pageModule.default
+        }
+
+        const pageContext = {
+          lang,
+          page: { ...page, module: pageModule, indexUrl },
+          history,
+          match,
+          location,
+        }
         return (
-          <PageContext.Provider value={{ lang, page }}>
-            <App {...appProps} Component={Component} />
+          <PageContext.Provider value={pageContext}>
+            <App {...pageContext} Component={Component.current} />
           </PageContext.Provider>
         )
       }}

@@ -9,4 +9,6 @@ export {
   HashRouter,
   Router,
 } from 'react-router-dom'
-export * from './client/Link'
+export * from './Link'
+export * from './Status'
+export * from './HttpError'

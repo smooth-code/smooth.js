@@ -1,6 +1,6 @@
 import React from 'react'
 import loadable from '@loadable/component'
-import Status from './router/Status'
+import { Status } from '../router'
 
 const ErrorPage = loadable(() => import('__smooth_error'))
 

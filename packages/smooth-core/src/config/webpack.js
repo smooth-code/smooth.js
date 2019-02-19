@@ -71,6 +71,7 @@ function getTargetConfig(target, { config, dev }) {
           __smooth_app: getScriptPath(config, '_app.js'),
           __smooth_document: getScriptPath(config, '_document.js'),
           __smooth_error: getScriptPath(config, '_error.js'),
+          __smooth_content: getScriptPath(config, '_content.js'),
           __smooth_blocks: config.blocksPath,
           __smooth_pages: config.pagesPath,
         },
