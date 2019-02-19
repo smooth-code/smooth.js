@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link as BaseLink, NavLink as BaseNavLink } from 'react-router-dom'
-import PageContext from './PageContext'
+import PageContext from '../client/PageContext'
 
 function computeTo(to, lang) {
   if (lang) {

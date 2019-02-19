@@ -19,12 +19,14 @@ export default function Routes() {
             <Route
               key={index}
               path={`${url}${page.routePath}`}
-              render={routeProps => (
+              render={({ history, match, location }) => (
                 <Page
                   lang={lang}
                   indexUrl={`${url}${page.indexPath}`}
                   page={page}
-                  {...routeProps}
+                  history={history}
+                  match={match}
+                  location={location}
                 />
               )}
             />
