@@ -1,4 +1,4 @@
-import { callApi } from '../plugin'
+import { callApi } from '../plugin/node'
 
 export function createAPIClient({ config, lang }) {
   const defaultOptions = { lang }

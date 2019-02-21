@@ -2,8 +2,9 @@ import path from 'path'
 
 module.exports = {
   plugins: [
+    { resolve: 'smooth-plugin-head-meta' },
     {
-      resolve: require.resolve('smooth-backend-wordpress'),
+      resolve: 'smooth-backend-wordpress',
       options: {
         basePath: path.join(__dirname, 'wordpress'),
         baseUrl: 'http://localhost:8000',

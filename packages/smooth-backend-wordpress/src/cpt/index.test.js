@@ -12,7 +12,7 @@ describe('#onBuild', () => {
 
   it('should generate config', async () => {
     const plugin = {
-      hooks: { onBuild },
+      node: { onBuild },
       options: {
         basePath: '/tmp',
       },

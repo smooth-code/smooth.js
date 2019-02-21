@@ -8,7 +8,7 @@ import { parse } from 'graphql'
 import { definitions as baseDefinitions } from '../definitions'
 import { addBlockTypeDefinitions } from './blockType'
 import { addContentTypeDefinitions } from './contentType'
-import { applyAsyncHook } from '../../plugin'
+import { applyAsyncHook } from '../../plugin/node'
 import babelRequire from '../../babel/require'
 
 const exists = promisify(fs.exists)

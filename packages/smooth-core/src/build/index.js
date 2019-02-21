@@ -1,3 +1,4 @@
+import path from 'path'
 import webpack from 'webpack'
 import { applyAsyncHook } from '../plugin'
 import {
@@ -8,6 +9,30 @@ import {
 import { createCache } from './cache'
 import { Watcher, watchFs } from './watcher'
 import webpackMiddleware from './webpackMiddleware'
+
+function getPluginFileContent(config) {
+  const imports = []
+  const names = []
+  config.plugins
+    .filter(plugin => plugin.browser)
+    .forEach((plugin, index) => {
+      const name = `plugin${index}`
+      imports.push(
+        `import * as plugin${index} from '${path.join(
+          plugin.resolve,
+          'smooth-browser',
+        )}';`,
+      )
+      names.push(name)
+    })
+
+  return `${imports.join('\n')}\nexport default [${names.join(',')}];`
+}
+
+export async function buildBrowserPlugins({ config }) {
+  const cache = createCache({ config })
+  await cache.writeCacheFile('browser-plugins.js', getPluginFileContent(config))
+}
 
 export async function buildSchemaDefinition({ config }) {
   const schemaDefinition = await createSchemaDefinition({ config })
