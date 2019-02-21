@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import camelcase from 'camelcase'
 import gql from 'graphql-tag'
 import qs from 'query-string'
 import { Redirect } from 'react-router-dom'
 import { Query as ApolloQuery } from 'react-apollo'
 import PageContext from '../client/PageContext'
-import { HTTPError } from '../router'
+import { HTTPError } from '../router/HTTPError'
 import { applyHook } from '../plugin/browser'
+import { HiddenRouterContext } from '../router/HiddenRouter'
 import {
   getFragmentDefinition,
   getFragment,
@@ -65,6 +66,24 @@ function getVariables(location, lang, slug = 'index') {
   return variables
 }
 
+function Handler({ children, ...props }) {
+  const hiddenRouter = useContext(HiddenRouterContext)
+  useEffect(() => {
+    if (hiddenRouter && !props.loading) {
+      hiddenRouter.onPrefetched()
+    }
+  }, [props.loading])
+
+  if (!props.loading && !props.error && !props.data.contentProps) {
+    return children({
+      ...props,
+      error: new HTTPError({ statusCode: 404 }),
+    })
+  }
+
+  return children(props)
+}
+
 export function Query({ children }) {
   return (
     <PageContext.Consumer>
@@ -85,20 +104,7 @@ export function Query({ children }) {
             query={getQuery(page)}
             variables={getVariables(location, lang, slug)}
           >
-            {apolloProps => {
-              if (
-                !apolloProps.loading &&
-                !apolloProps.error &&
-                !apolloProps.data.contentProps
-              ) {
-                return children({
-                  ...apolloProps,
-                  error: new HTTPError({ statusCode: 404 }),
-                })
-              }
-
-              return children(apolloProps)
-            }}
+            {apolloProps => <Handler {...apolloProps}>{children}</Handler>}
           </ApolloQuery>
         )
       }}
