@@ -11,4 +11,4 @@ export {
 } from 'react-router-dom'
 export * from './Link'
 export * from './Status'
-export * from './HttpError'
+export * from './HTTPError'

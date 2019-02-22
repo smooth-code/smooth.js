@@ -46,7 +46,9 @@ export default function Page({ title, book, specificBook, allBooks, blocks }) {
       <ul>
         {allBooks.map(b => (
           <li key={b.metadata.id}>
-            <Link to={`/books/${b.metadata.slug}`}>{b.name}</Link>
+            <Link waitBeforeTransition to={`/books/${b.metadata.slug}`}>
+              {b.name}
+            </Link>
           </li>
         ))}
       </ul>
