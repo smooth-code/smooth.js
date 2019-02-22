@@ -65,6 +65,7 @@
     "graphql-iso-date": "^3.6.1",
     "graphql-tag": "^2.10.1",
     "graphql-tools": "^4.0.4",
+    "history": "^4.7.2",
     "humanize-string": "^1.0.2",
     "merge-deep": "^3.0.2",
     "pluralize": "^7.0.0",

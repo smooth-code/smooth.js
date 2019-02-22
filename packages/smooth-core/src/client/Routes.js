@@ -22,7 +22,7 @@ export default function Routes() {
               {pages.map((page, index) => (
                 <Route
                   key={index}
-                  path={`${url}${page.routePath}`}
+                  path={`${url}${page.routePath}`.replace(/^\/\//, '/')}
                   render={({ history, match, location }) => (
                     <Page
                       lang={lang}

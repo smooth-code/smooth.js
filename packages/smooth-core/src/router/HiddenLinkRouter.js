@@ -1,12 +1,24 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useRef } from 'react'
 import { withRouter, Router } from 'react-router-dom'
+import { createLocation } from 'history'
 import HiddenHistoryContext from './HiddenHistoryContext'
 
-function HiddenLinkRouter({ history, children }) {
+// Create a local history, a mix with original history & hiddenHistory
+function useHiddenHistory(originalHistory) {
   const hiddenHistory = useContext(HiddenHistoryContext)
-  const newHistory = useMemo(() => ({ ...history }), [history])
-  newHistory.push = hiddenHistory.push
-  return <Router history={newHistory}>{children}</Router>
+  const mixedHistory = useRef({})
+  Object.assign(mixedHistory.current, originalHistory)
+  mixedHistory.current.push = hiddenHistory.push
+  mixedHistory.current.replace = hiddenHistory.replace
+  if (hiddenHistory.location) {
+    mixedHistory.current.location = createLocation(hiddenHistory.location)
+  }
+  return mixedHistory.current
+}
+
+function HiddenLinkRouter({ history, children }) {
+  const hiddenHistory = useHiddenHistory(history)
+  return <Router history={hiddenHistory}>{children}</Router>
 }
 
 export default withRouter(HiddenLinkRouter)
