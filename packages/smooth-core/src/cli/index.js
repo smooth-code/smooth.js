@@ -65,16 +65,19 @@ async function devCommand() {
   watch({ config })
 }
 
+async function logBuild(operation, name) {
+  console.log(`Building ${name}`)
+  const timeKey = `Build ${name}`
+  console.time(timeKey)
+  await operation()
+  console.timeEnd(timeKey)
+}
+
 async function buildCommand() {
   const config = await getConfig({ dev: false })
-  console.log('Building schema')
-  console.time('Build schema')
-  await buildSchema({ config })
-  console.timeEnd('Build schema')
-  console.log('Building webpack')
-  console.time('Build webpack')
-  await buildWebpack({ config })
-  console.timeEnd('Build webpack')
+  await logBuild(() => buildBrowserPlugins({ config }), 'plugins')
+  await logBuild(() => buildSchema({ config }), 'schema')
+  await logBuild(() => buildWebpack({ config }), 'webpack')
   // eslint-disable-next-line no-console
   console.log('Built!')
 }
