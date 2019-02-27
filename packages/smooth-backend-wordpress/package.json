@@ -1,7 +1,7 @@
 {
   "name": "smooth-backend-wordpress",
   "description": "Wordpress backend for Smooth.js.",
-  "version": "0.1.1-alpha.19",
+  "version": "0.1.1-alpha.24",
   "repository": "https://github.com/smooth-code/smooth.js/tree/master/packages/smooth-backend-wordpress",
   "author": "Greg Bergé <berge.greg@gmail.com>",
   "publishConfig": {
