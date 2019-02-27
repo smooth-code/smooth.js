@@ -1,4 +1,4 @@
-import { singularize, humanize } from 'smooth-core/utils'
+import { singularize, humanize } from 'smooth/utils'
 import allFields from './allFields'
 
 function enumValuesToChoices(nodes, helpers) {

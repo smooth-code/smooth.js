@@ -80,7 +80,7 @@ if (argv.copyAll) {
 } else {
   const { dependencies } = JSON.parse(
     fs.readFileSync(
-      path.join(smoothLocation, `packages/smooth-core/package.json`),
+      path.join(smoothLocation, `packages/smooth/package.json`),
     ),
   )
   packages = packages
@@ -97,7 +97,7 @@ You haven't got any Smooth dependencies into your current package.json
 You probably want to pass in a list of packages to start
 developing on! For example:
 
-smooth-dev --packages smooth-core smooth-backend-wordpress
+smooth-dev --packages smooth smooth-backend-wordpress
 
 If you prefer to place them in your package.json dependencies instead,
 smooth-dev will pick them up.

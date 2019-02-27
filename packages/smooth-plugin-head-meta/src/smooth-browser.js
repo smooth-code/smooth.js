@@ -1,5 +1,5 @@
 import React from 'react'
-import Head from 'smooth-core/head'
+import Head from 'smooth/head'
 
 function HeadMeta({ headMeta }) {
   if (!headMeta) return null

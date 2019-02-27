@@ -22,7 +22,7 @@
   },
   "peerDependencies": {
     "react": ">=16.8.0",
-    "smooth-core": "^0.1.0"
+    "smooth": "^0.1.0"
   },
   "dependencies": {
     "graphql-tag": "^2.10.1"

@@ -3,7 +3,7 @@
 </h1>
 <p align="center" style="font-size: 1.2rem;">Code driven CMS powered by GraphQL & React.</p>
 
-[![NPM version](https://img.shields.io/npm/v/smooth-core.svg)](https://www.npmjs.com/package/smooth-core)
+[![NPM version](https://img.shields.io/npm/v/smooth.svg)](https://www.npmjs.com/package/smooth)
 [![CircleCI](https://circleci.com/gh/smooth-code/smooth.js.svg?style=svg)](https://circleci.com/gh/smooth-code/smooth.js)
 [![Join the community on Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/smooth)
 
@@ -44,7 +44,7 @@
 Install it:
 
 ```bash
-npm install --save smooth-core react react-dom
+npm install --save smooth react react-dom
 ```
 
 and add a script to your package.json like this:
@@ -89,7 +89,7 @@ The `Link` component take care of the language for you, you can safely use it to
 ```js
 import React from 'react'
 import gql from 'graphql-tag'
-import { Link } from 'smooth-core/router'
+import { Link } from 'smooth/router'
 
 export const contentFragment = gql`
   fragment PageProps on Page {
@@ -215,7 +215,7 @@ _Note: Don't name the `static` directory anything else. The name is required and
 We expose a built-in component for appending elements to the `<head>` of the page.
 
 ```jsx
-import Head from 'smooth-core/head'
+import Head from 'smooth/head'
 
 export default () => (
   <div>
@@ -247,7 +247,7 @@ Client-side transitions between routes can be enabled via a `<Link>` component. 
 
 ```jsx
 // pages/index$.js
-import { Link } from 'smooth-core/router'
+import { Link } from 'smooth/router'
 
 export default () => (
   <div>
@@ -261,7 +261,7 @@ export default () => (
 export default () => <p>Welcome to About!</p>
 ```
 
-**Note: "smooth-core/router" exposes all methods from ["react-router-dom"](https://reacttraining.com/react-router/web/guides/quick-start).**
+**Note: "smooth/router" exposes all methods from ["react-router-dom"](https://reacttraining.com/react-router/web/guides/quick-start).**
 
 ### Dynamic Import
 
@@ -285,7 +285,7 @@ Here are a few ways to use dynamic imports.
 #### 1. Basic Usage (Also does SSR)
 
 ```jsx
-import loadable from 'smooth-core/loadable'
+import loadable from 'smooth/loadable'
 
 const DynamicComponent = loadable(() => import('../components/hello'))
 
@@ -301,7 +301,7 @@ export default () => (
 #### 2. With Custom Loading Component
 
 ```jsx
-import loadable from 'smooth-core/loadable'
+import loadable from 'smooth/loadable'
 
 const DynamicComponentWithCustomLoading = loadable(
   () => import('../components/hello2'),
@@ -317,7 +317,7 @@ export default () => (
 )
 ```
 
-**Note: "smooth-core/loadable" exposes all methods from ["@loadable/component"](https://www.smooth-code.com/open-source/loadable-components/).**
+**Note: "smooth/loadable" exposes all methods from ["@loadable/component"](https://www.smooth-code.com/open-source/loadable-components/).**
 
 ### Custom `<App>`
 
@@ -369,7 +369,7 @@ Pages in `Smooth.js` skip the definition of the surrounding document's markup. F
 // Event handlers like onClick can't be added to this file
 
 // ./src/_document.js
-import Document, { Head, Main, MainScript } from 'smooth-core/document'
+import Document, { Head, Main, MainScript } from 'smooth/document'
 
 export default () => (
   <html>
@@ -396,7 +396,7 @@ that need to wrap the application to properly work with server-rendering. 🚧
 - It takes as argument an options object for further customization
 
 ```js
-import Document from 'smooth-core/document'
+import Document from 'smooth/document'
 
 Document.getInitialProps = ctx => {
   const sheet = new ServerStyleSheet()
@@ -518,7 +518,7 @@ module.exports = {
 
 In order to extend our usage of `babel`, you can simply define a `.babelrc` file at the root of your app. This file is optional.
 
-If found, we're going to consider it the _source of truth_, therefore it needs to define what smooth needs as well, which is the `smooth-core/babel` preset.
+If found, we're going to consider it the _source of truth_, therefore it needs to define what smooth needs as well, which is the `smooth/babel` preset.
 
 This is designed so that you are not surprised by modifications we could make to the babel configurations.
 
@@ -526,25 +526,25 @@ Here's an example `.babelrc` file:
 
 ```json
 {
-  "presets": ["smooth-core/babel"],
+  "presets": ["smooth/babel"],
   "plugins": []
 }
 ```
 
-The `smooth-core/babel` preset includes everything needed to transpile React applications. This includes:
+The `smooth/babel` preset includes everything needed to transpile React applications. This includes:
 
 - preset-env
 - preset-react
 - plugin-proposal-class-properties
 - @loadable/babel-plugin
 
-These presets / plugins **should not** be added to your custom `.babelrc`. Instead, you can configure them on the `smooth-core/babel` preset:
+These presets / plugins **should not** be added to your custom `.babelrc`. Instead, you can configure them on the `smooth/babel` preset:
 
 ```json
 {
   "presets": [
     [
-      "smooth-core/babel",
+      "smooth/babel",
       {
         "preset-env": {},
         "transform-runtime": {}
@@ -572,7 +572,7 @@ For example, to deploy with [`now`](https://zeit.co/now) a `package.json` like f
 {
   "name": "my-app",
   "dependencies": {
-    "smooth-core": "latest"
+    "smooth": "latest"
   },
   "scripts": {
     "dev": "smooth dev",

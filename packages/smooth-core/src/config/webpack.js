@@ -63,7 +63,7 @@ function getTargetConfig(target, { config, dev }) {
       },
       resolve: {
         alias: {
-          'smooth-core': path.join(__dirname, '..'),
+          smooth: path.join(__dirname, '..'),
           __smooth_fragmentTypes: path.join(
             config.cachePath,
             'fragmentTypes.json',
@@ -79,7 +79,7 @@ function getTargetConfig(target, { config, dev }) {
       },
       externals:
         target === 'node'
-          ? [nodeExternals({ whitelist: [/smooth-core/] })]
+          ? [nodeExternals({ whitelist: [/^smooth\//] })]
           : undefined,
       output: {
         path: path.join(config.cachePath, target, 'static'),

@@ -1,4 +1,4 @@
-import { gql, createSchemaDefinitionMock, types } from 'smooth-core/graphql'
+import { gql, createSchemaDefinitionMock, types } from 'smooth/graphql'
 import createDefaultResolvers from './createDefaultResolvers'
 
 describe('createDefaultResolvers', () => {

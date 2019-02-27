@@ -21,7 +21,7 @@
     "prepublishOnly": "yarn run build"
   },
   "peerDependencies": {
-    "smooth-core": "^0.1.0"
+    "smooth": "^0.1.0"
   },
   "dependencies": {
     "axios": "^0.18.0",
