@@ -1,4 +1,4 @@
-import { humanize, pluralize } from 'smooth-core/utils'
+import { humanize, pluralize } from 'smooth/utils'
 
 export default function one(node, { gql: g, cpt: c }) {
   if (!g.isObjectTypeDefinition(node)) return null

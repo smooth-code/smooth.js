@@ -1,5 +1,5 @@
 import path from 'path'
-import { mergeResolvers } from 'smooth-core/graphql'
+import { mergeResolvers } from 'smooth/graphql'
 import { createResolvers } from './resolvers'
 import { generateConfig } from './config'
 import * as types from './types'
