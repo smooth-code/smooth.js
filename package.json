@@ -5,7 +5,7 @@
   ],
   "scripts": {
     "build": "lerna run build",
-    "build:doc": "doctoc packages/smooth-core/README.md",
+    "build:doc": "doctoc packages/smooth/README.md",
     "dev": "WATCH_MODE=true lerna run build --parallel -- --watch",
     "format": "prettier --write \"**/*.{js,json,md}\"",
     "lint": "eslint . --ignore-pattern \"examples/**/*.js\"",

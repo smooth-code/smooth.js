@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'smooth-core/router'
+import { Link } from 'smooth/router'
 
 export default () => (
   <div>

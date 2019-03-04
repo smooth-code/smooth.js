@@ -1,7 +1,7 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { BlockFragment, Blocks } from 'smooth-core/content'
-import { Link } from 'smooth-core/router'
+import { BlockFragment, Blocks } from 'smooth/content'
+import { Link } from 'smooth/router'
 
 export const contentFragment = gql`
   fragment PageProps on Page {

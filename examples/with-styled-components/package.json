@@ -8,7 +8,7 @@
   "dependencies": {
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
-    "smooth-core": "latest",
+    "smooth": "latest",
     "styled-components": "^4.1.3"
   }
 }
