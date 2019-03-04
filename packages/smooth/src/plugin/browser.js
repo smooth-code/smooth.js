@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import plugins from '__smooth_plugins'
 
 export function runHook(plugin, hook, args) {

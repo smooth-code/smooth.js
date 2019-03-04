@@ -27,11 +27,11 @@ export async function onBuild({ schemaDefinition, options, types: gqlTypes }) {
 }
 
 export async function getContent({ request, options }) {
-  const apiClient = createClient(options.baseUrl)
+  const apiClient = createClient(options)
   return apiClient.getContent(request)
 }
 
 export async function getContents({ request, options }) {
-  const apiClient = createClient(options.baseUrl)
+  const apiClient = createClient(options)
   return apiClient.getContents(request)
 }

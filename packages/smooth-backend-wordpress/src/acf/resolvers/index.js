@@ -24,7 +24,7 @@ export function createResolvers({
   schemaDefinition,
   config,
 }) {
-  const apiClient = createClient(options.baseUrl)
+  const apiClient = createClient(options)
   const { typeDefs } = schemaDefinition
   const blockDefinitions = typeDefs.definitions.filter(
     typeDefinition =>

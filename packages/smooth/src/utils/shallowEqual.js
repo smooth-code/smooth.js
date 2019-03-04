@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax */
+
 export function shallowEqual(actual, expected) {
   const keys = Object.keys(expected)
 

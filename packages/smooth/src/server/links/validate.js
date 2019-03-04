@@ -1,5 +1,5 @@
 import { ApolloLink, Observable } from 'apollo-link'
-import { validate } from 'graphql'
+import { validate } from 'graphql/validation'
 
 export class ValidateLink extends ApolloLink {
   constructor({ schema }) {

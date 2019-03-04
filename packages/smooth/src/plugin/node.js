@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { types } from '../graphql'
 import * as validators from './validators'
 

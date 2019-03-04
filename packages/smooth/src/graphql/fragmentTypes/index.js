@@ -1,4 +1,4 @@
-import { execute } from 'graphql'
+import { execute } from 'graphql/execution'
 import gql from 'graphql-tag'
 
 const QUERY = gql`
