@@ -79,7 +79,13 @@ function getTargetConfig(target, { config, dev }) {
       },
       externals:
         target === 'node'
-          ? [nodeExternals({ whitelist: [/^smooth\//] })]
+          ? [
+              nodeExternals({ whitelist: [/^smooth\//] }),
+              'graphql/type',
+              'graphql/language',
+              'graphql/execution',
+              'graphql/validation',
+            ]
           : undefined,
       output: {
         path: path.join(config.cachePath, target, 'static'),

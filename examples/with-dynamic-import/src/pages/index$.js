@@ -1,5 +1,5 @@
 import React from 'react'
-import loadable from 'smooth-core/loadable'
+import loadable from 'smooth/loadable'
 
 const DynamicComponent = loadable(() =>
   import('../components/DynamicComponent'),

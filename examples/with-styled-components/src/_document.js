@@ -1,5 +1,5 @@
 import React from 'react'
-import Document from 'smooth-core/document'
+import Document from 'smooth/document'
 import { ServerStyleSheet } from 'styled-components'
 
 Document.getInitialProps = async ctx => {

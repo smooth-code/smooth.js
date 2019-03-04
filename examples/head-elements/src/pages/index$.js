@@ -1,5 +1,5 @@
 import React from 'react'
-import Head from 'smooth-core/head'
+import Head from 'smooth/head'
 
 export default () => (
   <>

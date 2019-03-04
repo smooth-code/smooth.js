@@ -9,6 +9,6 @@
     "react-dom": "^16.8.2",
     "smooth-backend-wordpress": "latest",
     "smooth-plugin-head-meta": "latest",
-    "smooth-core": "latest"
+    "smooth": "latest"
   }
 }

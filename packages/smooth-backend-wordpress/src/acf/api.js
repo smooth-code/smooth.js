@@ -13,11 +13,11 @@ function paramsSerializer(params) {
   return qs.stringify(params, { arrayFormat: 'indices' })
 }
 
-export function createClient(baseUrl) {
+export function createClient({ baseUrl, defaultLanguage }) {
   return {
     async getContents({ type, slug, lang, query }) {
       type = type.toLowerCase()
-      const params = getParams({ lang, type, query })
+      const params = getParams({ lang: lang || defaultLanguage, type, query })
 
       if (slug) {
         params.slug = slug
@@ -40,7 +40,7 @@ export function createClient(baseUrl) {
       return results[0] || null
     },
     async getContentPreview({ lang, id }) {
-      const params = getParams({ lang })
+      const params = getParams({ lang: lang || defaultLanguage })
       const { data } = await axios.get(
         `${baseUrl}/wp-json/presspack/v1/preview/${id}/`,
         { params },

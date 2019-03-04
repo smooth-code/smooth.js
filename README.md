@@ -1,1 +1,1 @@
-packages/smooth-core/README.md
+packages/smooth/README.md

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import * as types from '../types'
 
 export async function applyAsyncHook(plugins, hook, value) {

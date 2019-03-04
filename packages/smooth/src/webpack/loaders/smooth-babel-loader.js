@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import babelLoader from 'babel-loader'
 import preset from '../../babel/preset'
 

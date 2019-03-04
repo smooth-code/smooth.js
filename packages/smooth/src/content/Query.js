@@ -72,7 +72,7 @@ function Handler({ children, ...props }) {
     if (hiddenRouter && !props.loading) {
       hiddenRouter.onPrefetched()
     }
-  }, [props.loading])
+  }, [props.loading]) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!props.loading && !props.error && !props.data.contentProps) {
     return children({

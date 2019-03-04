@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/html-has-lang */
 import React from 'react'
 import Context from './Context'
 
