@@ -76,6 +76,150 @@ So far, we get:
 - Server rendering and indexing of `./pages`
 - Static file serving. `./static/` is mapped to `/static/` (given you [create a `./static/` directory](#static-file-serving-eg-images) inside your project)
 
+
+
+### Structure
+
+
+#### GraphQL definitions
+
+- Date
+- Datetime
+- Image
+- Link
+- Media
+
+#### Types
+
+- @content (will appear on your back-office)
+- @block (can be added to a page)
+- @field (can be filled by the user)
+
+#### Schemas / Contents
+
+In the contents folder, you can add all types that you want to appear on your back-office's menu
+
+
+Example : 
+```js
+import gql from 'graphql-tag'
+
+export const typeDefs = gql`
+  type Actors {
+    name: String! @field
+  }
+
+  type Movie @content(slug: "movies", icon: "dashicons-admin-home") {
+    title: String! @field
+    description: String! @field(type: richText)
+    cover: Image! @field
+    actors: [Actors!]! @field
+  }
+`
+
+
+```
+
+#### Schemas / Blocks
+
+The blocks folder is used to design your blocks, by describing all your types.
+Example : 
+```js
+import gql from 'graphql-tag'
+
+export const typeDefs = gql`
+  type MovieListBlock @block {
+    movies: [Movie!]!
+  }
+`
+export const resolvers = {
+  MovieListBlock: {
+    movies: async (object, params, { api }) =>
+      api.getContents({
+        type: 'movies',
+      }),
+  },
+}
+
+```
+
+### Blocks
+
+In this folder, you will define your block's fragment, and design it. It needs the same name as the one given it 'schemas/blocks'.
+
+
+Example : 
+```js
+import React from 'react'
+import gql from 'graphql-tag'
+import { Link } from 'smooth/router'
+
+export default function MovieListBlock({ movies }) {
+  return (
+    <div>
+      {movies.map((movie, index) => (
+        <Link to={`/movies/${movie.metadata.slug}`} key={index}>
+          <div>{movie.title}</div>
+        </Link>
+      ))}
+    </div>
+  )
+}
+
+export const blockFragment = gql`
+  fragment MovieListBlockProps on MovieListBlock {
+    movies {
+      metadata {
+        slug
+      }
+      title
+      description
+      cover {
+        url
+        alt
+        title
+      }
+      actors {
+        name
+      }
+    }
+  }
+`
+
+```
+
+### Pages
+
+In this folder you can create all your content that will need a specific page.
+
+```js
+
+import React from 'react'
+import gql from 'graphql-tag'
+
+export const contentFragment = gql`
+  fragment MovieProps on Movie {
+    title
+    description
+    cover {
+      url
+      alt
+    }
+  }
+`
+
+export default function Movie({ title, description, cover }) {
+  return (
+    <div>
+      <img src={cover.url} alt={cover.alt} style={{ maxWidth: 200 }} />
+      <div>{title}</div>
+      <div dangerouslySetInnerHTML={{ __html: description }} />
+    </div>
+  )
+}
+
+```
+
 ### Content
 
 #### Link to another content
