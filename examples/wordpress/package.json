@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "WP_HOME=http://localhost:3001 smooth dev"
+    "dev": "WP_HOME=http://localhost:3000 smooth dev"
   },
   "dependencies": {
     "graphql-tag": "^2.10.1",
@@ -10,5 +10,8 @@
     "smooth-backend-wordpress": "latest",
     "smooth-plugin-head-meta": "latest",
     "smooth": "latest"
+  },
+  "resolutions": {
+    "apollo-link-dedup": "1.0.15"
   }
 }

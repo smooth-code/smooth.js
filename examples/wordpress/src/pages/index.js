@@ -28,6 +28,10 @@ export const contentFragment = gql`
     blocks {
       ...BlockFragment
     }
+    metadata {
+      id
+      slug
+    }
   }
 
   ${BlockFragment}

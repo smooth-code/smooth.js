@@ -3,7 +3,7 @@ import loadable from '@loadable/component'
 import App from '__smooth_app'
 import Content from '__smooth_content'
 import { applyHook } from '../plugin/browser'
-import PageContext from './PageContext'
+import { PageContextProvider } from './PageContext'
 
 function getFileName(filePath) {
   return filePath.replace(/^\.\//, '').replace(/\.js$/, '')
@@ -85,7 +85,7 @@ export default function Page({
             PageComponent.current ||
             (() => <Content Component={ContentComponent.current} />)
         } else {
-          ContentComponent.current = pageModule.default
+          PageComponent.current = pageModule.default
         }
 
         const pageContext = {
@@ -95,10 +95,11 @@ export default function Page({
           match,
           location,
         }
+
         return (
-          <PageContext.Provider value={pageContext}>
+          <PageContextProvider context={pageContext}>
             <App {...pageContext} Component={PageComponent.current} />
-          </PageContext.Provider>
+          </PageContextProvider>
         )
       }}
     </page.LoadableComponent>

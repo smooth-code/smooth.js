@@ -1,6 +1,6 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-import Page, { getPages } from './Page'
+import Page, { getPages } from '../page/Page'
 import HiddenRouter from '../router/HiddenRouter'
 import { Provider as HiddenHistoryContextProvider } from '../router/HiddenHistoryContext'
 import ScrollToTop from '../router/ScrollToTop'

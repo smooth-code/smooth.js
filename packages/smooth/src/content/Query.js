@@ -1,13 +1,11 @@
-import React, { useContext, useEffect } from 'react'
+import React from 'react'
 import camelcase from 'camelcase'
 import gql from 'graphql-tag'
-import qs from 'query-string'
 import { Redirect } from 'react-router-dom'
-import { Query as ApolloQuery } from 'react-apollo'
-import PageContext from '../client/PageContext'
+import { usePageContext } from '../page/PageContext'
 import { HTTPError } from '../router/HTTPError'
 import { applyHook } from '../plugin/browser'
-import { HiddenRouterContext } from '../router/HiddenRouter'
+import { Query as BaseQuery } from '../query/Query'
 import {
   getFragmentDefinition,
   getFragment,
@@ -33,17 +31,9 @@ function getQuery(page) {
 
   const query = gql`
     query Content(
-      $lang: String
       $slug: String!
-      $id: String
-      $preview: Boolean
     ) {
-      contentProps: ${queryField}(
-        lang: $lang
-        slug: $slug
-        id: $id
-        preview: $preview
-      ) {
+      contentProps: ${queryField}(slug: $slug) {
         ${fields}
       }
     }
@@ -54,26 +44,7 @@ function getQuery(page) {
   return query
 }
 
-function getVariables(location, lang, slug = 'index') {
-  const { id, preview } = qs.parse(location.search)
-  const variables = { lang, slug }
-
-  if (preview) {
-    variables.id = id
-    variables.preview = true
-  }
-
-  return variables
-}
-
 function Handler({ children, ...props }) {
-  const hiddenRouter = useContext(HiddenRouterContext)
-  useEffect(() => {
-    if (hiddenRouter && !props.loading) {
-      hiddenRouter.onPrefetched()
-    }
-  }, [props.loading]) // eslint-disable-line react-hooks/exhaustive-deps
-
   if (!props.loading && !props.error && !props.data.contentProps) {
     return children({
       ...props,
@@ -85,29 +56,20 @@ function Handler({ children, ...props }) {
 }
 
 export function Query({ children }) {
-  return (
-    <PageContext.Consumer>
-      {({
-        page,
-        lang,
-        match: {
-          params: { slug },
-        },
-        location,
-      }) => {
-        if (slug === 'index') {
-          return <Redirect to={page.indexUrl} />
-        }
+  const {
+    page,
+    match: {
+      params: { slug },
+    },
+  } = usePageContext()
 
-        return (
-          <ApolloQuery
-            query={getQuery(page)}
-            variables={getVariables(location, lang, slug)}
-          >
-            {apolloProps => <Handler {...apolloProps}>{children}</Handler>}
-          </ApolloQuery>
-        )
-      }}
-    </PageContext.Consumer>
+  if (slug === 'index') {
+    return <Redirect to={page.indexUrl} />
+  }
+
+  return (
+    <BaseQuery query={getQuery(page)} variables={{ slug: slug || 'index' }}>
+      {apolloProps => <Handler {...apolloProps}>{children}</Handler>}
+    </BaseQuery>
   )
 }

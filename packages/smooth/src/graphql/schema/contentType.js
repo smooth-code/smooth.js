@@ -6,7 +6,7 @@ function getQueries(contentDefinitions) {
   return contentDefinitions.map(def => {
     const name = t.getName(def)
     const queryName = camelcase(name)
-    return `${queryName}(slug: String!, lang: String, id: String, preview: Boolean): ${name}`
+    return `${queryName}(slug: String!): ${name}`
   })
 }
 

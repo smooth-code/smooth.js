@@ -91,7 +91,7 @@ function getQueryFieldResolver(node, helpers, state) {
   }
   const type = t.getContentSlug(typeDef)
   return {
-    async [name](object, { slug, lang, id, preview }) {
+    async [name](object, { slug }, { lang, id, preview }) {
       if (preview) {
         return state.apiClient.getContentPreview({
           type,
@@ -100,7 +100,9 @@ function getQueryFieldResolver(node, helpers, state) {
         })
       }
 
-      return state.apiClient.getContent({ type, lang, slug })
+      const res = await state.apiClient.getContent({ type, lang, slug })
+
+      return res
     },
   }
 }

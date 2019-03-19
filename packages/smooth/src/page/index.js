@@ -1,0 +1,1 @@
+export { useLang } from './PageContext'
