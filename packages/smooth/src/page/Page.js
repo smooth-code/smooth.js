@@ -81,21 +81,17 @@ function enrichPageRef(
 
   if (isContent) {
     pageRef.current.slug = getContentSlug({ match, history, location, pageRef })
-  }
 
-  if (
-    isContent &&
-    !pageRef.current.ContentComponent &&
-    !pageRef.current.PageComponent
-  ) {
-    const ContentComponent = props => {
-      const Component = pageRef.current.module.default
-      const element = <Component {...props} />
-      return applyHook('wrapContentElement', { element, props }, 'element')
+    if (!pageRef.current.ContentComponent && !pageRef.current.PageComponent) {
+      const ContentComponent = props => {
+        const Component = pageRef.current.module.default
+        const element = <Component {...props} />
+        return applyHook('wrapContentElement', { element, props }, 'element')
+      }
+      const PageComponent = () => <Content Component={ContentComponent} />
+      pageRef.current.ContentComponent = ContentComponent
+      pageRef.current.PageComponent = PageComponent
     }
-    const PageComponent = () => <Content Component={ContentComponent} />
-    pageRef.current.ContentComponent = ContentComponent
-    pageRef.current.PageComponent = PageComponent
   } else {
     pageRef.current.PageComponent = pageModule.default
   }
