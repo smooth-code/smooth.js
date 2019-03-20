@@ -56,9 +56,9 @@ export function getPages() {
 }
 
 function getContentSlug({ match, history, location, pageRef }) {
-  const { module: pageModule } = pageRef.current
+  const { module: pageModule, isWildCard } = pageRef.current
 
-  if (match.params.slug === undefined) {
+  if (!isWildCard) {
     if (!pageModule.contentSlug) {
       return pageRef.current.routePath.replace(/^\//, '')
     }
