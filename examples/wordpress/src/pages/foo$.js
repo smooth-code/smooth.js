@@ -13,7 +13,6 @@ const PAGE = gql`
 
 export default function Page() {
   const lang = useLang()
-  throw new Error('kk')
   return (
     <>
       <div>Lang: {lang}</div>

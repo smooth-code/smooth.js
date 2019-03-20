@@ -56,19 +56,17 @@ function Handler({ children, ...props }) {
 }
 
 export function Query({ children }) {
-  const {
-    page,
-    match: {
-      params: { slug },
-    },
-  } = usePageContext()
+  const { page } = usePageContext()
 
-  if (slug === 'index') {
+  if (page.slug === 'index') {
     return <Redirect to={page.indexUrl} />
   }
 
   return (
-    <BaseQuery query={getQuery(page)} variables={{ slug: slug || 'index' }}>
+    <BaseQuery
+      query={getQuery(page)}
+      variables={{ slug: page.slug || 'index' }}
+    >
       {apolloProps => <Handler {...apolloProps}>{children}</Handler>}
     </BaseQuery>
   )

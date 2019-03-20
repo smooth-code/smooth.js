@@ -13,24 +13,24 @@ function getIndexPath(isIndex, name) {
   return isIndex ? '/' : `/${name}`
 }
 
-function getRoutePath(isIndex, isContent, name) {
-  if (isContent) return isIndex ? '/:slug*' : `/${name}/:slug+`
+function getRoutePath(isIndex, isWildCard, name) {
+  if (isWildCard) return isIndex ? '/:slug*' : `/${name}/:slug+`
   return getIndexPath(isIndex, name)
 }
 
 function getPage(filePath) {
   const rawName = getFileName(filePath)
-  const isContent = !rawName.endsWith('$')
+  const isWildCard = !rawName.endsWith('$')
   const name = rawName.replace('$', '')
   const isIndex = name === 'index'
   const indexPath = getIndexPath(isIndex, name)
-  const routePath = getRoutePath(isIndex, isContent, name)
+  const routePath = getRoutePath(isIndex, isWildCard, name)
   const LoadableComponent = loadable.lib(() =>
     import(`__smooth_pages/${rawName}`),
   )
   return {
     isIndex,
-    isContent,
+    isWildCard,
     indexPath,
     routePath,
     filePath,
@@ -40,11 +40,11 @@ function getPage(filePath) {
 
 // First content, then indexes
 function sortPages(a, b) {
-  if (a.isContent === b.isContent) {
+  if (a.isWildCard === b.isWildCard) {
     if (a.isIndex === b.isIndex) return 0
     return a.isIndex < b.isIndex ? -1 : 1
   }
-  return a.isContent < b.isContent ? -1 : 1
+  return a.isWildCard < b.isWildCard ? -1 : 1
 }
 
 export function getPages() {
@@ -55,6 +55,56 @@ export function getPages() {
     .sort(sortPages)
 }
 
+function getContentSlug({ match, history, location, pageRef }) {
+  const { module: pageModule } = pageRef.current
+
+  if (match.params.slug === undefined) {
+    if (!pageModule.contentSlug) {
+      return pageRef.current.routePath.replace(/^\//, '')
+    }
+    return typeof pageModule.contentSlug === 'function'
+      ? pageModule.contentSlug({ history, location })
+      : pageModule.contentSlug
+  }
+
+  return match.params.slug
+}
+
+function enrichPageRef(
+  pageRef,
+  { module: pageModule, indexUrl, match, history, location },
+) {
+  const isContent = Boolean(pageModule.contentFragment)
+  pageRef.current.module = pageModule
+  pageRef.current.isContent = isContent
+  pageRef.current.indexUrl = indexUrl
+
+  if (isContent) {
+    pageRef.current.slug = getContentSlug({ match, history, location, pageRef })
+  }
+
+  if (
+    isContent &&
+    !pageRef.current.ContentComponent &&
+    !pageRef.current.PageComponent
+  ) {
+    const ContentComponent = props => {
+      const Component = pageRef.current.module.default
+      const element = <Component {...props} />
+      return applyHook('wrapContentElement', { element, props }, 'element')
+    }
+    const PageComponent = () => <Content Component={ContentComponent} />
+    pageRef.current.ContentComponent = ContentComponent
+    pageRef.current.PageComponent = PageComponent
+  } else {
+    pageRef.current.PageComponent = pageModule.default
+  }
+}
+
+function usePageRef(page) {
+  return useRef({ ...page })
+}
+
 export default function Page({
   page,
   lang,
@@ -63,34 +113,21 @@ export default function Page({
   match,
   location,
 }) {
-  const PageComponent = useRef()
-  const ContentComponent = useRef()
+  const pageRef = usePageRef(page)
   return (
     <page.LoadableComponent>
       {pageModule => {
-        if (page.isContent) {
-          ContentComponent.current =
-            ContentComponent.current ||
-            (props => {
-              const Component = pageModule.default
-              const element = <Component {...props} />
-              return applyHook(
-                'wrapContentElement',
-                { element, props },
-                'element',
-              )
-            })
-
-          PageComponent.current =
-            PageComponent.current ||
-            (() => <Content Component={ContentComponent.current} />)
-        } else {
-          PageComponent.current = pageModule.default
-        }
+        enrichPageRef(pageRef, {
+          module: pageModule,
+          indexUrl,
+          match,
+          history,
+          location,
+        })
 
         const pageContext = {
           lang,
-          page: { ...page, module: pageModule, indexUrl },
+          page: pageRef.current,
           history,
           match,
           location,
@@ -98,7 +135,7 @@ export default function Page({
 
         return (
           <PageContextProvider context={pageContext}>
-            <App {...pageContext} Component={PageComponent.current} />
+            <App {...pageContext} Component={pageRef.current.PageComponent} />
           </PageContextProvider>
         )
       }}
