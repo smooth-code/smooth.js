@@ -31,7 +31,7 @@ function PrefetchHandler({ children, ...props }) {
   return children(props)
 }
 
-export function Query({ children, prefetch = true, context, ...props }) {
+export function Query({ children, prefetch, context, ...props }) {
   const { lang, location } = usePageContext()
 
   return (
