@@ -4,7 +4,6 @@
     "dev": "WP_HOME=http://localhost:3000 smooth dev"
   },
   "dependencies": {
-    "@loadable/babel-plugin": "^5.7.1",
     "graphql-tag": "^2.10.1",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",

@@ -12,7 +12,7 @@ const PAGE = gql`
 
 export default function Page({ Component, ...props }) {
   return (
-    <Query prefetch={false} query={PAGE}>
+    <Query query={PAGE}>
       {({ data }) =>
         data && (
           <>
