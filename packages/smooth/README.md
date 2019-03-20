@@ -10,8 +10,31 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [How to use](#how-to-use)
   - [Setup](#setup)
+  - [Structure](#structure)
+    - [Directives](#directives)
+      - [`@content`](#content)
+      - [`@field`](#field)
+      - [`@block`](#block)
+    - [Additional GraphQL types](#additional-graphql-types)
+      - [Date](#date)
+      - [DateTime](#datetime)
+      - [Image](#image)
+      - [Media](#media)
+      - [Link](#link)
+      - [Metadata](#metadata)
+      - [Block](#block)
+    - [Schemas](#schemas)
+    - [Content API](#content-api)
+      - [Filters](#filters)
+  - [Pages](#pages)
+    - [Content Pages](#content-pages)
+    - [Fixed slug pages](#fixed-slug-pages)
+  - [Query](#query)
+  - [Content](#content)
+    - [Link to another content](#link-to-another-content)
   - [Automatic code splitting](#automatic-code-splitting)
   - [CSS](#css)
     - [Built-in CSS support](#built-in-css-support)
@@ -52,7 +75,7 @@ and add a script to your package.json like this:
 ```json
 {
   "scripts": {
-    "dev": "smooth",
+    "dev": "smooth dev",
     "build": "smooth build",
     "start": "smooth start"
   }
@@ -76,127 +99,336 @@ So far, we get:
 - Server rendering and indexing of `./pages`
 - Static file serving. `./static/` is mapped to `/static/` (given you [create a `./static/` directory](#static-file-serving-eg-images) inside your project)
 
-
-
 ### Structure
 
+#### Directives
 
-#### GraphQL definitions
+##### `@content`
 
-- Date
-- Datetime
-- Image
-- Link
-- Media
+Can be used on a GraphQL type definition. Indicates that this type will be available in backoffice.
 
-#### Types
+```graphql
+# A "Book" content will be available in backoffice
+type Book @content {
+  title: String @field
+}
 
-- @content (will appear on your back-office)
-- @block (can be added to a page)
-- @field (can be filled by the user)
+# This type will not be available in backoffice
+type User {
+  name: String
+}
+```
 
-#### Schemas / Contents
+**Specify icon**
 
-In the contents folder, you can add all types that you want to appear on your back-office's menu
+Some backoffices like Wordpress supports an icon. `@content` supports it as a parameter:
 
+```graphql
+type Book @content(icon: "dashicons-format-gallery") {
+  title: String @field
+}
+```
 
-Example : 
+**Specify slug**
+
+Slug is automatically generated from the name but you can also specify a specific one. Slug has an impact in the API and in the backoffice. It is the internal name of the content.
+
+```graphql
+type Book @content(slug: "awesome-book") {
+  title: String @field
+}
+```
+
+**Specify label**
+
+Label is automatically generated from the name but you can also specify a specific one. Label has an impact in the backoffice. It is the name used to display the name of the content.
+
+```graphql
+type Book @content(label: "Awesome Book") {
+  title: String @field
+}
+```
+
+**Specify a description**
+
+GraphQL comments are automatically converted in description in the backoffice.
+
+```graphql
+"It is just a book, relax."
+type Book @content {
+  title: String @field
+}
+```
+
+##### `@field`
+
+Can be used on a GraphQL field definition. Indicates that this field will be available in the backoffice. `@field` must only be used in a type marked as `@content`.
+
+```graphql
+type Book @content {
+  # This field is editable in backoffice
+  title: String @field
+  # This field is not editable in backoffice
+  # you have to write a custom resolver for it
+  likes: Int
+}
+```
+
+**Specify type explicitely**
+
+Most of field types are inferred from the GraphQL type of the field. A `String` will generate a text input, a `Boolean` will display a checkbox, etc... Sometimes you have to precise the exact type of field. For an example, a `String` display a `shortText`, but you could also want a `richText`.
+
+For this specific use-case you can specify a `type` argument in the `@field` directive:
+
+```graphql
+type Book @content {
+  # Will display a "shortText" in backoffice
+  title: String @field
+  # Will display a "longText" in backoffice
+  description: String @field(type: longText)
+}
+```
+
+Available types are: `shortText`, `longText` and `richText`, all other types are inferred from the GraphQL types, including special ones like `Image`, `Link` and `Media`.
+
+**Specify a label**
+
+Exactly like for `@content` you may want to display a custom label for this field. The label is used only in the backoffice.
+
+```graphql
+type Book @content {
+  title: String @field(label: "My awesome title")
+}
+```
+
+**Specify a description**
+
+GraphQL comments are automatically converted in description in the backoffice.
+
+```graphql
+type Book @content {
+  "The title of the book, yeah the big title!"
+  title: String @field
+}
+```
+
+##### `@block`
+
+Can be used on a GraphQL type definition. Indicates that this type will be available in the special `Block` type.
+
+```graphql
+type Page @content {
+  # The special type "Block" indicates that all blocks will be available in backoffice
+  blocks: [Block] @field
+}
+
+# This type will be available as a block in the "Page" content
+type Hero @block {
+  text: String @field
+}
+```
+
+#### Additional GraphQL types
+
+##### Date
+
+[RFC 3339](https://github.com/excitement-engineer/graphql-iso-date/blob/HEAD/rfc3339.txt) compliant date. See [graphql-iso-date](https://github.com/excitement-engineer/graphql-iso-date) for more information.
+
+##### DateTime
+
+[RFC 3339](https://github.com/excitement-engineer/graphql-iso-date/blob/HEAD/rfc3339.txt) compliant date time. See [graphql-iso-date](https://github.com/excitement-engineer/graphql-iso-date) for more information.
+
+##### Image
+
+Represents an image, with several pre-configured sizes.
+
+```graphql
+type ImageSize {
+  width: Int!
+  height: Int!
+  url: String!
+}
+
+type Image {
+  id: ID!
+  url: String!
+  mimeType: String!
+  alt: String
+  title: String
+  thumbnail: ImageSize!
+  medium: ImageSize!
+  large: ImageSize!
+}
+```
+
+##### Media
+
+Represents a media, just a file.
+
+```graphql
+type Media {
+  title: String
+  url: String!
+}
+```
+
+##### Link
+
+Represents a link to another page or content.
+
+```graphql
+type Link {
+  title: String
+  url: String!
+  target: String!
+}
+```
+
+##### Metadata
+
+Additional metadata accessible on contents.
+
+```graphql
+type Metadata {
+  id: ID!
+  slug: String!
+}
+```
+
+##### Block
+
+Special type to indicates all defined blocks.
+
+#### Schemas
+
+All your GraphQL schemas must be placed in `src/schemas`, you can place them in separated files or in a single files. The only requirement is to place them in `src/schemas`.
+
+You must specify your type definition in a named export `typeDefs`:
+
 ```js
 import gql from 'graphql-tag'
 
 export const typeDefs = gql`
-  type Actors {
+  type Actor {
     name: String! @field
   }
 
-  type Movie @content(slug: "movies", icon: "dashicons-admin-home") {
+  type Movie @content {
     title: String! @field
     description: String! @field(type: richText)
     cover: Image! @field
-    actors: [Actors!]! @field
+    actors: [Actor!]! @field
+  }
+`
+```
+
+And you can specify resolvers in a named export `resolvers`:
+
+```js
+import gql from 'graphql-tag'
+
+export const typeDefs = gql`
+  type Movie @content {
+    title: String! @field
+    likes: Int
   }
 `
 
-
+export const resolvers = {
+  Movie: {
+    async likes(object, params, { slug }) {
+      // This is an example of an external call to get movie likes
+      return api.getMovieLikes(slug)
+    },
+  },
+}
 ```
 
-#### Schemas / Blocks
+> `resolvers` are only required for field definition not marked as `@field`.
 
-The blocks folder is used to design your blocks, by describing all your types.
-Example : 
+#### Content API
+
+Sometimes, you may want to be able to request a set of contents. For example, a block that display three movies automatically.
+
 ```js
 import gql from 'graphql-tag'
 
 export const typeDefs = gql`
   type MovieListBlock @block {
+    # This type is not displayed in backoffice
     movies: [Movie!]!
   }
 `
 export const resolvers = {
   MovieListBlock: {
-    movies: async (object, params, { api }) =>
-      api.getContents({
-        type: 'movies',
-      }),
+    // This resolvers automatically display a list of movies
+    async movies(object, params, { api }) {
+      // The "type" is the slug of your content
+      return api.getContents({ type: 'movie' })
+    },
   },
 }
-
 ```
 
-### Blocks
+##### Filters
 
-In this folder, you will define your block's fragment, and design it. It needs the same name as the one given it 'schemas/blocks'.
+Available filters depends of your backoffice, using `Wordpress` we rely on [wp-rest-filter](https://wordpress.org/plugins/wp-rest-filter/). To use it, add a `query` to `api.getContents`:
 
-
-Example : 
 ```js
-import React from 'react'
-import gql from 'graphql-tag'
-import { Link } from 'smooth/router'
+// Get last 30 news ordered by "publicationDate"
+api.getContents({
+  type: 'news',
+  query: {
+    per_page: 30,
+    meta_key: 'publicationDate',
+    orderby: 'meta_value',
+    order: 'desc',
+  },
+})
 
-export default function MovieListBlock({ movies }) {
-  return (
-    <div>
-      {movies.map((movie, index) => (
-        <Link to={`/movies/${movie.metadata.slug}`} key={index}>
-          <div>{movie.title}</div>
-        </Link>
-      ))}
-    </div>
-  )
-}
-
-export const blockFragment = gql`
-  fragment MovieListBlockProps on MovieListBlock {
-    movies {
-      metadata {
-        slug
-      }
-      title
-      description
-      cover {
-        url
-        alt
-        title
-      }
-      actors {
-        name
-      }
-    }
-  }
-`
-
+// Get the last 4 projects:
+// - ordered by "date"
+// - with "hasPage" flag marked as true
+// - and exclude the current object
+api.getContents({
+  type: 'projects',
+  query: {
+    per_page: 4,
+    orderby: 'date',
+    order: 'desc',
+    filter: {
+      meta_query: [{ key: 'hasPage', value: 1 }],
+    },
+    exclude: [object.id],
+  },
+})
 ```
 
 ### Pages
 
-In this folder you can create all your content that will need a specific page.
+All your pages must be placed in `src/pages`. The name of the page determines the route of the page. Pages offers several possibilities, display a content or create a page from scratch.
+
+All pages must have a default export that represents the component used to display the page.
 
 ```js
+// src/pages/hello.js
+export default function Hello() {
+  return 'Hello world!'
+}
+```
 
+When I access to `/hello`, I see "Hello world!".
+
+#### Content Pages
+
+A content page is a page with a named export `contentFragment` that contains a fragment on a GraphQL type marked as `@content`. And of course a component as the default export. All fields specified in fragments are available as props.
+
+```js
 import React from 'react'
 import gql from 'graphql-tag'
 
+// The name of the fragment "MovieProps" does not matter
+// but it is recommended to named it like that.
 export const contentFragment = gql`
   fragment MovieProps on Movie {
     title
@@ -211,13 +443,67 @@ export const contentFragment = gql`
 export default function Movie({ title, description, cover }) {
   return (
     <div>
-      <img src={cover.url} alt={cover.alt} style={{ maxWidth: 200 }} />
+      <img src={cover.url} alt={cover.alt} />
       <div>{title}</div>
-      <div dangerouslySetInnerHTML={{ __html: description }} />
+      <p>{description</p>
     </div>
   )
 }
+```
 
+#### Fixed slug pages
+
+All pages are "wildcard" pages by default. It means that the page matches for all urls. For example, if I create a page `books.js`. The page will matches for URL "/books/foo/bar". In fact if this page has a content, it will look for a content with the slug "foo/bar". Most of time this is the correct behaviour, but sometimes you may want to be able to control it and to create a dedicated page.
+
+To create a dedicated page, not wildcard, you have to add a `$` at the end of the name. Let's take the same page `books$.js`. The page will matches only URL "/books/foo/bar" but it will only look for the content with the slug "books".
+
+**Customize slug**
+
+To change the slug looked for by a fixed slug page, you can use `contentSlug` variable. For example, a page named `best-book$.js` will look for `best-book` by default. But you can customize it.
+
+```js
+// The page is still accessible under "/best-book", but it will look for "harry-potter" book
+export const contentSlug = 'harry-potter'
+```
+
+You can also specify a function to compute slug from the url.
+
+```js
+export const contentSlug = ({ location }) => location.pathname
+```
+
+### Query
+
+You can write your GraphQL queries using the `Query` component. For example, in `_app.js` you can choose to display the settings.
+
+```js
+// src/_app.js
+import React from 'react'
+import gql from 'graphql-tag'
+import { Query } from 'smooth/query'
+
+const PAGE = gql`
+  query Settings {
+    settings(slug: "main") {
+      title
+    }
+  }
+`
+
+export default function Page({ Component, ...props }) {
+  return (
+    <Query query={PAGE}>
+      {({ data }) =>
+        data && (
+          <>
+            <h1>{data.settings.title}</h1>
+            <Component {...props} />
+          </>
+        )
+      }
+    </Query>
+  )
+}
 ```
 
 ### Content

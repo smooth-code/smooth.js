@@ -8,15 +8,15 @@ import {
 import { ValidateLink } from './links/validate'
 import { createAPIClient } from '../api'
 
-function getLang(url) {
-  const matches = url.match(/^\/(.{2})\//)
-  return matches ? matches[1] : null
-}
-
 export function getContext({ req, config }) {
+  const lang = req.headers['x-smooth-lang'] || null
+  const preview = Boolean(req.headers['x-smooth-preview'])
+  const id = req.headers['x-smooth-preview-id'] || null
   return {
-    api: createAPIClient({ config, lang: getLang(req.url) }),
-    lang: getLang(req.url),
+    api: createAPIClient({ config, lang }),
+    lang,
+    id,
+    preview,
     cookie: req.headers.cookie,
   }
 }

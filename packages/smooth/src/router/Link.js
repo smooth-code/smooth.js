@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link as BaseLink, NavLink as BaseNavLink } from 'react-router-dom'
-import PageContext from '../client/PageContext'
+import { useLang } from '../page/PageContext'
 import HiddenLinkRouter from './HiddenLinkRouter'
 
 function computeTo(to, lang) {
@@ -11,17 +11,9 @@ function computeTo(to, lang) {
 }
 
 function createLink(Component) {
-  return ({ waitBeforeTransition, ...props }) => {
-    const link = (
-      <PageContext.Consumer>
-        {pageContext => (
-          <Component
-            {...props}
-            to={computeTo(props.to, pageContext ? pageContext.lang : null)}
-          />
-        )}
-      </PageContext.Consumer>
-    )
+  const Link = ({ waitBeforeTransition, ...props }) => {
+    const lang = useLang()
+    const link = <Component {...props} to={computeTo(props.to, lang)} />
 
     return waitBeforeTransition ? (
       <HiddenLinkRouter>{link}</HiddenLinkRouter>
@@ -29,6 +21,9 @@ function createLink(Component) {
       link
     )
   }
+
+  Link.displayName = `enhanced(${Component.name})`
+  return Link
 }
 
 export const Link = createLink(BaseLink)
