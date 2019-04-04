@@ -6,6 +6,7 @@ import React, {
   useContext,
   useMemo,
 } from 'react'
+import { createPath } from 'history'
 import { Router, withRouter } from 'react-router-dom'
 import HiddenHistoryContext from './HiddenHistoryContext'
 
@@ -13,6 +14,10 @@ export const HiddenRouterContext = createContext()
 
 export function useHiddenRouter() {
   return useContext(HiddenRouterContext)
+}
+
+function createURL(location) {
+  return typeof location === 'string' ? location : createPath(location)
 }
 
 function HiddenRouter({ history, children }) {
@@ -60,6 +65,7 @@ function HiddenRouter({ history, children }) {
       goForward: noop,
       listen: () => noop,
       block: () => noop,
+      createHref: path => createURL(path),
     }
   }, [hiddenHistory.location])
 
