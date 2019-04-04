@@ -10,11 +10,15 @@ export function hasHook(plugin, hook) {
 }
 
 export function applyHook(hook, args, resultKey) {
-  let result = args[resultKey]
+  let result = resultKey ? args[resultKey] : undefined
   for (const plugin of plugins) {
     if (hasHook(plugin, hook)) {
       // eslint-disable-next-line no-await-in-loop
-      result = runHook(plugin, hook, { ...args, [resultKey]: result })
+      result = runHook(
+        plugin,
+        hook,
+        resultKey ? { ...args, [resultKey]: result } : { ...args },
+      )
     }
   }
   return result

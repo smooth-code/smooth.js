@@ -5,8 +5,10 @@ import Context from './Context'
 export default function Head({ children }) {
   return (
     <Context.Consumer>
-      {({ helmet }) => (
-        <html {...helmet.htmlAttributes.toComponent()}>{children}</html>
+      {({ helmet, htmlAttributes }) => (
+        <html {...helmet.htmlAttributes.toComponent()} {...htmlAttributes}>
+          {children}
+        </html>
       )}
     </Context.Consumer>
   )

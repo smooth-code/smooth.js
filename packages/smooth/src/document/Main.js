@@ -5,8 +5,12 @@ import Context from './Context'
 export default function Main() {
   return (
     <Context.Consumer>
-      {({ appHtml }) => (
-        <div id="main" dangerouslySetInnerHTML={{ __html: appHtml }} />
+      {({ appHtml, preBodyComponents, postBodyComponents }) => (
+        <>
+          {preBodyComponents}
+          <div id="main" dangerouslySetInnerHTML={{ __html: appHtml }} />
+          {postBodyComponents}
+        </>
       )}
     </Context.Consumer>
   )

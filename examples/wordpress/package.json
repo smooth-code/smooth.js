@@ -9,6 +9,7 @@
     "react-dom": "^16.8.2",
     "smooth": "latest",
     "smooth-backend-wordpress": "latest",
+    "smooth-plugin-google-analytics": "latest",
     "smooth-plugin-head-meta": "latest"
   },
   "resolutions": {

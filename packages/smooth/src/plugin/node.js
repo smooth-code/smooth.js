@@ -28,6 +28,24 @@ export async function applyAsyncHook(config, hook, value) {
   return value
 }
 
+export function applyHook(config, hook, value) {
+  const validate = validators[hook]
+
+  if (!validate) {
+    throw new Error(`Unknown hook "${hook}"`)
+  }
+
+  validate(value)
+
+  for (const plugin of config.plugins) {
+    if (hasHook(plugin, hook)) {
+      // eslint-disable-next-line no-await-in-loop
+      runAsyncHook(plugin, hook, { ...value, config, types })
+    }
+  }
+  return value
+}
+
 export async function callApi(plugins, api, request) {
   for (const plugin of plugins) {
     if (plugin.node[api]) {

@@ -56,6 +56,9 @@ export default function Page({ title, book, specificBook, allBooks, blocks }) {
           </li>
         ))}
       </ul>
+      <Link waitBeforeTransition to="/hello">
+        hello
+      </Link>
       <Blocks blocks={blocks} />
     </div>
   )
