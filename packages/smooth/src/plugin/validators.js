@@ -11,3 +11,19 @@ export function onBuild({ schemaDefinition }) {
 export function onCreateSchemaDefinition({ schemaDefinition }) {
   assertExists(schemaDefinition)
 }
+
+export function onRenderBody({
+  pathname,
+  setHeadComponents,
+  setHtmlAttributes,
+  setBodyAttributes,
+  setPreBodyComponents,
+  setPostBodyComponents,
+}) {
+  assertExists(pathname)
+  assertExists(setHeadComponents)
+  assertExists(setHtmlAttributes)
+  assertExists(setBodyAttributes)
+  assertExists(setPreBodyComponents)
+  assertExists(setPostBodyComponents)
+}

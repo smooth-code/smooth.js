@@ -64,7 +64,6 @@ export function Query({ children }) {
 
   return (
     <BaseQuery
-      prefetch
       query={getQuery(page)}
       variables={{ slug: page.slug || 'index' }}
     >

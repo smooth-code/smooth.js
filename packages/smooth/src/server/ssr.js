@@ -7,6 +7,7 @@ import { renderToString } from 'react-dom/server'
 import { ChunkExtractor } from '@loadable/server'
 import asyncHandler from 'express-async-handler'
 import { getContext, createApolloClient } from './apollo'
+import { applyHook } from '../plugin/node'
 
 function enhanceApp(options = {}, App) {
   return options.enhanceApp ? options.enhanceApp(App) : App
@@ -19,6 +20,51 @@ function clearCache() {
       delete require.cache[key]
     }
   })
+}
+
+function onRenderBody(config, pathname) {
+  let headComponents = []
+  let htmlAttributes = []
+  let bodyAttributes = []
+  let preBodyComponents = []
+  let postBodyComponents = []
+
+  function setHeadComponents(components) {
+    headComponents = [...headComponents, ...components]
+  }
+
+  function setHtmlAttributes(attributes) {
+    htmlAttributes = [...htmlAttributes, ...attributes]
+  }
+
+  function setBodyAttributes(attributes) {
+    bodyAttributes = [...bodyAttributes, ...attributes]
+  }
+
+  function setPreBodyComponents(components) {
+    preBodyComponents = [...preBodyComponents, ...components]
+  }
+
+  function setPostBodyComponents(components) {
+    postBodyComponents = [...postBodyComponents, ...components]
+  }
+
+  applyHook(config, 'onRenderBody', {
+    pathname,
+    setHeadComponents,
+    setHtmlAttributes,
+    setBodyAttributes,
+    setPreBodyComponents,
+    setPostBodyComponents,
+  })
+
+  return {
+    headComponents,
+    htmlAttributes,
+    bodyAttributes,
+    preBodyComponents,
+    postBodyComponents,
+  }
 }
 
 export default function ssrMiddleware({
@@ -110,6 +156,8 @@ export default function ssrMiddleware({
 
     const helmet = Helmet.renderStatic()
 
+    const pluginProps = onRenderBody(config, req.url)
+
     const html = renderToString(
       <DocumentContainer
         appHtml={appHtml}
@@ -117,6 +165,7 @@ export default function ssrMiddleware({
         helmet={helmet}
         apolloState={apolloState}
         error={error}
+        {...pluginProps}
         {...initialProps}
       />,
     )

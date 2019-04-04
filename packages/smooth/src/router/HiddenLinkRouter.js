@@ -1,6 +1,5 @@
 import React, { useContext, useRef } from 'react'
 import { withRouter, Router } from 'react-router-dom'
-import { createLocation } from 'history'
 import HiddenHistoryContext from './HiddenHistoryContext'
 
 // Create a local history, a mix with original history & hiddenHistory
@@ -11,7 +10,7 @@ function useHiddenHistory(originalHistory) {
   mixedHistory.current.push = hiddenHistory.push
   mixedHistory.current.replace = hiddenHistory.replace
   if (hiddenHistory.location) {
-    mixedHistory.current.location = createLocation(hiddenHistory.location)
+    mixedHistory.current.location = hiddenHistory.location
   }
   return mixedHistory.current
 }
