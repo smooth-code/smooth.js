@@ -1,8 +1,8 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import qs from 'query-string'
 import { Query as ApolloQuery } from 'react-apollo'
 import { usePageContext } from '../page/PageContext'
-import { useHiddenRouter } from '../router/HiddenRouter'
+import { usePause } from '../router/HiddenRouter'
 
 function getQueryContext(location, lang) {
   const { id, preview } = qs.parse(location.search)
@@ -21,24 +21,12 @@ function getQueryContext(location, lang) {
 }
 
 function PrefetchHandler({ children, ...props }) {
-  const hiddenRouter = useHiddenRouter()
-  const resolveRef = useRef()
-  const { loading } = props
+  const unpause = usePause()
   useEffect(() => {
-    if (!hiddenRouter) return
-    if (loading) {
-      hiddenRouter.waitForPromise(
-        new Promise(resolve => {
-          resolveRef.current = resolve
-        }),
-      )
-      return
+    if (!props.loading) {
+      unpause()
     }
-    if (resolveRef.current) {
-      resolveRef.current()
-    }
-  }, [loading]) // eslint-disable-line react-hooks/exhaustive-deps
-
+  }, [props.loading, unpause])
   return children(props)
 }
 

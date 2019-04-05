@@ -4,6 +4,7 @@ import App from '__smooth_app'
 import Content from '__smooth_content'
 import { applyHook } from '../plugin/browser'
 import { PageContextProvider } from './PageContext'
+import { usePause } from '../router/HiddenRouter'
 
 function getFileName(filePath) {
   return filePath.replace(/^\.\//, '').replace(/\.js$/, '')
@@ -110,9 +111,11 @@ export default function Page({
   location,
 }) {
   const pageRef = usePageRef(page)
+  const unpause = usePause()
   return (
     <page.LoadableComponent>
       {pageModule => {
+        unpause()
         enrichPageRef(pageRef, {
           module: pageModule,
           indexUrl,

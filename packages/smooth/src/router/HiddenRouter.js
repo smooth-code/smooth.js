@@ -1,10 +1,10 @@
 import React, {
-  useEffect,
   useRef,
   useCallback,
   createContext,
   useContext,
   useMemo,
+  useEffect,
 } from 'react'
 import { createPath } from 'history'
 import { Router, withRouter } from 'react-router-dom'
@@ -14,6 +14,24 @@ export const HiddenRouterContext = createContext()
 
 export function useHiddenRouter() {
   return useContext(HiddenRouterContext)
+}
+
+export function usePause() {
+  const resolve = useRef()
+  const promise = useMemo(
+    () =>
+      new Promise(r => {
+        resolve.current = r
+      }),
+    [],
+  )
+  const hiddenRouter = useHiddenRouter()
+  useEffect(() => {
+    if (hiddenRouter) {
+      hiddenRouter.waitForPromise(promise)
+    }
+  }, [hiddenRouter, promise])
+  return resolve.current
 }
 
 function createURL(location) {
@@ -33,12 +51,15 @@ function HiddenRouter({ history, children }) {
 
   const waitForPromise = useCallback(
     promise => {
+      if (promises.current.includes(promise)) return
       promise.then(() => {
         const index = promises.current.indexOf(promise)
         if (index !== -1) {
           promises.current.splice(index, 1)
         }
-        flush()
+        // 65ms is 4 frames, pretty invisible when we change page
+        // it ensures that React have time to start a new request for an example
+        setTimeout(() => flush(), 65)
       })
       promises.current.push(promise)
     },
@@ -46,11 +67,6 @@ function HiddenRouter({ history, children }) {
   )
 
   const hiddenRouter = useMemo(() => ({ waitForPromise }), [waitForPromise])
-
-  useEffect(() => {
-    const timeout = setTimeout(() => flush(), 20)
-    return () => clearTimeout(timeout)
-  }, [flush])
 
   const staticHistory = useMemo(() => {
     if (!hiddenHistory.location) return null
