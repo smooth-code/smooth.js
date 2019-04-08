@@ -51,7 +51,7 @@ const handlers = {
   },
   richText(infos) {
     preventList(infos)
-    return { type: 'wysiwyg', toolbar: 'basic', media_upload: 0 }
+    return { type: 'wysiwyg', media_upload: 0 }
   },
   image({ list }) {
     if (list) return { type: 'gallery' }
