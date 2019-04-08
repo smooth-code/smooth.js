@@ -26,18 +26,23 @@ export function createClient({ baseUrl, defaultLanguage }) {
           { params },
         )
         if (data && data.status !== 'publish') return []
-        return data ? [data] : []
+        return data
+          ? { totalCount: 1, data: [data] }
+          : { totalCount: 0, data: [] }
       }
 
-      const { data } = await axios.get(
+      const { data, headers } = await axios.get(
         `${baseUrl}/wp-json/presspack/v1/contents/`,
         { params, paramsSerializer },
       )
-      return data
+      return {
+        totalCount: Number(headers['x-wp-total']),
+        data,
+      }
     },
     async getContent(options) {
-      const results = await this.getContents(options)
-      return results[0] || null
+      const { data } = await this.getContents(options)
+      return data[0] || null
     },
     async getContentPreview({ lang, id }) {
       const params = getParams({ lang: lang || defaultLanguage })
