@@ -5,12 +5,17 @@ export const typeDefs = gql`
     title: String @field
     book: Book @field
     specificBook: Book
-    allBooks: [Book]
+    allBooks: BookResult!
     date: Date @field
     dateTime: DateTime @field
     link: Link @field
     blocks: [Block] @field
     file: Media @field
+  }
+
+  type BookResult {
+    totalCount: Int!
+    data: [Book!]!
   }
 `
 

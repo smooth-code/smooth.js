@@ -16,11 +16,14 @@ export const contentFragment = gql`
       name
     }
     allBooks {
-      metadata {
-        id
-        slug
+      totalCount
+      data {
+        metadata {
+          id
+          slug
+        }
+        name
       }
-      name
     }
     link {
       url
@@ -48,7 +51,8 @@ export default function Page({ title, book, specificBook, allBooks, blocks }) {
       <div>{specificBook && specificBook.name}</div>
       <h2>All books</h2>
       <ul>
-        {allBooks.map(b => (
+        {allBooks.totalCount}
+        {allBooks.data.map(b => (
           <li key={b.metadata.id}>
             <Link waitBeforeTransition to={`/books/${b.metadata.slug}`}>
               {b.name}

@@ -100,9 +100,7 @@ function getQueryFieldResolver(node, helpers, state) {
         })
       }
 
-      const res = await state.apiClient.getContent({ type, lang, slug })
-
-      return res
+      return state.apiClient.getContent({ type, lang, slug })
     },
   }
 }
