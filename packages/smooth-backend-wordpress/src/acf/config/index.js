@@ -1,13 +1,10 @@
-import oneBlock from './oneBlock'
+import isBlock from './isBlock'
 import oneContent from './oneContent'
 
 export function generateConfig(ast, helpers) {
   const state = { ast }
-  const layouts = ast.definitions
-    .map(def => oneBlock(def, helpers, state))
-    .filter(x => x)
 
-  state.blockLayouts = layouts
+  state.blockNodes = ast.definitions.filter(def => isBlock(def, helpers))
 
   const contentFieldGroups = ast.definitions
     .map(def => oneContent(def, helpers, state))

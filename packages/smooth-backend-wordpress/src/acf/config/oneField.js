@@ -1,5 +1,6 @@
 import { singularize, humanize } from 'smooth/utils'
 import allFields from './allFields'
+import oneBlock from './oneBlock'
 
 function enumValuesToChoices(nodes, helpers) {
   const { gql: g } = helpers
@@ -119,7 +120,7 @@ const handlers = {
     return {
       type: 'flexible_content',
       button_label: 'Add block',
-      layouts: state.blockLayouts,
+      layouts: state.blockNodes.map(node => oneBlock(node, helpers, state)),
     }
   },
   union({ list, name, type }, helpers, state) {
