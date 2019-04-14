@@ -18,22 +18,22 @@ export function resolveOptions(options) {
   return options
 }
 
-export function onCreateSchemaDefinition(params) {
-  acf.onCreateSchemaDefinition(params)
+export function onCreateSchemaDefinition(params, options) {
+  acf.onCreateSchemaDefinition(params, options)
 }
 
-export async function onBuild(params) {
+export async function onBuild(params, options) {
   await Promise.all([
-    acf.onBuild(params),
-    cpt.onBuild(params),
-    wordpress.onBuild(params),
+    acf.onBuild(params, options),
+    cpt.onBuild(params, options),
+    wordpress.onBuild(params, options),
   ])
 }
 
-export async function getContent(params) {
-  return acf.getContent(params)
+export async function getContent(params, options) {
+  return acf.getContent(params, options)
 }
 
-export async function getContents(params) {
-  return acf.getContents(params)
+export async function getContents(params, options) {
+  return acf.getContents(params, options)
 }

@@ -40,8 +40,8 @@ export function createClient({ baseUrl, defaultLanguage }) {
         data,
       }
     },
-    async getContent(options) {
-      const { data } = await this.getContents(options)
+    async getContent(request) {
+      const { data } = await this.getContents(request)
       return data[0] || null
     },
     async getContentPreview({ lang, id }) {

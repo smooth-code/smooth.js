@@ -21,6 +21,6 @@ loadableReady(() => {
         </BrowserRouter>
       </ApolloProvider>
     </ErrorContext.Provider>,
-    document.getElementById('main'),
+    document.getElementById('___smooth'),
   )
 })

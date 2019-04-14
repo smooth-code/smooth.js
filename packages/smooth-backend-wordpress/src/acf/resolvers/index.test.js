@@ -15,11 +15,13 @@ describe('createResolvers', () => {
       }
     `
     const schemaDefinition = createSchemaDefinitionMock({ typeDefs })
-    const resolvers = createResolvers({
-      options: { baseUrl: '/' },
-      schemaDefinition,
-      types,
-    })
+    const resolvers = createResolvers(
+      {
+        schemaDefinition,
+        types,
+      },
+      { baseUrl: '/' },
+    )
 
     expect(resolvers.Block).toBeDefined()
     expect(resolvers.Query).toBeDefined()

@@ -21,16 +21,23 @@ function loadFile(plugin, name) {
 
 export function parsePlugins(plugins) {
   return plugins.map(plugin => {
+    if (typeof plugin === 'string') {
+      plugin = { resolve: plugin }
+    }
     // eslint-disable-next-line global-require, import/no-dynamic-require
-    const node = loadFile(plugin, 'smooth-node')
+    const node = hasFile(plugin, 'smooth-node')
     const browser = hasFile(plugin, 'smooth-browser')
+    const nodePlugin = loadFile(plugin, 'smooth-node')
     const options = plugin.options || {}
     return {
       node,
+      plugin: nodePlugin,
       browser,
       resolve: plugin.resolve,
       options:
-        node && node.resolveOptions ? node.resolveOptions(options) : options,
+        nodePlugin && nodePlugin.resolveOptions
+          ? nodePlugin.resolveOptions(options)
+          : options,
     }
   })
 }

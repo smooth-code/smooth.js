@@ -1,6 +1,5 @@
 import path from 'path'
 import React from 'react'
-import { Helmet } from 'react-helmet'
 import { StaticRouter } from 'react-router-dom'
 import { ApolloProvider, getDataFromTree } from 'react-apollo'
 import { renderToString } from 'react-dom/server'
@@ -8,37 +7,31 @@ import { ChunkExtractor } from '@loadable/server'
 import asyncHandler from 'express-async-handler'
 import { getContext, createApolloClient } from './apollo'
 import { applyHook } from '../plugin/node'
+import ApolloState from './components/ApolloState'
+import SmoothError from './components/SmoothError'
 
-function enhanceApp(options = {}, App) {
-  return options.enhanceApp ? options.enhanceApp(App) : App
-}
-
-function clearCache() {
-  const keys = Object.keys(require.cache)
-  keys.forEach(key => {
-    if (key.match(/node\/static\//)) {
-      delete require.cache[key]
-    }
-  })
-}
-
-function onRenderBody(config, pathname) {
-  let headComponents = []
-  let htmlAttributes = []
-  let bodyAttributes = []
-  let preBodyComponents = []
-  let postBodyComponents = []
-
+function onRenderBody(
+  config,
+  {
+    headComponents = [],
+    htmlAttributes = {},
+    bodyAttributes = {},
+    preBodyComponents = [],
+    postBodyComponents = [],
+    bodyProps = {},
+    pathname,
+  },
+) {
   function setHeadComponents(components) {
     headComponents = [...headComponents, ...components]
   }
 
   function setHtmlAttributes(attributes) {
-    htmlAttributes = [...htmlAttributes, ...attributes]
+    htmlAttributes = { ...htmlAttributes, ...attributes }
   }
 
   function setBodyAttributes(attributes) {
-    bodyAttributes = [...bodyAttributes, ...attributes]
+    bodyAttributes = { ...bodyAttributes, ...attributes }
   }
 
   function setPreBodyComponents(components) {
@@ -49,6 +42,10 @@ function onRenderBody(config, pathname) {
     postBodyComponents = [...postBodyComponents, ...components]
   }
 
+  function setBodyProps(props) {
+    bodyProps = { ...bodyProps, ...props }
+  }
+
   applyHook(config, 'onRenderBody', {
     pathname,
     setHeadComponents,
@@ -56,6 +53,7 @@ function onRenderBody(config, pathname) {
     setBodyAttributes,
     setPreBodyComponents,
     setPostBodyComponents,
+    setBodyProps,
   })
 
   return {
@@ -64,6 +62,7 @@ function onRenderBody(config, pathname) {
     bodyAttributes,
     preBodyComponents,
     postBodyComponents,
+    bodyProps,
   }
 }
 
@@ -84,20 +83,12 @@ export default function ssrMiddleware({
       'web/static/loadable-stats.json',
     )
 
-    if (config.env !== 'production') {
-      clearCache()
-    }
-
     const nodeExtractor = new ChunkExtractor({
       statsFile: nodeStats,
       outputPath: path.join(config.cachePath, 'node/static'),
     })
 
-    const {
-      Root,
-      DocumentContainer,
-      ErrorContext,
-    } = nodeExtractor.requireEntrypoint()
+    const { Root, Html, ErrorContext } = nodeExtractor.requireEntrypoint()
 
     const webExtractor = new ChunkExtractor({ statsFile: webStats })
     const routerContext = {}
@@ -117,30 +108,21 @@ export default function ssrMiddleware({
       </ErrorContext.Provider>
     )
 
+    const rootElement = applyHook(
+      config,
+      'wrapRootElement',
+      { element: jsx, pathname: req.url },
+      'element',
+    )
+
     // Loadable components
     jsx = webExtractor.collectChunks(jsx)
 
     await getDataFromTree(jsx)
     const apolloState = apolloClient.cache.extract()
 
-    function renderPage(options) {
-      const App = enhanceApp(options, ({ children }) => children)
-      return renderToString(<App>{jsx}</App>)
-    }
-
-    const context = {
-      pathname: req.url,
-      query: req.query,
-      asPath: req.originalUrl,
-      req,
-      res,
-      renderPage,
-    }
-
-    const initialProps = await DocumentContainer.getInitialProps(context)
-
     // Render app HTML
-    const appHtml = renderPage()
+    const appHtml = renderToString(rootElement)
 
     // Handle React router status
     if (routerContext.status) {
@@ -154,21 +136,18 @@ export default function ssrMiddleware({
       return
     }
 
-    const helmet = Helmet.renderStatic()
+    const postBodyComponents = [
+      <SmoothError key="smooth-error" error={error} />,
+      <ApolloState key="apollo-state" state={apolloState} />,
+      ...webExtractor.getScriptElements(),
+    ]
 
-    const pluginProps = onRenderBody(config, req.url)
+    const pluginProps = onRenderBody(config, {
+      postBodyComponents,
+      pathname: req.url,
+    })
 
-    const html = renderToString(
-      <DocumentContainer
-        appHtml={appHtml}
-        extractor={webExtractor}
-        helmet={helmet}
-        apolloState={apolloState}
-        error={error}
-        {...pluginProps}
-        {...initialProps}
-      />,
-    )
+    const html = renderToString(<Html {...pluginProps} body={appHtml} />)
 
     res.set('content-type', 'text/html')
     res.end(`<!DOCTYPE html>${html}`)

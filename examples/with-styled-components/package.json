@@ -9,6 +9,7 @@
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "smooth": "latest",
+    "smooth-plugin-styled-components": "latest",
     "styled-components": "^4.1.3"
   }
 }

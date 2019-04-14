@@ -8,7 +8,7 @@ const themeDir = path.join(__dirname, 'theme')
 const pluginTpl = fs.readFileSync(path.join(pluginDir, 'index.php'), 'utf-8')
 const themeTpl = fs.readFileSync(path.join(themeDir, 'index.php'), 'utf-8')
 
-export async function onBuild({ options }) {
+export async function onBuild(_, options) {
   const pluginDistDir = await getPluginDir(options.basePath)
   const pluginContent = pluginTpl.replace(/%HOME_URL%/g, options.homeUrl)
   const pluginPath = path.join(pluginDistDir, 'index.php')

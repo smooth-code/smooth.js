@@ -4,12 +4,14 @@ Easily add Google Analytics to your Smooth site.
 
 ## Install
 
-`npm install --save smooth-plugin-google-analytics`
+`npm install smooth-plugin-google-analytics`
 
-## How to use
+## Usage
 
-```javascript
-// In your smooth-config.js
+Edit `smooth.config.js`:
+
+```js
+// smooth.config.js
 module.exports = {
   plugins: [
     {
@@ -42,7 +44,7 @@ module.exports = {
 
 See below for the complete list of [Create Only Fields](#create-only-fields).
 
-## `<OutboundLink>` component
+### `<OutboundLink>`
 
 To make it easy to track clicks on outbound links in Google Analytics,
 the plugin provides a component.
@@ -64,14 +66,16 @@ export default function Main() {
 }
 ```
 
-## The "anonymize" option
+### Options
+
+#### "anonymize"
 
 Some countries (such as Germany) require you to use the
 [\_anonymizeIP](https://support.google.com/analytics/answer/2763052) function for
 Google Analytics. Otherwise you are not allowed to use it. The option adds two
 blocks to the code:
 
-```javascript
+```js
 function gaOptout(){document.cookie=disableStr+'=true; expires=Thu, 31 Dec 2099 23:59:59 UTC;path=/',window[disableStr]=!0}var gaProperty='UA-XXXXXXXX-X',disableStr='ga-disable-'+gaProperty;document.cookie.indexOf(disableStr+'=true')>-1&&(window[disableStr]=!0);
 
 ...
@@ -84,27 +88,27 @@ you can set a link e.g. in your imprint as follows:
 
 `<a href="javascript:gaOptout();">Deactivate Google Analytics</a>`
 
-## The "respectDNT" option
+#### "respectDNT"
 
 If you enable this optional option, Google Analytics will not be loaded at all for visitors that have "Do Not Track" enabled. While using Google Analytics does not necessarily constitute Tracking, you might still want to do this to cater to more privacy oriented users.
 
-## The "exclude" option
+#### "exclude"
 
 If you need to exclude any path from the tracking system, you can add it (one or more) to this optional array as glob expressions.
 
-## The "optimizeId" option
+#### "optimizeId"
 
 If you need to use Google Optimize for A/B testing, you can add this optional Optimize container id to allow Google Optimize to load the correct test parameters for your site.
 
-## The "experimentId" option
+#### "experimentId"
 
 If you need to set up SERVER_SIDE Google Optimize experiment, you can add the experiment ID. The experiment ID is shown on the right-hand panel on the experiment details page. [Server-side Experiments](https://developers.google.com/optimize/devguides/experiments)
 
-## The "variationId" option
+#### "variationId"
 
 Besides the experiment ID you also need the variation ID for SERVER_SIDE experiments in Google Optimize. Set 0 for original version.
 
-## Create Only Fields
+### Create Only Fields
 
 This plugin supports all optional Create Only Fields documented in [Google Analytics](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#create):
 

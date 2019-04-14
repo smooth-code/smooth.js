@@ -41,18 +41,19 @@
     - [CSS-in-JS](#css-in-js)
     - [Importing CSS / Sass / Less / Stylus files](#importing-css--sass--less--stylus-files)
   - [Static file serving (e.g.: images)](#static-file-serving-eg-images)
-  - [Populating `<head>`](#populating-head)
   - [Routing](#routing)
   - [Dynamic Import](#dynamic-import)
     - [1. Basic Usage (Also does SSR)](#1-basic-usage-also-does-ssr)
     - [2. With Custom Loading Component](#2-with-custom-loading-component)
   - [Custom `<App>`](#custom-app)
-  - [Custom `<Document>`](#custom-document)
-    - [Customizing `renderPage`](#customizing-renderpage)
   - [Custom error handling](#custom-error-handling)
   - [Custom configuration](#custom-configuration)
   - [Customizing webpack config](#customizing-webpack-config)
   - [Customizing babel config](#customizing-babel-config)
+- [Plugins Hooks](#plugins-hooks)
+  - [Plugins API](#plugins-api)
+  - [smooth-node.js](#smooth-nodejs)
+  - [smooth-browser.js](#smooth-browserjs)
 - [Production deployment](#production-deployment)
 - [Browser support](#browser-support)
 - [Contributing](#contributing)
@@ -604,6 +605,7 @@ Please see the [emotion documentation](https://emotion.sh/) for more examples.
   </summary>
   <ul>
     <li><a href="/examples/with-styled-components">Styled components</a></li>
+    <li><a href="/examples/with-emotion">Emotion</a></li>
   </ul>
 </details>
 
@@ -614,8 +616,6 @@ It's possible to use any existing CSS-in-JS solution. The simplest one is inline
 ```jsx
 export default () => <p style={{ color: 'red' }}>hi there</p>
 ```
-
-To use more sophisticated CSS-in-JS solutions, you typically have to implement style flushing for server-side rendering. We enable this by allowing you to define your own [custom `<Document>`](#user-content-custom-document) component that wraps each page.
 
 #### Importing CSS / Sass / Less / Stylus files
 
@@ -630,37 +630,6 @@ export default () => <img src="/static/my-image.png" alt="my image" />
 ```
 
 _Note: Don't name the `static` directory anything else. The name is required and is the only directory that Smooth.js uses for serving static assets._
-
-### Populating `<head>`
-
-<details>
-  <summary><b>Examples</b></summary>
-  <ul>
-    <li><a href="/examples/head-elements">Head elements</a></li>
-  </ul>
-</details>
-
-<p></p>
-
-We expose a built-in component for appending elements to the `<head>` of the page.
-
-```jsx
-import Head from 'smooth/head'
-
-export default () => (
-  <div>
-    <Head>
-      <title>My page title</title>
-      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    </Head>
-    <p>Hello world!</p>
-  </div>
-)
-```
-
-_Note: The contents of `<head>` get cleared upon unmounting the component, so make sure each page completely defines what it needs in `<head>`, without making assumptions about what other pages added_
-
-_Note: `<title>` and `<meta>` elements need to be contained as **direct** children of the `<Head>` element, or wrapped into maximum one level of `<React.Fragment>`, otherwise the metatags won't be correctly picked up on clientside navigation._
 
 ### Routing
 
@@ -775,74 +744,6 @@ export default ({ Component, ...props }) => (
     <Component {...props} />
   </div>
 )
-```
-
-### Custom `<Document>`
-
-<details>
-  <summary><b>Examples</b></summary>
-  <ul>
-    <li><a href="/examples/with-styled-components">Styled components custom document</a></li>
-  </ul>
-</details>
-
-<p></p>
-
-- Is rendered on the server side
-- Is used to change the initial server side rendered document markup
-- Commonly used to implement server side rendering for css-in-js libraries like [styled-components](/examples/with-styled-components).
-
-Pages in `Smooth.js` skip the definition of the surrounding document's markup. For example, you never include `<html>`, `<body>`, etc. To override that default behavior, you must create a file at `./src/_document.js`, where you can extend the `Document` class:
-
-```jsx
-// _document is only rendered on the server side and not on the client side
-// Event handlers like onClick can't be added to this file
-
-// ./src/_document.js
-import Document, { Head, Main, MainScript } from 'smooth/document'
-
-export default () => (
-  <html>
-    <Head>
-      <style>{`body { margin: 0 } /* custom! */`}</style>
-    </Head>
-    <body className="custom_class">
-      <Main />
-      <MainScript />
-    </body>
-  </html>
-)
-```
-
-All of `<Head />`, `<Main />` and `<MainScript />` are required for page to be properly rendered.
-
-**Note: React-components outside of `<Main />` will not be initialised by the browser. Do _not_ add application logic here. If you need shared components in all your pages (like a menu or a toolbar), take a look at the `App` component instead.**
-
-#### Customizing `renderPage`
-
-🚧 It should be noted that the only reason you should be customizing `renderPage` is for usage with css-in-js libraries
-that need to wrap the application to properly work with server-rendering. 🚧
-
-- It takes as argument an options object for further customization
-
-```js
-import Document from 'smooth/document'
-
-Document.getInitialProps = ctx => {
-  const sheet = new ServerStyleSheet()
-
-  const originalRenderPage = ctx.renderPage
-  ctx.renderPage = () =>
-    originalRenderPage({
-      // wrap the all react tree
-      enhanceApp: App => App,
-    })
-
-  // Return additional props
-  return {}
-}
-
-export default Document
 ```
 
 ### Custom error handling
@@ -986,6 +887,27 @@ These presets / plugins **should not** be added to your custom `.babelrc`. Inste
 ```
 
 The `modules` option on `"preset-env"` should be kept to `false` otherwise webpack code splitting is disabled.
+
+## Plugins Hooks
+
+### Plugins API
+
+- resolveOptions
+
+### smooth-node.js
+
+- onRenderBody
+- onCreateBabelConfig
+- getContents
+- getContent
+- onBuild
+
+### smooth-browser.js
+
+- onRouteUpdate
+- onSelectContentFields
+- wrapContentElement
+- wrapRootElement
 
 ## Production deployment
 

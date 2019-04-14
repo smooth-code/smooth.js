@@ -11,26 +11,21 @@ import { Watcher, watchFs } from './watcher'
 import webpackMiddleware from './webpackMiddleware'
 
 function getPluginFileContent(config) {
-  const imports = []
-  const names = []
-  config.plugins
+  const definitions = config.plugins
     .filter(plugin => plugin.browser)
-    .forEach((plugin, index) => {
-      const name = `plugin${index}`
-      imports.push(
-        `import * as plugin${index} from '${path.join(
-          plugin.resolve,
-          'smooth-browser',
-        )}';`,
-      )
-      names.push(name)
+    .map((plugin, index) => {
+      const file = path.join(plugin.resolve, 'smooth-browser')
+      return `{ plugin: '${file}', options: ${JSON.stringify(plugin.options)} }`
     })
 
-  return `${imports.join('\n')}\nexport default [${names.join(',')}];`
+  return `module.exports = [${definitions.join(',\n')}]`
 }
 
-export async function buildBrowserPlugins({ config }) {
+export async function buildBrowser({ config }) {
   const cache = createCache({ config })
+  // Create empty default-blocks directory
+  await cache.createDirectory('default-blocks')
+  // Write browser plugins
   await cache.writeCacheFile('browser-plugins.js', getPluginFileContent(config))
 }
 
