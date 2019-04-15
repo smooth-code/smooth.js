@@ -1,4 +1,5 @@
 import path from 'path'
+import babelRequire from '../babel/require'
 
 function hasFile(plugin, name) {
   try {
@@ -13,7 +14,7 @@ function hasFile(plugin, name) {
 function loadFile(plugin, name) {
   try {
     // eslint-disable-next-line global-require, import/no-dynamic-require
-    return require(path.join(plugin.resolve, name))
+    return babelRequire(path.join(plugin.resolve, name))
   } catch (error) {
     return null
   }
