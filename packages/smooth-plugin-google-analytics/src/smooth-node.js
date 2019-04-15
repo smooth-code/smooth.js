@@ -16,14 +16,13 @@ const knownOptions = {
   allowLinker: `boolean`,
 }
 
-exports.onRenderBody = ({
-  setHeadComponents,
-  setPostBodyComponents,
+exports.onRenderBody = (
+  { setHeadComponents, setPostBodyComponents },
   options,
-}) => {
-  // if (process.env.NODE_ENV !== 'production') {
-  //   return null
-  // }
+) => {
+  if (process.env.NODE_ENV !== 'production') {
+    return null
+  }
 
   // Lighthouse recommends pre-connecting to google analytics
   setHeadComponents([
@@ -53,7 +52,7 @@ exports.onRenderBody = ({
   const setComponents = options.head ? setHeadComponents : setPostBodyComponents
   return setComponents([
     <script
-      key="gatsby-plugin-google-analytics"
+      key="smooth-plugin-google-analytics"
       dangerouslySetInnerHTML={{
         __html: `
   ${

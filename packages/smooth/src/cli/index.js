@@ -5,7 +5,7 @@ import createLogger from 'progress-estimator'
 import { getConfig } from '../config'
 import { start } from '../server'
 import {
-  buildBrowserPlugins,
+  buildBrowser,
   watchSchema,
   buildSchema,
   watchWebpack,
@@ -61,7 +61,7 @@ async function devCommand() {
   clearConsole()
   console.log('> smooth.js 👨‍🚀')
   const config = await getConfig({ dev: true })
-  await logger(buildBrowserPlugins({ config }), 'Build plugins')
+  await logger(buildBrowser({ config }), 'Setup project')
   watch({ config })
 }
 
@@ -75,7 +75,7 @@ async function logBuild(operation, name) {
 
 async function buildCommand() {
   const config = await getConfig({ dev: false })
-  await logBuild(() => buildBrowserPlugins({ config }), 'plugins')
+  await logBuild(() => buildBrowser({ config }), 'plugins')
   await logBuild(() => buildSchema({ config }), 'schema')
   await logBuild(() => buildWebpack({ config }), 'webpack')
   // eslint-disable-next-line no-console

@@ -3,10 +3,26 @@ import fs from 'fs'
 import webpack from 'webpack'
 import nodeExternals from 'webpack-node-externals'
 import LoadablePlugin from '@loadable/webpack-plugin'
+import { applyHook } from '../plugin/node'
+import SmoothCacheHotReloader from '../webpack/plugins/smooth-cache-hot-reloader'
 
 function fileExistsSync(filepath) {
   try {
     return fs.statSync(filepath).isFile()
+  } catch (e) {
+    // Check exception. If ENOENT - no such file or directory ok, file doesn't exist.
+    // Otherwise something else went wrong, we don't have rights to access the file, ...
+    if (e.code !== 'ENOENT') {
+      throw e
+    }
+
+    return false
+  }
+}
+
+function directoryExistsSync(filepath) {
+  try {
+    return fs.statSync(filepath).isDirectory()
   } catch (e) {
     // Check exception. If ENOENT - no such file or directory ok, file doesn't exist.
     // Otherwise something else went wrong, we don't have rights to access the file, ...
@@ -24,13 +40,47 @@ function getScriptPath(config, script) {
   return fileExistsSync(customPath) ? customPath : defaultPath
 }
 
+function getDirectory(config, dirPath, defaultPath) {
+  return directoryExistsSync(dirPath)
+    ? dirPath
+    : path.join(config.cachePath, defaultPath)
+}
+
+function getBabelOptions({ config, isServer }) {
+  let mixOpts = { plugins: [], presets: [] }
+
+  const actions = {
+    setBabelOptions(opts) {
+      mixOpts = { ...mixOpts, ...opts }
+    },
+    setBabelPlugin({ name, options = {} }) {
+      mixOpts = {
+        ...mixOpts,
+        plugins: [...mixOpts.plugins, [name, options]],
+      }
+    },
+    setBabelPreset({ name, options = {} }) {
+      mixOpts = {
+        ...mixOpts,
+        presets: [...mixOpts.presets, [name, options]],
+      }
+    },
+  }
+
+  applyHook(config, 'onCreateBabelConfig', { isServer, actions })
+
+  return mixOpts
+}
+
 function getTargetConfig(target, { config, dev }) {
   const mainEntry = path.join(__dirname, '../client', `main-${target}.js`)
   const isServer = target === 'node'
+  const babelOptions = getBabelOptions({ config, isServer })
   const defaultLoaders = {
     babel: {
       loader: 'smooth-babel-loader',
       options: {
+        ...babelOptions,
         dev,
         isServer,
         cwd: config.cwd,
@@ -39,6 +89,7 @@ function getTargetConfig(target, { config, dev }) {
     },
   }
   const options = { isServer, defaultLoaders, dev }
+  const blocksPath = getDirectory(config, config.blocksPath, 'default-blocks')
 
   return config.webpack(
     {
@@ -70,17 +121,19 @@ function getTargetConfig(target, { config, dev }) {
           ),
           __smooth_plugins: path.join(config.cachePath, 'browser-plugins.js'),
           __smooth_app: getScriptPath(config, '_app.js'),
-          __smooth_document: getScriptPath(config, '_document.js'),
+          __smooth_html: getScriptPath(config, 'html.js'),
           __smooth_error: getScriptPath(config, '_error.js'),
           __smooth_content: getScriptPath(config, '_content.js'),
-          __smooth_blocks: config.blocksPath,
+          __smooth_blocks: blocksPath,
           __smooth_pages: config.pagesPath,
         },
       },
       externals:
         target === 'node'
           ? [
-              nodeExternals({ whitelist: [/^smooth\//] }),
+              nodeExternals({
+                whitelist: [/^smooth[/\\]/],
+              }),
               'graphql/type',
               'graphql/language',
               'graphql/execution',
@@ -95,10 +148,11 @@ function getTargetConfig(target, { config, dev }) {
       },
       plugins: [
         new webpack.EnvironmentPlugin({
-          __smooth_blocks: config.blocksPath,
+          __smooth_blocks: blocksPath,
           __smooth_pages: config.pagesPath,
         }),
         new LoadablePlugin(),
+        ...(target === 'node' && dev ? [new SmoothCacheHotReloader()] : []),
         ...(target === 'web' && dev
           ? [new webpack.HotModuleReplacementPlugin()]
           : []),

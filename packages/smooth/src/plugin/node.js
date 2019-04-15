@@ -1,55 +1,23 @@
 /* eslint-disable no-restricted-syntax */
 import { types } from '../graphql'
-import * as validators from './validators'
+import { createApplyHook, createApplyAsyncHook } from './common'
 
-export async function runAsyncHook(plugin, hook, value) {
-  return plugin.node[hook]({ ...value, options: plugin.options })
+export { runHook, runAsyncHook, hasHook } from './common'
+
+export function applyHook(config, ...args) {
+  const defaultOptions = { config, types }
+  return createApplyHook(config.plugins, defaultOptions)(...args)
 }
 
-export function hasHook(plugin, hook) {
-  return plugin.node && plugin.node[hook]
-}
-
-export async function applyAsyncHook(config, hook, value) {
-  const validate = validators[hook]
-
-  if (!validate) {
-    throw new Error(`Unknown hook "${hook}"`)
-  }
-
-  validate(value)
-
-  for (const plugin of config.plugins) {
-    if (hasHook(plugin, hook)) {
-      // eslint-disable-next-line no-await-in-loop
-      await runAsyncHook(plugin, hook, { ...value, config, types })
-    }
-  }
-  return value
-}
-
-export function applyHook(config, hook, value) {
-  const validate = validators[hook]
-
-  if (!validate) {
-    throw new Error(`Unknown hook "${hook}"`)
-  }
-
-  validate(value)
-
-  for (const plugin of config.plugins) {
-    if (hasHook(plugin, hook)) {
-      // eslint-disable-next-line no-await-in-loop
-      runAsyncHook(plugin, hook, { ...value, config, types })
-    }
-  }
-  return value
+export async function applyAsyncHook(config, ...args) {
+  const defaultOptions = { config, types }
+  return createApplyAsyncHook(config.plugins, defaultOptions)(...args)
 }
 
 export async function callApi(plugins, api, request) {
   for (const plugin of plugins) {
-    if (plugin.node[api]) {
-      return plugin.node[api]({ request, options: plugin.options })
+    if (plugin.plugin[api]) {
+      return plugin.plugin[api]({ request }, plugin.options)
     }
   }
 

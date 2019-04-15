@@ -1,0 +1,28 @@
+{
+  "name": "smooth-plugin-react-helmet",
+  "description": "Manage document head data with react-helmet. Provides drop-in server rendering support for Smooth.",
+  "version": "0.1.1-alpha.30",
+  "repository": "https://github.com/smooth-code/smooth.js/tree/master/packages/smooth-plugin-react-helmet",
+  "author": "Greg Bergé <berge.greg@gmail.com>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "smooth",
+    "smooth-plugin"
+  ],
+  "engines": {
+    "node": ">=8"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "prebuild": "shx rm -rf lib",
+    "build": "babel --root-mode upward -d lib --ignore \"**/*.test.js\" --copy-files src",
+    "prepublishOnly": "yarn run build"
+  },
+  "peerDependencies": {
+    "react-helmet": "^5.1.3",
+    "smooth": "^0.1.0"
+  }
+}

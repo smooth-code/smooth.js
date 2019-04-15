@@ -12,7 +12,8 @@ describe('#onBuild', () => {
 
   it('should generate config', async () => {
     const plugin = {
-      node: { onBuild },
+      node: true,
+      plugin: { onBuild },
       options: {
         basePath: '/tmp',
       },

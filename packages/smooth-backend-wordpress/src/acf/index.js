@@ -6,15 +6,15 @@ import * as types from './types'
 import { createClient } from './api'
 import { writeFile, getPluginDir } from '../util'
 
-export function onCreateSchemaDefinition(params) {
-  const acfResolvers = createResolvers(params)
+export function onCreateSchemaDefinition(params, options) {
+  const acfResolvers = createResolvers(params, options)
   params.schemaDefinition.resolvers = mergeResolvers(
     params.schemaDefinition.resolvers,
     acfResolvers,
   )
 }
 
-export async function onBuild({ schemaDefinition, options, types: gqlTypes }) {
+export async function onBuild({ schemaDefinition, types: gqlTypes }, options) {
   const acfConfig = await generateConfig(schemaDefinition.typeDefs, {
     gql: gqlTypes,
     acf: types,
@@ -26,12 +26,12 @@ export async function onBuild({ schemaDefinition, options, types: gqlTypes }) {
   await writeFile(acfConfigPath, JSON.stringify(acfConfig, null, 2))
 }
 
-export async function getContent({ request, options }) {
+export async function getContent({ request }, options) {
   const apiClient = createClient(options)
   return apiClient.getContent(request)
 }
 
-export async function getContents({ request, options }) {
+export async function getContents({ request }, options) {
   const apiClient = createClient(options)
   return apiClient.getContents(request)
 }

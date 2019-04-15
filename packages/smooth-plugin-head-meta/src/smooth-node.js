@@ -25,7 +25,7 @@ function one(node, { types: t, options }) {
   node.fields.push(headMetaField)
 }
 
-export function onCreateSchemaDefinition({ schemaDefinition, types, options }) {
+export function onCreateSchemaDefinition({ schemaDefinition, types }, options) {
   schemaDefinition.typeDefs.definitions.forEach(node =>
     one(node, { types, options }),
   )

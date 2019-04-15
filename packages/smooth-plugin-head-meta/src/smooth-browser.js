@@ -1,10 +1,11 @@
+/* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
 import React from 'react'
-import Head from 'smooth/head'
+import Helmet from 'react-helmet'
 
 function HeadMeta({ headMeta }) {
   if (!headMeta) return null
   return (
-    <Head>
+    <Helmet>
       {headMeta.title && <title>{headMeta.title}</title>}
       {headMeta.description && (
         <meta name="description" content={headMeta.description} />
@@ -36,7 +37,7 @@ function HeadMeta({ headMeta }) {
         headMeta.customMetas.map((meta, index) => (
           <meta key={index} name={meta.name} content={meta.content} />
         ))}
-    </Head>
+    </Helmet>
   )
 }
 

@@ -10,18 +10,18 @@ function usePreviousLocation(location) {
   return previousLocation.current
 }
 
-function useScrollTop({ location, previousLocation }) {
+function useScrollTop({ location, prevLocation }) {
   useEffect(() => {
-    if (previousLocation && previousLocation.pathname !== location.pathname) {
+    if (prevLocation && prevLocation.pathname !== location.pathname) {
       // eslint-disable-next-line
       window.scrollTo(0, 0)
     }
-  }, [location, previousLocation])
+  }, [location, prevLocation])
 }
 
 function RouterHooks({ location }) {
-  const previousLocation = usePreviousLocation(location)
-  const options = { location, previousLocation }
+  const prevLocation = usePreviousLocation(location)
+  const options = { location, prevLocation }
   useScrollTop(options)
   applyHook('onRouteUpdate', options)
   return null

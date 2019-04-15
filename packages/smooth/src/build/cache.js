@@ -12,5 +12,8 @@ export function createCache({ config }) {
       await mkdirp(config.cachePath)
       await writeFile(path.join(config.cachePath, filePath), content)
     },
+    async createDirectory(dirPath) {
+      await mkdirp(path.join(config.cachePath, dirPath))
+    },
   }
 }

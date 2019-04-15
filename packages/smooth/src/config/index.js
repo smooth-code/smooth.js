@@ -52,7 +52,7 @@ export async function getConfig({ dev }) {
     defaultConfig,
   )
 
-  config.webpackConfig = await getWebpackConfig({ config, dev })
   config.plugins = parsePlugins(config.plugins)
+  config.webpackConfig = await getWebpackConfig({ config, dev })
   return config
 }

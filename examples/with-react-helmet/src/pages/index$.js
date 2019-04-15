@@ -1,11 +1,11 @@
 import React from 'react'
-import Head from 'smooth/head'
+import Helmet from 'react-helmet'
 
 export default () => (
   <>
-    <Head>
+    <Helmet>
       <title>My awesome page</title>
-    </Head>
+    </Helmet>
     Hello world!
   </>
 )
