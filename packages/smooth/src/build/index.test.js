@@ -36,7 +36,7 @@ describe('#buildBrowser', () => {
     const [[filename, content]] = cache.writeCacheFile.mock.calls
     expect(filename).toBe('browser-plugins.js')
     expect(content).toBe(
-      'module.exports = [{ plugin: \'/a/smooth-browser\', options: {"foo":"bar"} }]',
+      'module.exports = [{ plugin: require(\'/a/smooth-browser\'), options: {"foo":"bar"} }]',
     )
   })
 })

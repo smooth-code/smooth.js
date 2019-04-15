@@ -15,7 +15,9 @@ function getPluginFileContent(config) {
     .filter(plugin => plugin.browser)
     .map((plugin, index) => {
       const file = path.join(plugin.resolve, 'smooth-browser')
-      return `{ plugin: '${file}', options: ${JSON.stringify(plugin.options)} }`
+      return `{ plugin: require('${file}'), options: ${JSON.stringify(
+        plugin.options,
+      )} }`
     })
 
   return `module.exports = [${definitions.join(',\n')}]`
