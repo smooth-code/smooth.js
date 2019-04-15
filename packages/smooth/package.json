@@ -1,7 +1,7 @@
 {
   "name": "smooth",
   "description": "Code driven CMS powered by GraphQL & React.",
-  "version": "0.1.1-alpha.32",
+  "version": "0.1.1-alpha.36",
   "main": "index.js",
   "repository": "https://github.com/smooth-code/smooth.js/tree/master/packages/smooth",
   "author": "Greg Bergé <berge.greg@gmail.com>",
