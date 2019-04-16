@@ -95,7 +95,8 @@ export default function ssrMiddleware({
     const apolloClient = createApolloClient({
       schema,
       fragmentTypes,
-      context: getContext({ req, config }),
+      context: operation =>
+        getContext({ req, config, operationContext: operation.getContext() }),
     })
 
     let jsx = (
