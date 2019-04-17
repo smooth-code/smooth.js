@@ -36,7 +36,7 @@ export function onRenderBody({ setHeadComponents, pathname }) {
     sheet.seal()
 
     // Prevent cache bugs
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV !== 'production') {
       sheet.masterSheet.constructor.reset(true)
     }
   }
