@@ -143,7 +143,7 @@ function getTargetConfig(target, { config, dev }) {
       output: {
         path: path.join(config.cachePath, target, 'static'),
         filename: dev ? '[name].js' : '[name]-bundle-[chunkhash:8].js',
-        publicPath: `/${target}/static/`,
+        publicPath: `/web/static/`,
         libraryTarget: target === 'node' ? 'commonjs2' : undefined,
       },
       plugins: [
