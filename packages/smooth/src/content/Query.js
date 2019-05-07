@@ -66,6 +66,7 @@ export function Query({ children }) {
     <BaseQuery
       query={getQuery(page)}
       variables={{ slug: page.slug || 'index' }}
+      pageContent
     >
       {apolloProps => <Handler {...apolloProps}>{children}</Handler>}
     </BaseQuery>

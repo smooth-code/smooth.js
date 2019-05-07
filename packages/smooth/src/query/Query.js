@@ -4,7 +4,7 @@ import { Query as ApolloQuery } from 'react-apollo'
 import { usePageContext } from '../page/PageContext'
 import { usePause } from '../router/HiddenRouter'
 
-function getQueryContext(location, lang) {
+function getQueryContext({ location, lang, pageContent }) {
   const { id, preview } = qs.parse(location.search)
   const headers = {}
 
@@ -12,7 +12,7 @@ function getQueryContext(location, lang) {
     headers['x-smooth-lang'] = lang
   }
 
-  if (preview) {
+  if (preview && pageContent) {
     headers['x-smooth-preview-id'] = id
     headers['x-smooth-preview'] = 1
   }
@@ -30,11 +30,20 @@ function PrefetchHandler({ children, ...props }) {
   return children(props)
 }
 
-export function Query({ children, prefetch = true, context, ...props }) {
+export function Query({
+  children,
+  prefetch = true,
+  pageContent = false,
+  context,
+  ...props
+}) {
   const { lang, location } = usePageContext()
 
   return (
-    <ApolloQuery context={getQueryContext(location, lang)} {...props}>
+    <ApolloQuery
+      context={getQueryContext({ location, lang, pageContent })}
+      {...props}
+    >
       {apolloProps =>
         prefetch ? (
           <PrefetchHandler {...apolloProps}>{children}</PrefetchHandler>
