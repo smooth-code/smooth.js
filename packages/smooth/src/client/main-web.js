@@ -3,13 +3,13 @@ import 'regenerator-runtime/runtime'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
 import { ApolloProvider } from 'react-apollo'
 import { loadableReady } from '@loadable/component'
 import { createApolloClient } from './apollo'
 import Root from './Root'
 import ErrorContext from './ErrorContext'
-import RouterHooks from '../router/RouterHooks'
+import { BrowserRouter } from '../router'
+import { RouterHooks } from '../router/RouterHooks'
 
 loadableReady(() => {
   ReactDOM.hydrate(

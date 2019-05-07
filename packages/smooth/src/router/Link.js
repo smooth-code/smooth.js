@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link as BaseLink, NavLink as BaseNavLink } from 'react-router-dom'
 import { useLang } from '../page/PageContext'
-import HiddenLinkRouter from './HiddenLinkRouter'
+import { HiddenLinkRouter } from './HiddenLinkRouter'
 
 function computeTo(to, lang) {
   if (lang) {

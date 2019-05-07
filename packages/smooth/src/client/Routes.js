@@ -1,14 +1,14 @@
 import React from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route } from '../router'
 import Page, { getPages } from '../page/Page'
-import HiddenRouter from '../router/HiddenRouter'
-import { Provider as HiddenHistoryContextProvider } from '../router/HiddenHistoryContext'
+import { HiddenRouter } from '../router/HiddenRouter'
+import { HiddenHistoryProvider } from '../router/HiddenHistory'
 
 const pages = getPages()
 
 export default function Routes() {
   return (
-    <HiddenHistoryContextProvider>
+    <HiddenHistoryProvider>
       <Route
         path="/:lang(.{2})?"
         render={({
@@ -45,6 +45,6 @@ export default function Routes() {
           )
         }}
       />
-    </HiddenHistoryContextProvider>
+    </HiddenHistoryProvider>
   )
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import camelcase from 'camelcase'
 import gql from 'graphql-tag'
-import { Redirect } from 'react-router-dom'
+import { Redirect, useRouter } from '../router'
 import { usePageContext } from '../page/PageContext'
 import { HTTPError } from '../router/HTTPError'
 import { applyHook } from '../plugin/browser'
@@ -57,9 +57,10 @@ function Handler({ children, ...props }) {
 
 export function Query({ children }) {
   const { page } = usePageContext()
+  const { location } = useRouter()
 
   if (page.slug === 'index') {
-    return <Redirect to={page.indexUrl} />
+    return <Redirect to={`${page.indexUrl}${location.search}`} />
   }
 
   return (

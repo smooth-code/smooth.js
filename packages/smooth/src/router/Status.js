@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Route } from './Router'
 
 export function Status({ code, children }) {
   return (

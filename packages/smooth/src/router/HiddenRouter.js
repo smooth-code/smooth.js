@@ -7,10 +7,10 @@ import React, {
   useEffect,
 } from 'react'
 import { createPath } from 'history'
-import { Router, withRouter } from 'react-router-dom'
-import HiddenHistoryContext from './HiddenHistoryContext'
+import { Router, useRouter } from './Router'
+import { useHiddenHistory } from './HiddenHistory'
 
-export const HiddenRouterContext = createContext()
+const HiddenRouterContext = createContext()
 
 export function useHiddenRouter() {
   return useContext(HiddenRouterContext)
@@ -38,8 +38,9 @@ function createURL(location) {
   return typeof location === 'string' ? location : createPath(location)
 }
 
-function HiddenRouter({ history, children }) {
-  const hiddenHistory = useContext(HiddenHistoryContext)
+export function HiddenRouter({ children }) {
+  const { history } = useRouter()
+  const hiddenHistory = useHiddenHistory()
   const promises = useRef([])
 
   const flush = useCallback(() => {
@@ -93,5 +94,3 @@ function HiddenRouter({ history, children }) {
     </div>
   ) : null
 }
-
-export default withRouter(HiddenRouter)

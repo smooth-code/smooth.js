@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { withRouter } from 'react-router-dom'
+import { useRouter } from './Router'
 import { applyHook } from '../plugin/browser'
 
 function usePreviousLocation(location) {
@@ -19,7 +19,7 @@ function useScrollTop({ location, prevLocation }) {
   }, [location, prevLocation])
 }
 
-function RouterHooks({ location }) {
+function RouterHooksInternal({ location }) {
   const prevLocation = usePreviousLocation(location)
   const options = { location, prevLocation }
   useScrollTop(options)
@@ -27,9 +27,8 @@ function RouterHooks({ location }) {
   return null
 }
 
-function RouterHooksGuard({ location }) {
+export function RouterHooks() {
+  const { location } = useRouter()
   if (location.hidden) return null
-  return <RouterHooks location={location} />
+  return <RouterHooksInternal location={location} />
 }
-
-export default withRouter(RouterHooksGuard)

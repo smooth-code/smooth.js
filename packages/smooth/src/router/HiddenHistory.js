@@ -1,4 +1,11 @@
-import React, { useMemo, useCallback, createContext, useState } from 'react'
+import React, {
+  useContext,
+  useMemo,
+  useCallback,
+  createContext,
+  useState,
+  useRef,
+} from 'react'
 import { createLocation } from 'history'
 
 const HiddenHistoryContext = createContext()
@@ -10,7 +17,7 @@ function createHiddenLocation(state) {
   return location
 }
 
-export function Provider({ children }) {
+export function HiddenHistoryProvider({ children }) {
   const [state, setState] = useState(null)
   const reset = useCallback(() => setState(null), [])
   const push = useCallback(
@@ -39,4 +46,19 @@ export function Provider({ children }) {
   )
 }
 
-export default HiddenHistoryContext
+export function useHiddenHistory() {
+  return useContext(HiddenHistoryContext)
+}
+
+// Create a local history, a mix with original history & hiddenHistory
+export function useMixedHiddenHistory(originalHistory = {}) {
+  const hiddenHistory = useHiddenHistory()
+  const mixedHistory = useRef({})
+  Object.assign(mixedHistory.current, originalHistory)
+  mixedHistory.current.push = hiddenHistory.push
+  mixedHistory.current.replace = hiddenHistory.replace
+  if (hiddenHistory.location) {
+    mixedHistory.current.location = hiddenHistory.location
+  }
+  return mixedHistory.current
+}
