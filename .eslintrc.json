@@ -2,6 +2,7 @@
   "root": true,
   "extends": ["smooth", "smooth/project", "smooth/react"],
   "rules": {
+    "import/no-cycle": "off",
     "no-underscore-dangle": [
       "error",
       {
