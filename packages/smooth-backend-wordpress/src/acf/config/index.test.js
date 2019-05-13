@@ -33,7 +33,7 @@ describe('#generateConfig', () => {
       ['[String] @field', { type: 'textarea' }],
       ['String @field(type: shortText)', { type: 'text' }],
       ['String @field(type: longText)', { type: 'textarea' }],
-      ['String @field(type: richText)', { type: 'wysiwyg', media_upload: 0 }],
+      ['String @field(type: richText)', { type: 'wysiwyg' }],
       ['Boolean @field', { type: 'true_false' }],
       ['Date @field', { type: 'date_picker' }],
       ['DateTime @field', { type: 'date_time_picker' }],
