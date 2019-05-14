@@ -36,7 +36,7 @@
     "eslint-plugin-react-hooks": "^1.6.0",
     "jest": "^24.8.0",
     "lerna": "^3.13.4",
-    "prettier": "^1.17.0",
+    "prettier": "^1.17.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "shx": "^0.3.2"
