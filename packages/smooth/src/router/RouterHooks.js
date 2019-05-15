@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useRouter } from './Router'
-import { applyHook } from '../plugin/browser'
+import { onRouteUpdate } from '../plugin/browserHooks'
 
 function usePreviousLocation(location) {
   const previousLocation = useRef(null)
@@ -23,7 +23,7 @@ function RouterHooksInternal({ location }) {
   const prevLocation = usePreviousLocation(location)
   const options = { location, prevLocation }
   useScrollTop(options)
-  applyHook('onRouteUpdate', options)
+  onRouteUpdate(options)
   return null
 }
 

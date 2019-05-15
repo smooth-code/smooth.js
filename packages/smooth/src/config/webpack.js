@@ -3,7 +3,7 @@ import fs from 'fs'
 import webpack from 'webpack'
 import nodeExternals from 'webpack-node-externals'
 import LoadablePlugin from '@loadable/webpack-plugin'
-import { applyHook } from '../plugin/node'
+import { onCreateBabelConfig } from '../plugin/nodeHooks'
 import SmoothCacheHotReloader from '../webpack/plugins/smooth-cache-hot-reloader'
 
 function fileExistsSync(filepath) {
@@ -46,36 +46,10 @@ function getDirectory(config, dirPath, defaultPath) {
     : path.join(config.cachePath, defaultPath)
 }
 
-function getBabelOptions({ config, isServer }) {
-  let mixOpts = { plugins: [], presets: [] }
-
-  const actions = {
-    setBabelOptions(opts) {
-      mixOpts = { ...mixOpts, ...opts }
-    },
-    setBabelPlugin({ name, options = {} }) {
-      mixOpts = {
-        ...mixOpts,
-        plugins: [...mixOpts.plugins, [name, options]],
-      }
-    },
-    setBabelPreset({ name, options = {} }) {
-      mixOpts = {
-        ...mixOpts,
-        presets: [...mixOpts.presets, [name, options]],
-      }
-    },
-  }
-
-  applyHook(config, 'onCreateBabelConfig', { isServer, actions })
-
-  return mixOpts
-}
-
 function getTargetConfig(target, { config, dev }) {
   const mainEntry = path.join(__dirname, '../client', `main-${target}.js`)
   const isServer = target === 'node'
-  const babelOptions = getBabelOptions({ config, isServer })
+  const babelOptions = onCreateBabelConfig(config)({ isServer })
   const defaultLoaders = {
     babel: {
       loader: 'smooth-babel-loader',

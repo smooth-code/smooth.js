@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import loadable from '@loadable/component'
 import App from '__smooth_app'
 import Content from '__smooth_content'
-import { applyHook } from '../plugin/browser'
+import { wrapContentElement } from '../plugin/browserHooks'
 import { PageContextProvider } from './PageContext'
 import { usePause } from '../router/HiddenRouter'
 
@@ -87,7 +87,7 @@ function enrichPageRef(
       const ContentComponent = props => {
         const Component = pageRef.current.module.default
         const element = <Component {...props} />
-        return applyHook('wrapContentElement', { element, props }, 'element')
+        return wrapContentElement({ element, props })
       }
       const PageComponent = () => <Content Component={ContentComponent} />
       pageRef.current.ContentComponent = ContentComponent

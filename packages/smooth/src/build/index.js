@@ -1,6 +1,6 @@
 import path from 'path'
 import webpack from 'webpack'
-import { applyAsyncHook } from '../plugin'
+import { onBuild } from '../plugin/nodeHooks'
 import {
   createSchemaDefinition,
   makeExecutableSchema,
@@ -40,7 +40,7 @@ export async function buildSchemaDefinition({ config }) {
 export async function buildSchema({ config }) {
   const cache = createCache({ config })
   const { schemaDefinition, schema } = await buildSchemaDefinition({ config })
-  await applyAsyncHook(config, 'onBuild', { schemaDefinition })
+  await onBuild(config)({ schemaDefinition })
   const fragmentTypes = await getFragmentTypes({ schema })
   await cache.writeCacheFile(
     'fragmentTypes.json',
