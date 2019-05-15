@@ -5,6 +5,7 @@ import cors from 'cors'
 import { ApolloServer } from 'apollo-server-express'
 import { getContext } from './apollo'
 import ssr from './ssr'
+import { onCreateServer, onCreateApolloServerConfig } from '../plugin/nodeHooks'
 
 export function createExpressApp({
   dev,
@@ -14,6 +15,8 @@ export function createExpressApp({
   webpackMiddleware,
 }) {
   const app = express()
+
+  onCreateServer(config)({ app })
 
   app.use(cors())
 
@@ -51,10 +54,14 @@ export function createExpressApp({
     app.use(webpackMiddleware)
   }
 
-  const apolloServer = new ApolloServer({
-    schema,
-    context: ({ req }) => getContext({ req, config }),
+  const apolloServerConfig = onCreateApolloServerConfig(config)({
+    apolloServerConfig: {
+      schema,
+      context: ({ req }) => getContext({ req, config }),
+    },
   })
+
+  const apolloServer = new ApolloServer(apolloServerConfig)
 
   apolloServer.applyMiddleware({ app })
 

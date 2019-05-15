@@ -6,65 +6,9 @@ import { renderToString } from 'react-dom/server'
 import { ChunkExtractor } from '@loadable/server'
 import asyncHandler from 'express-async-handler'
 import { getContext, createApolloClient } from './apollo'
-import { applyHook } from '../plugin/node'
 import ApolloState from './components/ApolloState'
 import SmoothError from './components/SmoothError'
-
-function onRenderBody(
-  config,
-  {
-    headComponents = [],
-    htmlAttributes = {},
-    bodyAttributes = {},
-    preBodyComponents = [],
-    postBodyComponents = [],
-    bodyProps = {},
-    pathname,
-  },
-) {
-  function setHeadComponents(components) {
-    headComponents = [...headComponents, ...components]
-  }
-
-  function setHtmlAttributes(attributes) {
-    htmlAttributes = { ...htmlAttributes, ...attributes }
-  }
-
-  function setBodyAttributes(attributes) {
-    bodyAttributes = { ...bodyAttributes, ...attributes }
-  }
-
-  function setPreBodyComponents(components) {
-    preBodyComponents = [...preBodyComponents, ...components]
-  }
-
-  function setPostBodyComponents(components) {
-    postBodyComponents = [...postBodyComponents, ...components]
-  }
-
-  function setBodyProps(props) {
-    bodyProps = { ...bodyProps, ...props }
-  }
-
-  applyHook(config, 'onRenderBody', {
-    pathname,
-    setHeadComponents,
-    setHtmlAttributes,
-    setBodyAttributes,
-    setPreBodyComponents,
-    setPostBodyComponents,
-    setBodyProps,
-  })
-
-  return {
-    headComponents,
-    htmlAttributes,
-    bodyAttributes,
-    preBodyComponents,
-    postBodyComponents,
-    bodyProps,
-  }
-}
+import { onRenderBody, wrapRootElement } from '../plugin/nodeHooks'
 
 export default function ssrMiddleware({
   config,
@@ -109,12 +53,10 @@ export default function ssrMiddleware({
       </ErrorContext.Provider>
     )
 
-    const rootElement = applyHook(
-      config,
-      'wrapRootElement',
-      { element: jsx, pathname: req.url },
-      'element',
-    )
+    const rootElement = wrapRootElement(config)({
+      element: jsx,
+      pathname: req.url,
+    })
 
     // Loadable components
     jsx = webExtractor.collectChunks(jsx)
@@ -143,7 +85,7 @@ export default function ssrMiddleware({
       ...webExtractor.getScriptElements(),
     ]
 
-    const pluginProps = onRenderBody(config, {
+    const pluginProps = onRenderBody(config)({
       postBodyComponents,
       pathname: req.url,
     })

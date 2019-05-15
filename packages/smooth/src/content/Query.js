@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import { Redirect, useRouter } from '../router'
 import { usePageContext } from '../page/PageContext'
 import { HTTPError } from '../router/HTTPError'
-import { applyHook } from '../plugin/browser'
+import { onSelectContentFields } from '../plugin/browserHooks'
 import { Query as BaseQuery } from '../query/Query'
 import {
   getFragmentDefinition,
@@ -23,11 +23,7 @@ function getQuery(page) {
   const type = getDefinitionType(fragmentDefinition)
   const queryField = getQueryField(type)
   const fragmentName = getDefinitionName(fragmentDefinition)
-  const fields = applyHook(
-    'onSelectContentFields',
-    { fields: [`...${fragmentName}`] },
-    'fields',
-  )
+  const fields = onSelectContentFields({ fragmentName })
 
   const query = gql`
     query Content(

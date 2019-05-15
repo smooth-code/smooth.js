@@ -10,7 +10,6 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [How to use](#how-to-use)
   - [Setup](#setup)
   - [Structure](#structure)
@@ -896,6 +895,8 @@ The `modules` option on `"preset-env"` should be kept to `false` otherwise webpa
 
 ### smooth-node.js
 
+- onCreateServer
+- onCreateApolloServerConfig
 - onRenderBody
 - onCreateBabelConfig
 - getContents
