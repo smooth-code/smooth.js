@@ -7,9 +7,11 @@ import * as Metadata from './Metadata'
 import * as Mutation from './Mutation'
 import * as Query from './Query'
 import * as schema from './schema'
+import * as Upload from './Upload'
 
 export const definitions = [
   Date,
+  Upload,
   directives,
   Media,
   Image,
