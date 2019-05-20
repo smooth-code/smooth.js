@@ -3,7 +3,7 @@ import fs from 'fs'
 import webpack from 'webpack'
 import nodeExternals from 'webpack-node-externals'
 import LoadablePlugin from '@loadable/webpack-plugin'
-import { onCreateBabelConfig } from '../plugin/nodeHooks'
+import { onCreateBabelConfig, onCreateWebpackConfig } from '../plugin/nodeHooks'
 import SmoothCacheHotReloader from '../webpack/plugins/smooth-cache-hot-reloader'
 
 function fileExistsSync(filepath) {
@@ -46,6 +46,10 @@ function getDirectory(config, dirPath, defaultPath) {
     : path.join(config.cachePath, defaultPath)
 }
 
+function getStage({ target, dev }) {
+  return `${dev ? 'develop-' : 'build-'}${target}`
+}
+
 function getTargetConfig(target, { config, dev }) {
   const mainEntry = path.join(__dirname, '../client', `main-${target}.js`)
   const isServer = target === 'node'
@@ -65,75 +69,79 @@ function getTargetConfig(target, { config, dev }) {
   const options = { isServer, defaultLoaders, dev }
   const blocksPath = getDirectory(config, config.blocksPath, 'default-blocks')
 
-  return config.webpack(
-    {
-      name: target,
-      mode: dev ? 'development' : 'production',
-      target,
-      entry:
-        target === 'web' && dev
-          ? ['webpack-hot-middleware/client?name=web&reload=true', mainEntry]
-          : mainEntry,
-      resolveLoader: {
-        modules: [path.join(__dirname, '../webpack/loaders'), 'node_modules'],
-      },
-      module: {
-        rules: [
-          {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            use: defaultLoaders.babel,
-          },
-        ],
-      },
-      resolve: {
-        alias: {
-          smooth: path.join(__dirname, '..'),
-          __smooth_fragmentTypes: path.join(
-            config.cachePath,
-            'fragmentTypes.json',
-          ),
-          __smooth_plugins: path.join(config.cachePath, 'browser-plugins.js'),
-          __smooth_app: getScriptPath(config, '_app.js'),
-          __smooth_html: getScriptPath(config, 'html.js'),
-          __smooth_error: getScriptPath(config, '_error.js'),
-          __smooth_content: getScriptPath(config, '_content.js'),
-          __smooth_blocks: blocksPath,
-          __smooth_pages: config.pagesPath,
+  const defaultWebpackConfig = {
+    name: target,
+    mode: dev ? 'development' : 'production',
+    target,
+    entry:
+      target === 'web' && dev
+        ? ['webpack-hot-middleware/client?name=web&reload=true', mainEntry]
+        : mainEntry,
+    resolveLoader: {
+      modules: [path.join(__dirname, '../webpack/loaders'), 'node_modules'],
+    },
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: defaultLoaders.babel,
         },
-      },
-      externals:
-        target === 'node'
-          ? [
-              nodeExternals({
-                whitelist: [/^smooth[/\\]/],
-              }),
-              'graphql/type',
-              'graphql/language',
-              'graphql/execution',
-              'graphql/validation',
-            ]
-          : undefined,
-      output: {
-        path: path.join(config.cachePath, target, 'static'),
-        filename: dev ? '[name].js' : '[name]-bundle-[chunkhash:8].js',
-        publicPath: `/web/static/`,
-        libraryTarget: target === 'node' ? 'commonjs2' : undefined,
-      },
-      plugins: [
-        new webpack.EnvironmentPlugin({
-          __smooth_blocks: blocksPath,
-          __smooth_pages: config.pagesPath,
-        }),
-        new LoadablePlugin(),
-        ...(target === 'node' && dev ? [new SmoothCacheHotReloader()] : []),
-        ...(target === 'web' && dev
-          ? [new webpack.HotModuleReplacementPlugin()]
-          : []),
       ],
     },
-    options,
-  )
+    resolve: {
+      alias: {
+        smooth: path.join(__dirname, '..'),
+        __smooth_fragmentTypes: path.join(
+          config.cachePath,
+          'fragmentTypes.json',
+        ),
+        __smooth_plugins: path.join(config.cachePath, 'browser-plugins.js'),
+        __smooth_app: getScriptPath(config, '_app.js'),
+        __smooth_html: getScriptPath(config, 'html.js'),
+        __smooth_error: getScriptPath(config, '_error.js'),
+        __smooth_content: getScriptPath(config, '_content.js'),
+        __smooth_blocks: blocksPath,
+        __smooth_pages: config.pagesPath,
+      },
+    },
+    externals:
+      target === 'node'
+        ? [
+            nodeExternals({
+              whitelist: [/\.(?!(?:jsx?|json)$).{1,5}$/i, /^smooth[/\\]/],
+            }),
+            'graphql/type',
+            'graphql/language',
+            'graphql/execution',
+            'graphql/validation',
+          ]
+        : undefined,
+    output: {
+      path: path.join(config.cachePath, target, 'static'),
+      filename: dev ? '[name].js' : '[name]-bundle-[chunkhash:8].js',
+      publicPath: `/web/static/`,
+      libraryTarget: target === 'node' ? 'commonjs2' : undefined,
+    },
+    plugins: [
+      new webpack.EnvironmentPlugin({
+        __smooth_blocks: blocksPath,
+        __smooth_pages: config.pagesPath,
+      }),
+      new LoadablePlugin(),
+      ...(target === 'node' && dev ? [new SmoothCacheHotReloader()] : []),
+      ...(target === 'web' && dev
+        ? [new webpack.HotModuleReplacementPlugin()]
+        : []),
+    ],
+  }
+
+  const webpackConfig = onCreateWebpackConfig(config)({
+    state: getStage({ target, dev }),
+    webpackConfig: defaultWebpackConfig,
+  })
+
+  return config.webpack(webpackConfig, options)
 }
 
 export async function getWebpackConfig({ config, dev }) {
