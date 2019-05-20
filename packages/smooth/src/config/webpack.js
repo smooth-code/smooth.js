@@ -137,7 +137,7 @@ function getTargetConfig(target, { config, dev }) {
   }
 
   const webpackConfig = onCreateWebpackConfig(config)({
-    state: getStage({ target, dev }),
+    stage: getStage({ target, dev }),
     webpackConfig: defaultWebpackConfig,
   })
 
