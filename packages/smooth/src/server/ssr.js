@@ -79,6 +79,8 @@ export default function ssrMiddleware({
       return
     }
 
+    const headComponents = webExtractor.getStyleElements()
+
     const postBodyComponents = [
       <SmoothError key="smooth-error" error={error} />,
       <ApolloState key="apollo-state" state={apolloState} />,
@@ -86,6 +88,7 @@ export default function ssrMiddleware({
     ]
 
     const pluginProps = onRenderBody(config)({
+      headComponents,
       postBodyComponents,
       pathname: req.url,
     })

@@ -7,7 +7,7 @@ export const onCreateApolloServerConfig = config => ({
 
   applyHook(config, 'onCreateApolloServerConfig', {
     getConfig() {
-      return defaultApolloServerConfig
+      return apolloServerConfig
     },
     actions: {
       setApolloServerConfig(additionalConfig) {
