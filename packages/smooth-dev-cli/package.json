@@ -32,7 +32,7 @@
     "react-dom": ">=16.3.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.4",
+    "@babel/runtime": "^7.4.5",
     "chokidar": "^3.0.0",
     "configstore": "^4.0.0",
     "fs-extra": "^8.0.1",
