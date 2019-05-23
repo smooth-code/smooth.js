@@ -42,6 +42,7 @@ export function HiddenRouter({ children }) {
   const { history } = useRouter()
   const hiddenHistory = useHiddenHistory()
   const promises = useRef([])
+  const timeoutRef = useRef()
 
   const flush = useCallback(() => {
     if (promises.current.length || !hiddenHistory.state) return
@@ -60,7 +61,8 @@ export function HiddenRouter({ children }) {
         }
         // 65ms is 4 frames, pretty invisible when we change page
         // it ensures that React have time to start a new request for an example
-        setTimeout(() => flush(), 65)
+        clearTimeout(timeoutRef.current)
+        timeoutRef.current = setTimeout(() => flush(), 65)
       })
       promises.current.push(promise)
     },

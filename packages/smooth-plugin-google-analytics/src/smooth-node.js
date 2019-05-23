@@ -20,10 +20,6 @@ exports.onRenderBody = (
   { setHeadComponents, setPostBodyComponents },
   options,
 ) => {
-  if (process.env.NODE_ENV !== 'production') {
-    return null
-  }
-
   // Lighthouse recommends pre-connecting to google analytics
   setHeadComponents([
     <link
@@ -78,6 +74,7 @@ exports.onRenderBody = (
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
   }
   if (typeof ga === "function") {
+    
     ga('create', '${options.trackingId}', '${
           typeof options.cookieDomain === `string`
             ? options.cookieDomain
@@ -85,6 +82,11 @@ exports.onRenderBody = (
         }', ${
           typeof options.name === `string` ? `'${options.name}', ` : ``
         }${JSON.stringify(gaCreateOptions)});
+      ${
+        process.env.NODE_ENV !== 'production'
+          ? `ga('set', 'sendHitTask', null);`
+          : ''
+      }
       ${
         typeof options.anonymize !== `undefined` && options.anonymize === true
           ? `ga('set', 'anonymizeIp', true);`
