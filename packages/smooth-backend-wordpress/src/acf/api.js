@@ -28,7 +28,7 @@ function formatContent(content) {
 
 export function createClient({
   baseUrl,
-  concurrency = Number(process.env.SEED_CONCURRENCY || 8),
+  concurrency,
   password,
   user,
   defaultLanguage,

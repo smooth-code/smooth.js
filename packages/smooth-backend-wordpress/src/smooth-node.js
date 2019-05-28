@@ -17,6 +17,8 @@ export function resolveOptions(options) {
 
   options.user = options.user || process.env.WP_USER || 'admin'
   options.password = options.password || process.env.WP_PASSWORD || 'admin'
+  options.concurrency =
+    Number(options.concurrency || process.env.SEED_CONCURRENCY) || 8
 
   return options
 }
