@@ -2,6 +2,7 @@
 import path from 'path'
 import program from 'commander'
 import createLogger from 'progress-estimator'
+import glob from 'tiny-glob'
 import { getConfig } from '../config'
 import { start } from '../server'
 import {
@@ -12,6 +13,9 @@ import {
   buildSchemaDefinition,
   buildWebpack,
 } from '../build'
+import { process as processSeeds } from '../seeds/processor'
+import babelRequire from '../babel/require'
+import { createAPIClient } from '../api'
 
 const logger = createLogger()
 
@@ -99,6 +103,18 @@ async function startCommand() {
   console.log('Started 🚀')
 }
 
+async function seedCommand() {
+  const config = await getConfig({ dev: false })
+  const api = createAPIClient({ config })
+  // eslint-disable-next-line import/no-dynamic-require, global-require
+  const seeds = babelRequire(config.seedsPath).default
+  await seeds.process({
+    glob: ({ cwd, path }) => glob(path, { cwd, absolute: true }),
+    processor: processSeeds({ api, logger }),
+  })
+  console.log('Seeded 🍙')
+}
+
 function runCmd(command) {
   command().catch(error => {
     // eslint-disable-next-line no-console
@@ -122,5 +138,9 @@ program
     'Starts the application in production mode.\nThe application should be compiled with `smooth build` first.',
   )
   .action(() => runCmd(startCommand))
+program
+  .command('seed')
+  .description('Seeds the application using ./seeds directory.')
+  .action(() => runCmd(seedCommand))
 
 program.parse(process.argv)

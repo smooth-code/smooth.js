@@ -38,6 +38,7 @@ export async function getConfig({ dev }) {
     blocksPath: path.join(localCwd, 'src/blocks'),
     pagesPath: path.join(localCwd, 'src/pages'),
     schemasPath: path.join(localCwd, 'src/schemas'),
+    seedsPath: path.join(localCwd, process.env.SEEDS_PATH || './seeds'),
     server: {
       port: process.env.PORT || 3000,
     },

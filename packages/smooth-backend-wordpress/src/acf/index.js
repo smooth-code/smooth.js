@@ -35,3 +35,13 @@ export async function getContents({ request }, options) {
   const apiClient = createClient(options)
   return apiClient.getContents(request)
 }
+
+export async function createMany({ request }, options) {
+  const apiClient = createClient(options)
+  return apiClient.createMany(request)
+}
+
+export async function truncate({ request }, options) {
+  const apiClient = createClient(options)
+  return apiClient.truncate(request)
+}
