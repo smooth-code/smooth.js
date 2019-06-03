@@ -50,3 +50,12 @@ export async function createMany(params, options) {
 export async function truncate(params, options) {
   return acf.truncate(params, options)
 }
+
+export function createBackendPayload({ data, name, type }) {
+  if (type === 'media') {
+    return data
+  }
+
+  const { slug, ...fields } = data
+  return { status: 'publish', slug, title: name, fields }
+}

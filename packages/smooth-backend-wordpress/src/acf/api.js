@@ -17,14 +17,7 @@ function paramsSerializer(params) {
   return qs.stringify(params, { arrayFormat: 'indices' })
 }
 
-function formatContent(content) {
-  return {
-    id: content.id,
-    title: content.title,
-    fields: content.acf,
-    url: content.source_url,
-  }
-}
+export const onCreateResponse = ({ id, acf }) => ({ id, ...acf })
 
 export function createClient({
   baseUrl,
@@ -92,11 +85,11 @@ export function createClient({
             ...headers,
           },
         })
-        return formatContent(content)
+        return onCreateResponse(content)
       }
 
       const { data: content } = await axios.post(url, data, { headers })
-      return formatContent(content)
+      return onCreateResponse(content)
     },
 
     async createMany({ type, data }) {

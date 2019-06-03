@@ -2,7 +2,6 @@
 import path from 'path'
 import program from 'commander'
 import createLogger from 'progress-estimator'
-import glob from 'tiny-glob'
 import { getConfig } from '../config'
 import { start } from '../server'
 import {
@@ -13,9 +12,9 @@ import {
   buildSchemaDefinition,
   buildWebpack,
 } from '../build'
-import { process as processSeeds } from '../seeds/processor'
 import babelRequire from '../babel/require'
 import { createAPIClient } from '../api'
+import processSeeds from '../seeds/process'
 
 const logger = createLogger()
 
@@ -106,11 +105,11 @@ async function startCommand() {
 async function seedCommand() {
   const config = await getConfig({ dev: false })
   const api = createAPIClient({ config })
-  // eslint-disable-next-line import/no-dynamic-require, global-require
-  const seeds = babelRequire(config.seedsPath).default
-  await seeds.process({
-    glob: ({ cwd, path }) => glob(path, { cwd, absolute: true }),
-    processor: processSeeds({ api, logger }),
+  await processSeeds({
+    api,
+    config,
+    createSeeds: babelRequire(config.seedsPath).default,
+    logger,
   })
   console.log('Seeded 🍙')
 }
