@@ -15,6 +15,11 @@ export function resolveOptions(options) {
     options.homeUrl = process.env.WP_HOME
   }
 
+  options.user = options.user || process.env.WP_USER || 'admin'
+  options.password = options.password || process.env.WP_PASSWORD || 'admin'
+  options.concurrency =
+    Number(options.concurrency || process.env.SEED_CONCURRENCY) || 8
+
   return options
 }
 
@@ -36,4 +41,21 @@ export async function getContent(params, options) {
 
 export async function getContents(params, options) {
   return acf.getContents(params, options)
+}
+
+export async function createMany(params, options) {
+  return acf.createMany(params, options)
+}
+
+export async function truncate(params, options) {
+  return acf.truncate(params, options)
+}
+
+export function createBackendPayload({ data, name, type }) {
+  if (type === 'media') {
+    return data
+  }
+
+  const { slug, ...fields } = data
+  return { status: 'publish', slug, title: name, fields }
 }

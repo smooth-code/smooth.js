@@ -12,6 +12,9 @@ import {
   buildSchemaDefinition,
   buildWebpack,
 } from '../build'
+import babelRequire from '../babel/require'
+import { createAPIClient } from '../api'
+import processSeeds from '../seeds/process'
 
 const logger = createLogger()
 
@@ -99,6 +102,18 @@ async function startCommand() {
   console.log('Started 🚀')
 }
 
+async function seedCommand() {
+  const config = await getConfig({ dev: false })
+  const api = createAPIClient({ config })
+  await processSeeds({
+    api,
+    config,
+    createSeeds: babelRequire(config.seedsPath).default,
+    logger,
+  })
+  console.log('Seeded 🍙')
+}
+
 function runCmd(command) {
   command().catch(error => {
     // eslint-disable-next-line no-console
@@ -122,5 +137,9 @@ program
     'Starts the application in production mode.\nThe application should be compiled with `smooth build` first.',
   )
   .action(() => runCmd(startCommand))
+program
+  .command('seed')
+  .description('Seeds the application using ./seeds directory.')
+  .action(() => runCmd(seedCommand))
 
 program.parse(process.argv)

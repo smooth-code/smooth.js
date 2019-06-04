@@ -15,5 +15,17 @@ export function createAPIClient({ config, lang }) {
         ...options,
       })
     },
+    async createMany(options) {
+      return callApi(config.plugins, 'createMany', {
+        ...defaultOptions,
+        ...options,
+      })
+    },
+    async truncate(options) {
+      return callApi(config.plugins, 'truncate', {
+        ...defaultOptions,
+        ...options,
+      })
+    },
   }
 }
