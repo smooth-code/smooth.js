@@ -52,13 +52,20 @@ export const BlockFragment = gql`
   ${blocks.map(block => getFragmentString(block.fragment)).join('')}
 `
 
-export function Blocks({ blocks: blocksProp }) {
+export function Blocks({ blocks: blocksProp, ...other }) {
   if (!blocksProp) return null
   return blocksProp.map(({ type, ...props }, index) => {
     const block = blocksByType[type]
     if (!block) {
       throw new Error(`Block "${type}" is not found`)
     }
-    return <block.Component key={index} {...props[block.propsAttribute]} />
+
+    return (
+      <block.Component
+        key={index}
+        {...props[block.propsAttribute]}
+        {...other}
+      />
+    )
   })
 }
