@@ -1,4 +1,4 @@
-import { toRelativeUrl, formatDate, formatDateTime } from './util'
+import { toRelativeUrl, formatDate, formatDateTime, formatTime } from './util'
 
 describe('util', () => {
   describe('#formatDate', () => {
@@ -24,6 +24,20 @@ describe('util', () => {
       expect(formatDateTime(null)).toBe(null)
       expect(formatDateTime('')).toBe(null)
       expect(formatDateTime(undefined)).toBe(null)
+    })
+  })
+
+  describe('#formatTime', () => {
+    it('should format time', () => {
+      expect(formatTime('2:30 am')).toBe('02:30:00Z')
+      expect(formatTime('7:45 pm')).toBe('19:45:00Z')
+      expect(formatTime('12:15 pm')).toBe('00:15:00Z')
+    })
+
+    it('should return null if not a string (or empty)', () => {
+      expect(formatTime(null)).toBe(null)
+      expect(formatTime('')).toBe(null)
+      expect(formatTime(undefined)).toBe(null)
     })
   })
 

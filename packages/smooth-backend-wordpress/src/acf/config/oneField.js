@@ -42,6 +42,10 @@ const handlers = {
     preventList(infos)
     return { type: 'date_time_picker' }
   },
+  time(infos) {
+    preventList(infos)
+    return { type: 'time_picker' }
+  },
   shortText({ list }) {
     if (list) return { type: 'textarea' }
     return { type: 'text' }
