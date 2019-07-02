@@ -107,6 +107,8 @@ export function getKnownType(type) {
       return 'date'
     case 'DateTime':
       return 'dateTime'
+    case 'Time':
+      return 'time'
     case 'Block':
       return 'block'
     default:

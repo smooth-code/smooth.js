@@ -37,6 +37,7 @@ describe('#generateConfig', () => {
       ['Boolean @field', { type: 'true_false' }],
       ['Date @field', { type: 'date_picker' }],
       ['DateTime @field', { type: 'date_time_picker' }],
+      ['Time @field', { type: 'time_picker' }],
       ['Int @field', { type: 'number' }],
       ['Float @field', { type: 'number' }],
       ['Image @field', { type: 'image' }],
