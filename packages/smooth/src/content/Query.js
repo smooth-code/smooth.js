@@ -2,7 +2,7 @@ import React from 'react'
 import camelcase from 'camelcase'
 import gql from 'graphql-tag'
 import { Redirect, useRouter } from '../router'
-import { usePageContext } from '../page/PageContext'
+import { usePage } from '../page/PageContext'
 import { HTTPError } from '../router/HTTPError'
 import { onSelectContentFields } from '../plugin/browserHooks'
 import { Query as BaseQuery } from '../query/Query'
@@ -52,7 +52,7 @@ function Handler({ children, ...props }) {
 }
 
 export function Query({ children }) {
-  const { page } = usePageContext()
+  const page = usePage()
   const { location } = useRouter()
 
   if (page.slug === 'index') {

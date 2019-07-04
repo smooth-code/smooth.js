@@ -5,12 +5,7 @@ import { HiddenRouter } from '../router/HiddenRouter'
 
 const pages = getPages()
 
-export default function Routes({
-  match: {
-    url,
-    params: { lang = null },
-  },
-}) {
+export default function Routes({ match: { url } }) {
   const routes = (
     <Switch>
       {pages.map((page, index) => (
@@ -19,7 +14,6 @@ export default function Routes({
           path={`${url}${page.routePath}`.replace(/\/\//, '/')}
           render={({ history, match, location }) => (
             <Page
-              lang={lang}
               indexUrl={`${url}${page.indexPath}`}
               page={page}
               history={history}

@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback, useRef } from 'react'
 import qs from 'query-string'
-import { usePageContext } from '../page/PageContext'
+import { useLang } from '../i18n'
+import { useRouter } from '../router'
 import { usePause } from '../router/HiddenRouter'
 
 function PrefetchHandler({ children, ...props }) {
@@ -14,7 +15,8 @@ function PrefetchHandler({ children, ...props }) {
 }
 
 function useOperationContext(props) {
-  const { lang, location } = usePageContext()
+  const lang = useLang()
+  const { location } = useRouter()
   const headers = {}
 
   if (lang) {
