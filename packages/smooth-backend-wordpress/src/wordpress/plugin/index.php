@@ -149,7 +149,7 @@ function get_content($data)
 	$slug = $data['slug'];
 	$lang = $data['lang'];
 	$post = get_page_by_path($slug, OBJECT, $postType);
-	if ($lang) {
+	if ($lang && function_exists(icl_object_id)) {
 		$post = get_page(icl_object_id($post->ID, $postType, true, $lang));
 	}
 	if (!$post) {

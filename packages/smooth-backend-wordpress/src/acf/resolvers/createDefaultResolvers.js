@@ -1,4 +1,4 @@
-import { toRelativeUrl, formatDate, formatDateTime, formatTime } from './util'
+import { toRelativeUrl, formatDate } from './util'
 
 function acfField(object, name) {
   if (object.acf) {
@@ -15,11 +15,11 @@ const handlers = {
   },
   dateTime({ name, list }) {
     if (list) return null
-    return object => formatDateTime(acfField(object, name))
+    return object => formatDate(acfField(object, name))
   },
   time({ name, list }) {
     if (list) return null
-    return object => formatTime(acfField(object, name))
+    return object => formatDate(acfField(object, name))
   },
   link({ name, list }, helpers, state) {
     const { homeUrl } = state.options

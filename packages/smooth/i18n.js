@@ -1,2 +1,2 @@
 /* eslint-disable import/no-unresolved */
-module.exports = require('./lib/page')
+module.exports = require('./lib/i18n')

@@ -36,15 +36,19 @@ const handlers = {
   },
   date(infos) {
     preventList(infos)
-    return { type: 'date_picker' }
+    return { type: 'date_picker', display_format: 'd/m/Y', return_format: 'c' }
   },
   dateTime(infos) {
     preventList(infos)
-    return { type: 'date_time_picker' }
+    return {
+      type: 'date_time_picker',
+      display_format: 'd/m/Y g:i a',
+      return_format: 'c',
+    }
   },
   time(infos) {
     preventList(infos)
-    return { type: 'time_picker' }
+    return { type: 'time_picker', display_format: 'g:i a', return_format: 'c' }
   },
   shortText({ list }) {
     if (list) return { type: 'textarea' }

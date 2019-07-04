@@ -35,9 +35,22 @@ describe('#generateConfig', () => {
       ['String @field(type: longText)', { type: 'textarea' }],
       ['String @field(type: richText)', { type: 'wysiwyg' }],
       ['Boolean @field', { type: 'true_false' }],
-      ['Date @field', { type: 'date_picker' }],
-      ['DateTime @field', { type: 'date_time_picker' }],
-      ['Time @field', { type: 'time_picker' }],
+      [
+        'Date @field',
+        { type: 'date_picker', display_format: 'd/m/Y', return_format: 'c' },
+      ],
+      [
+        'DateTime @field',
+        {
+          type: 'date_time_picker',
+          display_format: 'd/m/Y g:i a',
+          return_format: 'c',
+        },
+      ],
+      [
+        'Time @field',
+        { type: 'time_picker', display_format: 'g:i a', return_format: 'c' },
+      ],
       ['Int @field', { type: 'number' }],
       ['Float @field', { type: 'number' }],
       ['Image @field', { type: 'image' }],

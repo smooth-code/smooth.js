@@ -102,14 +102,7 @@ function usePageRef(page) {
   return useRef({ ...page })
 }
 
-export default function Page({
-  page,
-  lang,
-  indexUrl,
-  history,
-  match,
-  location,
-}) {
+export default function Page({ page, indexUrl, history, match, location }) {
   const pageRef = usePageRef(page)
   const unpause = usePause()
   return (
@@ -124,13 +117,7 @@ export default function Page({
           location,
         })
 
-        const pageContext = {
-          lang,
-          page: pageRef.current,
-          history,
-          match,
-          location,
-        }
+        const pageContext = { page: pageRef.current }
 
         return (
           <PageContextProvider context={pageContext}>

@@ -1,43 +1,15 @@
-import { toRelativeUrl, formatDate, formatDateTime, formatTime } from './util'
+import { toRelativeUrl, formatDate } from './util'
 
 describe('util', () => {
   describe('#formatDate', () => {
     it('should format date', () => {
-      expect(formatDate('21/05/1989').toJSON()).toBe('1989-05-21T00:00:00.000Z')
+      expect(formatDate('1989-05-21').toJSON()).toBe('1989-05-21T00:00:00.000Z')
     })
 
     it('should return null if not a string (or empty)', () => {
       expect(formatDate(null)).toBe(null)
       expect(formatDate('')).toBe(null)
       expect(formatDate(undefined)).toBe(null)
-    })
-  })
-
-  describe('#formatDateTime', () => {
-    it('should format datetime', () => {
-      expect(formatDateTime('21/05/1989 02:00 am').toJSON()).toBe(
-        '1989-05-21T02:00:00.000Z',
-      )
-    })
-
-    it('should return null if not a string (or empty)', () => {
-      expect(formatDateTime(null)).toBe(null)
-      expect(formatDateTime('')).toBe(null)
-      expect(formatDateTime(undefined)).toBe(null)
-    })
-  })
-
-  describe('#formatTime', () => {
-    it('should format time', () => {
-      expect(formatTime('2:30 am')).toBe('02:30:00Z')
-      expect(formatTime('7:45 pm')).toBe('19:45:00Z')
-      expect(formatTime('12:15 pm')).toBe('00:15:00Z')
-    })
-
-    it('should return null if not a string (or empty)', () => {
-      expect(formatTime(null)).toBe(null)
-      expect(formatTime('')).toBe(null)
-      expect(formatTime(undefined)).toBe(null)
     })
   })
 

@@ -1,19 +1,13 @@
 import React from 'react'
 import { Link as BaseLink, NavLink as BaseNavLink } from 'react-router-dom'
-import { useLang } from '../page/PageContext'
+import { formatLangUrl, useLang } from '../i18n'
 import { HiddenLinkRouter } from './HiddenLinkRouter'
-
-function computeTo(to, lang) {
-  if (lang) {
-    return `/${lang}${to}`
-  }
-  return to
-}
 
 function createLink(Component) {
   const Link = ({ waitBeforeTransition, ...props }) => {
     const lang = useLang()
-    const link = <Component {...props} to={computeTo(props.to, lang)} />
+    const to = formatLangUrl(props.to, lang)
+    const link = <Component {...props} to={to} />
 
     return waitBeforeTransition ? (
       <HiddenLinkRouter>{link}</HiddenLinkRouter>
