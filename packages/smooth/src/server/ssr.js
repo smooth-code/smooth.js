@@ -32,7 +32,11 @@ export default function ssrMiddleware({
       outputPath: path.join(config.cachePath, 'node/static'),
     })
 
-    const { Root, Html, ErrorContext } = nodeExtractor.requireEntrypoint()
+    const {
+      Root,
+      Html,
+      ErrorContextProvider,
+    } = nodeExtractor.requireEntrypoint()
 
     const webExtractor = new ChunkExtractor({ statsFile: webStats })
     const routerContext = {}
@@ -44,13 +48,13 @@ export default function ssrMiddleware({
     })
 
     let jsx = (
-      <ErrorContext.Provider value={{ error }}>
+      <ErrorContextProvider error={error}>
         <ApolloProvider client={apolloClient}>
           <StaticRouter location={req.url} context={routerContext}>
             <Root error={error} />
           </StaticRouter>
         </ApolloProvider>
-      </ErrorContext.Provider>
+      </ErrorContextProvider>
     )
 
     const rootElement = wrapRootElement(config)({

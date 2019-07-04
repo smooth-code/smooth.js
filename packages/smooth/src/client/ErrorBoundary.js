@@ -17,7 +17,7 @@ export default class ErrorBoundary extends React.Component {
     if (error) {
       return (
         <Status code={error.statusCode || 500}>
-          <ErrorPage error={error} />
+          <ErrorPage lang={this.props.lang || null} error={error} />
         </Status>
       )
     }
