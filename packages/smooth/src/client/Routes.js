@@ -2,6 +2,7 @@ import React from 'react'
 import { Switch, Route } from '../router'
 import Page, { getPages } from '../page/Page'
 import { HiddenRouter } from '../router/HiddenRouter'
+import { CoreRouter } from '../router/CoreRouter'
 
 const pages = getPages()
 
@@ -26,9 +27,9 @@ export default function Routes({ match: { url } }) {
     </Switch>
   )
   return (
-    <>
+    <CoreRouter>
       {routes}
       <HiddenRouter>{routes}</HiddenRouter>
-    </>
+    </CoreRouter>
   )
 }
