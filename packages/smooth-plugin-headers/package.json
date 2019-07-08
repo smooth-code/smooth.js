@@ -1,0 +1,30 @@
+{
+  "name": "smooth-plugin-headers",
+  "description": "Smooth plugin to add custom headers",
+  "version": "0.1.1-alpha.56",
+  "repository": "https://github.com/smooth-code/smooth.js/tree/master/packages/smooth-plugin-headers",
+  "author": "Vivien Ripoche <vivienripoche@gmail.com>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "smooth",
+    "smooth-plugin"
+  ],
+  "engines": {
+    "node": ">=8"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "prebuild": "shx rm -rf lib",
+    "build": "babel --root-mode upward -d lib --ignore \"**/*.test.js\" --copy-files src",
+    "prepublishOnly": "yarn run build"
+  },
+  "dependencies": {
+    "path-to-regexp": "^3.0.0"
+  },
+  "peerDependencies": {
+    "smooth": "^0.1.0"
+  }
+}
