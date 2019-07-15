@@ -33,6 +33,6 @@ export const typeDefs = gql`
     twitterDescription: String @field(label: "Twitter description")
     twitterImage: Image @field(label: "Twitter image")
     customMetas: [CustomMeta] @field(label: "Custom metadatas")
-    HreflangLinks: [HreflangLink] @field(label: "hreflang links")
+    hreflangLinks: [HreflangLink] @field(label: "hreflang links")
   }
 `
