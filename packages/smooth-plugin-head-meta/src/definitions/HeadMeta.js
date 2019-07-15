@@ -11,6 +11,12 @@ export const typeDefs = gql`
     content: String @field(label: "Content")
   }
 
+  type HreflangLink {
+    rel: String @field(label: "rel")
+    href: String @field(label: "href")
+    hreflang: String @field(label: "hreflang")
+  }
+
   type HeadMeta {
     title: String @field(label: "Title")
     description: String @field(label: "Description")
@@ -27,5 +33,6 @@ export const typeDefs = gql`
     twitterDescription: String @field(label: "Twitter description")
     twitterImage: Image @field(label: "Twitter image")
     customMetas: [CustomMeta] @field(label: "Custom metadatas")
+    hreflangLinks: [HreflangLink] @field(label: "hreflang links")
   }
 `

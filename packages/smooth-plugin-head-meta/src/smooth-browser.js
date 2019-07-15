@@ -37,6 +37,15 @@ function HeadMeta({ headMeta }) {
         headMeta.customMetas.map((meta, index) => (
           <meta key={index} name={meta.name} content={meta.content} />
         ))}
+      {headMeta.hreflangLinks &&
+        headMeta.hreflangLinks.map((link, index) => (
+          <link
+            key={index}
+            rel={link.rel}
+            href={link.href}
+            hrefLang={link.hreflang}
+          />
+        ))}
     </Helmet>
   )
 }
@@ -72,6 +81,11 @@ headMeta {
   customMetas {
     name
     content
+  }
+  hreflangLinks {
+    rel
+    href
+    hreflang
   }
 }
   `,
