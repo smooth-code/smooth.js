@@ -27,5 +27,7 @@ export const typeDefs = gql`
     twitterDescription: String @field(label: "Twitter description")
     twitterImage: Image @field(label: "Twitter image")
     customMetas: [CustomMeta] @field(label: "Custom metadatas")
+    customJsonld: String @field(type: longText, label: "Paste valid JSON-LD here")
+    "<a href='https://search.google.com/structured-data/testing-tool/u/0/' target='_blank'>JSON-LD validator</a>"
   }
 `

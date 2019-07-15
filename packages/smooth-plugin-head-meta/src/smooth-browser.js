@@ -37,6 +37,11 @@ function HeadMeta({ headMeta }) {
         headMeta.customMetas.map((meta, index) => (
           <meta key={index} name={meta.name} content={meta.content} />
         ))}
+      {headMeta.customJsonld && (
+        <script type="application/ld+json">
+          {JSON.parse(headMeta.customJsonld)}
+        </script>
+      )}
     </Helmet>
   )
 }
@@ -73,6 +78,7 @@ headMeta {
     name
     content
   }
+  customJsonld
 }
   `,
   ]
