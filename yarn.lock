@@ -4767,10 +4767,10 @@ eslint-config-prettier@^6.1.0:
   dependencies:
     get-stdin "^6.0.0"
 
-eslint-config-smooth@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-smooth/-/eslint-config-smooth-2.1.0.tgz#56f625d1ff433c6e3858e5560cd23e8398e2d9d7"
-  integrity sha512-+TqT1uySfIliRFSxkFCxBWcpi6oRzrTfza9mPKMkyJDQsehTKNDpAcM6qFgl5RGj2llUSI90ctVU5KotUAcC7A==
+eslint-config-smooth@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/eslint-config-smooth/-/eslint-config-smooth-2.1.1.tgz#4dea6adb99571a5e80e1737f78a5f93b8ac5aef7"
+  integrity sha512-NfCzHEl8jcVMh+U8nHzNsi8IKr3IZzAI8j6qwLMRTt+0vzk2C/4mj40sCkwAtsqcwMaiteWEiFmKYn1HePxWSg==
 
 eslint-import-resolver-node@^0.3.2:
   version "0.3.2"
