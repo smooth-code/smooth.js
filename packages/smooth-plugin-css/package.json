@@ -22,8 +22,8 @@
     "prepublishOnly": "yarn run build"
   },
   "dependencies": {
-    "css-loader": "^2.1.1",
-    "mini-css-extract-plugin": "^0.7.0"
+    "css-loader": "^3.2.0",
+    "mini-css-extract-plugin": "^0.8.0"
   },
   "peerDependencies": {
     "smooth": "^0.1.0"

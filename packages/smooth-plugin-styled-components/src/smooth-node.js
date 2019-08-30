@@ -33,7 +33,6 @@ export function onRenderBody({ setHeadComponents, pathname }) {
   if (sheet) {
     setHeadComponents([sheet.getStyleElement()])
     sheetByPathname.delete(pathname)
-    sheet.seal()
 
     // Prevent cache bugs
     if (process.env.NODE_ENV !== 'production') {
