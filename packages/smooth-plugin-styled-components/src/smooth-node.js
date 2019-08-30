@@ -19,20 +19,34 @@ export function onCreateBabelConfig({ actions }, pluginOptions) {
   })
 }
 
-const sheetByPathname = new Map()
+const sheetConfigByRequestId = new Map()
 
 // eslint-disable-next-line react/prop-types,react/display-name
-export function wrapRootElement({ element, pathname }) {
+export function wrapRootElement({ element, requestId }) {
   const sheet = new ServerStyleSheet()
-  sheetByPathname.set(pathname, sheet)
+
+  // Sheet is automatically disposed after 2min to prevent memory leaks
+  const disposeTimeout = setTimeout(() => {
+    // eslint-disable-next-line no-use-before-define
+    dispose()
+  }, 120000)
+
+  function dispose() {
+    sheetConfigByRequestId.delete(requestId)
+    clearTimeout(disposeTimeout)
+  }
+
+  const sheetConfig = { sheet, dispose }
+  sheetConfigByRequestId.set(requestId, sheetConfig)
   return <StyleSheetManager sheet={sheet.instance}>{element}</StyleSheetManager>
 }
 
-export function onRenderBody({ setHeadComponents, pathname }) {
-  const sheet = sheetByPathname.get(pathname)
-  if (sheet) {
+export function onRenderBody({ setHeadComponents, requestId }) {
+  const sheetConfig = sheetConfigByRequestId.get(requestId)
+  if (sheetConfig) {
+    const { sheet, dispose } = sheetConfig
     setHeadComponents([sheet.getStyleElement()])
-    sheetByPathname.delete(pathname)
+    dispose()
 
     // Prevent cache bugs
     if (process.env.NODE_ENV !== 'production') {

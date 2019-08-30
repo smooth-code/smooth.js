@@ -57,9 +57,15 @@ export default function ssrMiddleware({
       </ErrorContextProvider>
     )
 
+    // Generate unique request id
+    const requestId = Math.random()
+      .toString(36)
+      .substring(7)
+
     const rootElement = wrapRootElement(config)({
       element: jsx,
       pathname: req.url,
+      requestId,
     })
 
     // Loadable components
@@ -95,6 +101,7 @@ export default function ssrMiddleware({
       headComponents,
       postBodyComponents,
       pathname: req.url,
+      requestId,
     })
 
     const html = renderToString(<Html {...pluginProps} body={appHtml} />)
