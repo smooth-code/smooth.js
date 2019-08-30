@@ -8,6 +8,7 @@ export const onRenderBody = config => ({
   postBodyComponents = [],
   bodyProps = {},
   pathname,
+  requestId,
 }) => {
   function setHeadComponents(components) {
     headComponents = [...headComponents, ...components]
@@ -35,6 +36,7 @@ export const onRenderBody = config => ({
 
   applyHook(config, 'onRenderBody', {
     pathname,
+    requestId,
     setHeadComponents,
     setHtmlAttributes,
     setBodyAttributes,
