@@ -15,7 +15,7 @@ const nodeConfig = opts => ({
       {
         loose: true,
         useBuiltIns: 'entry',
-        corejs: 'core-js@2',
+        corejs: 3,
         targets: {
           node: 'current',
         },
@@ -35,7 +35,7 @@ const webConfig = opts => ({
         modules: false,
         loose: true,
         useBuiltIns: 'entry',
-        corejs: 'core-js@2',
+        corejs: 3,
         ...opts['preset-env'],
       },
     ],
