@@ -898,6 +898,7 @@ The `modules` option on `"preset-env"` should be kept to `false` otherwise webpa
 - onCreateServer
 - onCreateApolloServerConfig
 - onRenderBody
+- onServerError
 - onCreateBabelConfig
 - onCreateWebpackConfig
 - getContents
