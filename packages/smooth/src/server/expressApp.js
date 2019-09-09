@@ -67,6 +67,8 @@ export function createExpressApp({
 
   app.use(ssr({ config, schema, fragmentTypes }))
 
+  onCreateServer(config)({ app })
+
   if (config.env === 'development') {
     app.use((error, req, res, next) => {
       const graphQLErrors =
