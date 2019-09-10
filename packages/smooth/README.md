@@ -903,13 +903,13 @@ The `modules` option on `"preset-env"` should be kept to `false` otherwise webpa
 - getContents
 - getContent
 - onBuild
+- wrapRootElement
 
 ### smooth-browser.js
 
 - onRouteUpdate
 - onSelectContentFields
 - wrapContentElement
-- wrapRootElement
 
 ## Production deployment
 
