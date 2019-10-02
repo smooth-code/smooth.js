@@ -5,7 +5,7 @@ import cors from 'cors'
 import { ApolloServer } from 'apollo-server-express'
 import { getContext } from './apollo'
 import ssr from './ssr'
-import { onCreateServer, onCreateApolloServerConfig } from '../plugin/nodeHooks'
+import { onCreateServer, onServerError, onCreateApolloServerConfig } from '../plugin/nodeHooks'
 
 export function createExpressApp({
   dev,
@@ -66,6 +66,11 @@ export function createExpressApp({
   apolloServer.applyMiddleware({ app })
 
   app.use(ssr({ config, schema, fragmentTypes }))
+  
+  app.use((error, req, res, next) => {
+    onServerError(config)({ error, req })
+    next(error)
+  })
 
   if (config.env === 'development') {
     app.use((error, req, res, next) => {
