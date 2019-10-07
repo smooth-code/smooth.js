@@ -1,11 +1,11 @@
 import React from 'react'
 import camelcase from 'camelcase'
 import gql from 'graphql-tag'
-import { Redirect, useRouter } from '../router'
+import { Redirect, useLocation } from '../router'
 import { usePage } from '../page/PageContext'
 import { HTTPError } from '../router/HTTPError'
 import { onSelectContentFields } from '../plugin/browserHooks'
-import { Query as BaseQuery } from '../query/Query'
+import { useQuery } from '../graphql'
 import {
   getFragmentDefinition,
   getFragment,
@@ -53,19 +53,18 @@ function Handler({ children, ...props }) {
 
 export function Query({ children }) {
   const page = usePage()
-  const { location } = useRouter()
+  const location = useLocation()
+  const indexRedirect = page.slug === 'index'
 
-  if (page.slug === 'index') {
+  const result = useQuery(getQuery(page), {
+    pageContent: true,
+    skip: indexRedirect,
+    variables: { slug: page.slug || 'index' },
+  })
+
+  if (indexRedirect) {
     return <Redirect to={`${page.indexUrl}${location.search}`} />
   }
 
-  return (
-    <BaseQuery
-      query={getQuery(page)}
-      variables={{ slug: page.slug || 'index' }}
-      pageContent
-    >
-      {apolloProps => <Handler {...apolloProps}>{children}</Handler>}
-    </BaseQuery>
-  )
+  return <Handler {...result}>{children}</Handler>
 }

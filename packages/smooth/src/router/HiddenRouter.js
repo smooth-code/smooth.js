@@ -7,7 +7,7 @@ import React, {
   useEffect,
 } from 'react'
 import { createPath } from 'history'
-import { Router, useRouter } from './Router'
+import { Router, useHistory } from './Router'
 import { useHiddenHistory } from './HiddenHistory'
 
 const HiddenRouterContext = createContext()
@@ -16,7 +16,7 @@ export function useHiddenRouter() {
   return useContext(HiddenRouterContext)
 }
 
-export function usePause() {
+export function usePause({ skip = false } = {}) {
   const resolve = useRef()
   const promise = useMemo(
     () =>
@@ -27,10 +27,10 @@ export function usePause() {
   )
   const hiddenRouter = useHiddenRouter()
   useEffect(() => {
-    if (hiddenRouter) {
+    if (hiddenRouter && !skip) {
       hiddenRouter.waitForPromise(promise)
     }
-  }, [hiddenRouter, promise])
+  }, [skip, hiddenRouter, promise])
   return resolve.current
 }
 
@@ -39,7 +39,7 @@ function createURL(location) {
 }
 
 export function HiddenRouter({ children }) {
-  const { history } = useRouter()
+  const history = useHistory()
   const hiddenHistory = useHiddenHistory()
   const promises = useRef([])
   const timeoutRef = useRef()

@@ -1,6 +1,6 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { Query } from 'smooth/query'
+import { useQuery } from 'smooth/graphql'
 
 const PAGE = gql`
   query Page {
@@ -11,16 +11,11 @@ const PAGE = gql`
 `
 
 export default function Page({ Component, ...props }) {
-  return (
-    <Query query={PAGE}>
-      {({ data }) =>
-        data.page && (
-          <>
-            <h1>{data.page.title}</h1>
-            <Component {...props} />
-          </>
-        )
-      }
-    </Query>
-  )
+  const { data } = useQuery(PAGE)
+  return data ? (
+    <>
+      <h1>{data.page.title}</h1>
+      <Component {...props} />
+    </>
+  ) : null
 }

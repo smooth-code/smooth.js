@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import { types } from '../graphql'
+import { types } from '../graphql-node'
 import { createApplyHook, createApplyAsyncHook } from './common'
 
 export { runHook, runAsyncHook, hasHook } from './common'

@@ -9,7 +9,8 @@ import { ValidateLink } from './links/validate'
 import { createAPIClient } from '../api'
 
 export function getContext({ req, config, operationContext }) {
-  const headers = operationContext ? operationContext.headers : req.headers
+  const headers =
+    (operationContext ? operationContext.headers : req.headers) || {}
   const lang = headers['x-smooth-lang'] || null
   const preview = Boolean(headers['x-smooth-preview'])
   const id = headers['x-smooth-preview-id'] || null

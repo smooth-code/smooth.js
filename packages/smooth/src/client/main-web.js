@@ -3,7 +3,7 @@ import 'regenerator-runtime/runtime'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ApolloProvider } from 'react-apollo'
+import { ApolloProvider } from '@apollo/react-hooks'
 import { loadableReady } from '@loadable/component'
 import { createApolloClient } from './apollo'
 import Root from './Root'

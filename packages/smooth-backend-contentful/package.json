@@ -1,15 +1,15 @@
 {
-  "name": "smooth-plugin-headers",
-  "description": "Smooth plugin to add custom headers",
-  "version": "0.1.1-alpha.64",
-  "repository": "https://github.com/smooth-code/smooth.js/tree/master/packages/smooth-plugin-headers",
-  "author": "Vivien Ripoche <vivienripoche@gmail.com>",
+  "name": "smooth-backend-contentful",
+  "description": "Contentful backend for Smooth.js.",
+  "version": "0.1.1-alpha.59",
+  "repository": "https://github.com/smooth-code/smooth.js/tree/master/packages/smooth-backend-contentful",
+  "author": "Greg Bergé <berge.greg@gmail.com>",
   "publishConfig": {
     "access": "public"
   },
   "keywords": [
-    "smooth",
-    "smooth-plugin"
+    "smooth-backend",
+    "contentful"
   ],
   "engines": {
     "node": ">=8"
@@ -21,10 +21,10 @@
     "build": "babel --root-mode upward -d lib --ignore \"**/*.test.js\" --copy-files src",
     "prepublishOnly": "yarn run build"
   },
-  "dependencies": {
-    "path-to-regexp": "^3.1.0"
-  },
   "peerDependencies": {
     "smooth": "^0.1.0"
+  },
+  "dependencies": {
+    "axios": "^0.19.0"
   }
 }

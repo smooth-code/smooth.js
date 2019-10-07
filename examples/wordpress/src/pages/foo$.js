@@ -1,10 +1,10 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { Query } from 'smooth/query'
-import { useLang } from 'smooth/page'
+import { useLang } from 'smooth/i18n'
 
 const PAGE = gql`
-  query Page($foo: String) {
+  query Page {
     page(slug: "test") {
       title
     }

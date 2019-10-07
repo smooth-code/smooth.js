@@ -1,4 +1,4 @@
-import { gql, createSchemaDefinitionMock, types } from 'smooth/graphql'
+import { gql, createSchemaDefinitionMock, types } from 'smooth/graphql-node'
 import { generateConfig } from '.'
 import * as cptTypes from '../types'
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { useRouter } from './Router'
+import { useLocation } from './Router'
 import { onRouteUpdate } from '../plugin/browserHooks'
 
 function usePreviousLocation(location) {
@@ -28,7 +28,7 @@ function RouterHooksInternal({ location }) {
 }
 
 export function RouterHooks() {
-  const { location } = useRouter()
+  const location = useLocation()
   if (location.hidden) return null
   return <RouterHooksInternal location={location} />
 }

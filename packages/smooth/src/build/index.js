@@ -5,7 +5,7 @@ import {
   createSchemaDefinition,
   makeExecutableSchema,
   getFragmentTypes,
-} from '../graphql'
+} from '../graphql-node'
 import { createCache } from './cache'
 import { Watcher, watchFs } from './watcher'
 import webpackMiddleware from './webpackMiddleware'

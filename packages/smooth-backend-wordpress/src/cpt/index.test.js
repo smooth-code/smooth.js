@@ -1,5 +1,5 @@
 import { applyAsyncHook } from 'smooth/plugin'
-import { gql, createSchemaDefinitionMock } from 'smooth/graphql'
+import { gql, createSchemaDefinitionMock } from 'smooth/graphql-node'
 import { getPluginDir, writeFile } from '../util'
 import { onBuild } from '.'
 

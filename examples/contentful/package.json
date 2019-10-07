@@ -9,9 +9,7 @@
     "react-dom": "^16.10.2",
     "react-helmet": "^5.2.1",
     "smooth": "0.1.1-alpha.61",
-    "smooth-backend-wordpress": "0.1.1-alpha.59",
-    "smooth-plugin-google-analytics": "latest",
-    "smooth-plugin-head-meta": "0.1.1-alpha.59"
+    "smooth-backend-contentful": "0.1.1-alpha.59"
   },
   "resolutions": {
     "apollo-link-dedup": "1.0.15"

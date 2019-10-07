@@ -23,6 +23,7 @@ export async function getPluginDir(basePath) {
   await mkdirp(pluginDir)
   return pluginDir
 }
+
 export async function getThemeDir(basePath) {
   const pluginDir = path.join(basePath, 'wp-content/themes/smooth-js')
   await mkdirp(pluginDir)
