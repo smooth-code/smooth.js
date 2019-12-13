@@ -6,8 +6,10 @@
     "start": "smooth start"
   },
   "dependencies": {
-    "react": "^16.8.2",
-    "react-dom": "^16.8.2",
-    "smooth": "latest"
+    "fretch": "^0.0.3-alpha.11",
+    "react": "^16.12.0",
+    "react-async-ssr": "^0.5.4",
+    "react-dom": "^16.12.0",
+    "smooth": "0.1.1-alpha.61"
   }
 }

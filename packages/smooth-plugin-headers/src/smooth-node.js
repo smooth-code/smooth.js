@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import pathToRegexp from 'path-to-regexp'
+import { pathToRegexp } from 'path-to-regexp'
 
 export function parseHeaders(url = '', headers = {}) {
   return [

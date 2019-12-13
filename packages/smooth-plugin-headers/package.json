@@ -22,7 +22,7 @@
     "prepublishOnly": "yarn run build"
   },
   "dependencies": {
-    "path-to-regexp": "^3.0.0"
+    "path-to-regexp": "^6.1.0"
   },
   "peerDependencies": {
     "smooth": "^0.1.0"

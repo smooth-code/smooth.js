@@ -1,21 +1,15 @@
 import path from 'path'
 import React from 'react'
 import { StaticRouter } from 'react-router-dom'
-import { ApolloProvider, getDataFromTree } from 'react-apollo'
 import { renderToString } from 'react-dom/server'
 import { ChunkExtractor } from '@loadable/server'
 import asyncHandler from 'express-async-handler'
-import { getContext, createApolloClient } from './apollo'
-import ApolloState from './components/ApolloState'
+import { getDataFromTree, createCache, CacheProvider } from 'fretch'
 import SmoothError from './components/SmoothError'
+import FretchCache from './components/FretchCache'
 import { onRenderBody, wrapRootElement } from '../plugin/nodeHooks'
 
-export default function ssrMiddleware({
-  config,
-  schema,
-  fragmentTypes,
-  error = null,
-}) {
+export default function ssrMiddleware({ config, error = null }) {
   return asyncHandler(async (req, res) => {
     const nodeStats = path.resolve(
       config.cachePath,
@@ -40,20 +34,15 @@ export default function ssrMiddleware({
 
     const webExtractor = new ChunkExtractor({ statsFile: webStats })
     const routerContext = {}
-    const apolloClient = createApolloClient({
-      schema,
-      fragmentTypes,
-      context: operation =>
-        getContext({ req, config, operationContext: operation.getContext() }),
-    })
+    const cache = createCache()
 
     let jsx = (
       <ErrorContextProvider error={error}>
-        <ApolloProvider client={apolloClient}>
+        <CacheProvider cache={cache}>
           <StaticRouter location={req.url} context={routerContext}>
             <Root error={error} />
           </StaticRouter>
-        </ApolloProvider>
+        </CacheProvider>
       </ErrorContextProvider>
     )
 
@@ -72,7 +61,6 @@ export default function ssrMiddleware({
     jsx = webExtractor.collectChunks(jsx)
 
     await getDataFromTree(jsx)
-    const apolloState = apolloClient.cache.extract()
 
     // Render app HTML
     const appHtml = renderToString(rootElement)
@@ -93,7 +81,7 @@ export default function ssrMiddleware({
 
     const postBodyComponents = [
       <SmoothError key="smooth-error" error={error} />,
-      <ApolloState key="apollo-state" state={apolloState} />,
+      <FretchCache key="fretch-cache" cache={cache.extract()} />,
       ...webExtractor.getScriptElements(),
     ]
 
