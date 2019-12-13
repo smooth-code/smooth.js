@@ -1,1 +1,1 @@
-module.exports = require('./src/smooth-node')
+module.exports = require('./lib/smooth-node')
