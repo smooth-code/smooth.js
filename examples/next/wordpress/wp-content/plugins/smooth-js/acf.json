@@ -1,0 +1,709 @@
+[
+  {
+    "key": "sc_field_group_Book",
+    "title": "Book",
+    "fields": [
+      {
+        "key": "sc_field_contents_Book_name",
+        "name": "name",
+        "label": "Name",
+        "instructions": null,
+        "required": 0,
+        "type": "text"
+      },
+      {
+        "key": "sc_field_contents_Book_test",
+        "name": "test",
+        "label": "Test",
+        "instructions": null,
+        "required": 0,
+        "type": "text"
+      },
+      {
+        "key": "sc_field_contents_Book_author",
+        "name": "author",
+        "label": "Author",
+        "instructions": null,
+        "required": 1,
+        "type": "post_object",
+        "post_type": [
+          "author"
+        ]
+      },
+      {
+        "key": "sc_field_contents_Book_headMeta",
+        "name": "headMeta",
+        "label": "HeadMeta",
+        "instructions": null,
+        "required": 0,
+        "type": "group",
+        "button_label": null,
+        "sub_fields": [
+          {
+            "key": "sc_field_contents_Book_headMeta_title",
+            "name": "title",
+            "label": "Title",
+            "instructions": null,
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Book_headMeta_description",
+            "name": "description",
+            "label": "Description",
+            "instructions": null,
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Book_headMeta_ogType",
+            "name": "ogType",
+            "label": "Open Graph Type",
+            "instructions": "<a href='http://ogp.me' target='_blank'>Documentation</a>",
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Book_headMeta_ogTitle",
+            "name": "ogTitle",
+            "label": "Open Graph Title",
+            "instructions": "<a href='http://ogp.me' target='_blank'>Documentation</a>",
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Book_headMeta_ogDescription",
+            "name": "ogDescription",
+            "label": "Open Graph Description",
+            "instructions": "<a href='http://ogp.me' target='_blank'>Documentation</a>",
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Book_headMeta_ogImage",
+            "name": "ogImage",
+            "label": "Open Graph Image",
+            "instructions": "<a href='http://ogp.me' target='_blank'>Documentation</a>",
+            "required": 0,
+            "type": "image"
+          },
+          {
+            "key": "sc_field_contents_Book_headMeta_twitterCard",
+            "name": "twitterCard",
+            "label": "Twitter Card Type",
+            "instructions": null,
+            "required": 0,
+            "type": "select",
+            "multiple": 0,
+            "allow_null": 1,
+            "choices": {
+              "summary_large_image": "summary_large_image",
+              "summary": "summary"
+            }
+          },
+          {
+            "key": "sc_field_contents_Book_headMeta_twitterTitle",
+            "name": "twitterTitle",
+            "label": "Twitter title",
+            "instructions": null,
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Book_headMeta_twitterDescription",
+            "name": "twitterDescription",
+            "label": "Twitter description",
+            "instructions": null,
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Book_headMeta_twitterImage",
+            "name": "twitterImage",
+            "label": "Twitter image",
+            "instructions": null,
+            "required": 0,
+            "type": "image"
+          },
+          {
+            "key": "sc_field_contents_Book_headMeta_customMetas",
+            "name": "customMetas",
+            "label": "Custom metadatas",
+            "instructions": null,
+            "required": 0,
+            "type": "repeater",
+            "button_label": "Add custom metadata",
+            "sub_fields": [
+              {
+                "key": "sc_field_contents_Book_headMeta_customMetas_name",
+                "name": "name",
+                "label": "Name",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              },
+              {
+                "key": "sc_field_contents_Book_headMeta_customMetas_content",
+                "name": "content",
+                "label": "Content",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              }
+            ]
+          },
+          {
+            "key": "sc_field_contents_Book_headMeta_hreflangLinks",
+            "name": "hreflangLinks",
+            "label": "hreflang links",
+            "instructions": null,
+            "required": 0,
+            "type": "repeater",
+            "button_label": "Add hreflang link",
+            "sub_fields": [
+              {
+                "key": "sc_field_contents_Book_headMeta_hreflangLinks_rel",
+                "name": "rel",
+                "label": "rel",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              },
+              {
+                "key": "sc_field_contents_Book_headMeta_hreflangLinks_href",
+                "name": "href",
+                "label": "href",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              },
+              {
+                "key": "sc_field_contents_Book_headMeta_hreflangLinks_hreflang",
+                "name": "hreflang",
+                "label": "hreflang",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "book"
+        }
+      ]
+    ],
+    "position": "acf_after_title",
+    "style": "seamless",
+    "hide_on_screen": [
+      "the_content",
+      "excerpt",
+      "discussion",
+      "comments",
+      "revisions",
+      "slug",
+      "author",
+      "format",
+      "page_attributes",
+      "featured_image",
+      "categories",
+      "tags",
+      "send-trackbacks"
+    ]
+  },
+  {
+    "key": "sc_field_group_Author",
+    "title": "Author",
+    "fields": [
+      {
+        "key": "sc_field_contents_Author_name",
+        "name": "name",
+        "label": "Name",
+        "instructions": null,
+        "required": 0,
+        "type": "text"
+      },
+      {
+        "key": "sc_field_contents_Author_headMeta",
+        "name": "headMeta",
+        "label": "HeadMeta",
+        "instructions": null,
+        "required": 0,
+        "type": "group",
+        "button_label": null,
+        "sub_fields": [
+          {
+            "key": "sc_field_contents_Author_headMeta_title",
+            "name": "title",
+            "label": "Title",
+            "instructions": null,
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Author_headMeta_description",
+            "name": "description",
+            "label": "Description",
+            "instructions": null,
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Author_headMeta_ogType",
+            "name": "ogType",
+            "label": "Open Graph Type",
+            "instructions": "<a href='http://ogp.me' target='_blank'>Documentation</a>",
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Author_headMeta_ogTitle",
+            "name": "ogTitle",
+            "label": "Open Graph Title",
+            "instructions": "<a href='http://ogp.me' target='_blank'>Documentation</a>",
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Author_headMeta_ogDescription",
+            "name": "ogDescription",
+            "label": "Open Graph Description",
+            "instructions": "<a href='http://ogp.me' target='_blank'>Documentation</a>",
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Author_headMeta_ogImage",
+            "name": "ogImage",
+            "label": "Open Graph Image",
+            "instructions": "<a href='http://ogp.me' target='_blank'>Documentation</a>",
+            "required": 0,
+            "type": "image"
+          },
+          {
+            "key": "sc_field_contents_Author_headMeta_twitterCard",
+            "name": "twitterCard",
+            "label": "Twitter Card Type",
+            "instructions": null,
+            "required": 0,
+            "type": "select",
+            "multiple": 0,
+            "allow_null": 1,
+            "choices": {
+              "summary_large_image": "summary_large_image",
+              "summary": "summary"
+            }
+          },
+          {
+            "key": "sc_field_contents_Author_headMeta_twitterTitle",
+            "name": "twitterTitle",
+            "label": "Twitter title",
+            "instructions": null,
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Author_headMeta_twitterDescription",
+            "name": "twitterDescription",
+            "label": "Twitter description",
+            "instructions": null,
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Author_headMeta_twitterImage",
+            "name": "twitterImage",
+            "label": "Twitter image",
+            "instructions": null,
+            "required": 0,
+            "type": "image"
+          },
+          {
+            "key": "sc_field_contents_Author_headMeta_customMetas",
+            "name": "customMetas",
+            "label": "Custom metadatas",
+            "instructions": null,
+            "required": 0,
+            "type": "repeater",
+            "button_label": "Add custom metadata",
+            "sub_fields": [
+              {
+                "key": "sc_field_contents_Author_headMeta_customMetas_name",
+                "name": "name",
+                "label": "Name",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              },
+              {
+                "key": "sc_field_contents_Author_headMeta_customMetas_content",
+                "name": "content",
+                "label": "Content",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              }
+            ]
+          },
+          {
+            "key": "sc_field_contents_Author_headMeta_hreflangLinks",
+            "name": "hreflangLinks",
+            "label": "hreflang links",
+            "instructions": null,
+            "required": 0,
+            "type": "repeater",
+            "button_label": "Add hreflang link",
+            "sub_fields": [
+              {
+                "key": "sc_field_contents_Author_headMeta_hreflangLinks_rel",
+                "name": "rel",
+                "label": "rel",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              },
+              {
+                "key": "sc_field_contents_Author_headMeta_hreflangLinks_href",
+                "name": "href",
+                "label": "href",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              },
+              {
+                "key": "sc_field_contents_Author_headMeta_hreflangLinks_hreflang",
+                "name": "hreflang",
+                "label": "hreflang",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "author"
+        }
+      ]
+    ],
+    "position": "acf_after_title",
+    "style": "seamless",
+    "hide_on_screen": [
+      "the_content",
+      "excerpt",
+      "discussion",
+      "comments",
+      "revisions",
+      "slug",
+      "author",
+      "format",
+      "page_attributes",
+      "featured_image",
+      "categories",
+      "tags",
+      "send-trackbacks"
+    ]
+  },
+  {
+    "key": "sc_field_group_Page",
+    "title": "Page",
+    "fields": [
+      {
+        "key": "sc_field_contents_Page_title",
+        "name": "title",
+        "label": "Title",
+        "instructions": null,
+        "required": 0,
+        "type": "text"
+      },
+      {
+        "key": "sc_field_contents_Page_book",
+        "name": "book",
+        "label": "Book",
+        "instructions": null,
+        "required": 0,
+        "type": "post_object",
+        "post_type": [
+          "book"
+        ]
+      },
+      {
+        "key": "sc_field_contents_Page_date",
+        "name": "date",
+        "label": "Date",
+        "instructions": null,
+        "required": 0,
+        "type": "date_picker",
+        "display_format": "d/m/Y",
+        "return_format": "c"
+      },
+      {
+        "key": "sc_field_contents_Page_dateTime",
+        "name": "dateTime",
+        "label": "DateTime",
+        "instructions": null,
+        "required": 0,
+        "type": "date_time_picker",
+        "display_format": "d/m/Y g:i a",
+        "return_format": "c"
+      },
+      {
+        "key": "sc_field_contents_Page_link",
+        "name": "link",
+        "label": "Link",
+        "instructions": null,
+        "required": 0,
+        "type": "link"
+      },
+      {
+        "key": "sc_field_contents_Page_blocks",
+        "name": "blocks",
+        "label": "Blocks",
+        "instructions": null,
+        "required": 0,
+        "type": "flexible_content",
+        "button_label": "Add block",
+        "layouts": [
+          {
+            "key": "sc_layout_contents_Page_blocks_blocks_SimpleBlock",
+            "name": "SimpleBlock",
+            "label": "SimpleBlock",
+            "sub_fields": [
+              {
+                "key": "sc_field_contents_Page_blocks_blocks_SimpleBlock_text",
+                "name": "text",
+                "label": "Text",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              }
+            ]
+          },
+          {
+            "key": "sc_layout_contents_Page_blocks_blocks_BookBlock",
+            "name": "BookBlock",
+            "label": "BookBlock",
+            "sub_fields": [
+              {
+                "key": "sc_field_contents_Page_blocks_blocks_BookBlock_book",
+                "name": "book",
+                "label": "Book",
+                "instructions": null,
+                "required": 0,
+                "type": "post_object",
+                "post_type": [
+                  "book"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "sc_field_contents_Page_file",
+        "name": "file",
+        "label": "File",
+        "instructions": null,
+        "required": 0,
+        "type": "file"
+      },
+      {
+        "key": "sc_field_contents_Page_headMeta",
+        "name": "headMeta",
+        "label": "HeadMeta",
+        "instructions": null,
+        "required": 0,
+        "type": "group",
+        "button_label": null,
+        "sub_fields": [
+          {
+            "key": "sc_field_contents_Page_headMeta_title",
+            "name": "title",
+            "label": "Title",
+            "instructions": null,
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Page_headMeta_description",
+            "name": "description",
+            "label": "Description",
+            "instructions": null,
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Page_headMeta_ogType",
+            "name": "ogType",
+            "label": "Open Graph Type",
+            "instructions": "<a href='http://ogp.me' target='_blank'>Documentation</a>",
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Page_headMeta_ogTitle",
+            "name": "ogTitle",
+            "label": "Open Graph Title",
+            "instructions": "<a href='http://ogp.me' target='_blank'>Documentation</a>",
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Page_headMeta_ogDescription",
+            "name": "ogDescription",
+            "label": "Open Graph Description",
+            "instructions": "<a href='http://ogp.me' target='_blank'>Documentation</a>",
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Page_headMeta_ogImage",
+            "name": "ogImage",
+            "label": "Open Graph Image",
+            "instructions": "<a href='http://ogp.me' target='_blank'>Documentation</a>",
+            "required": 0,
+            "type": "image"
+          },
+          {
+            "key": "sc_field_contents_Page_headMeta_twitterCard",
+            "name": "twitterCard",
+            "label": "Twitter Card Type",
+            "instructions": null,
+            "required": 0,
+            "type": "select",
+            "multiple": 0,
+            "allow_null": 1,
+            "choices": {
+              "summary_large_image": "summary_large_image",
+              "summary": "summary"
+            }
+          },
+          {
+            "key": "sc_field_contents_Page_headMeta_twitterTitle",
+            "name": "twitterTitle",
+            "label": "Twitter title",
+            "instructions": null,
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Page_headMeta_twitterDescription",
+            "name": "twitterDescription",
+            "label": "Twitter description",
+            "instructions": null,
+            "required": 0,
+            "type": "text"
+          },
+          {
+            "key": "sc_field_contents_Page_headMeta_twitterImage",
+            "name": "twitterImage",
+            "label": "Twitter image",
+            "instructions": null,
+            "required": 0,
+            "type": "image"
+          },
+          {
+            "key": "sc_field_contents_Page_headMeta_customMetas",
+            "name": "customMetas",
+            "label": "Custom metadatas",
+            "instructions": null,
+            "required": 0,
+            "type": "repeater",
+            "button_label": "Add custom metadata",
+            "sub_fields": [
+              {
+                "key": "sc_field_contents_Page_headMeta_customMetas_name",
+                "name": "name",
+                "label": "Name",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              },
+              {
+                "key": "sc_field_contents_Page_headMeta_customMetas_content",
+                "name": "content",
+                "label": "Content",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              }
+            ]
+          },
+          {
+            "key": "sc_field_contents_Page_headMeta_hreflangLinks",
+            "name": "hreflangLinks",
+            "label": "hreflang links",
+            "instructions": null,
+            "required": 0,
+            "type": "repeater",
+            "button_label": "Add hreflang link",
+            "sub_fields": [
+              {
+                "key": "sc_field_contents_Page_headMeta_hreflangLinks_rel",
+                "name": "rel",
+                "label": "rel",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              },
+              {
+                "key": "sc_field_contents_Page_headMeta_hreflangLinks_href",
+                "name": "href",
+                "label": "href",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              },
+              {
+                "key": "sc_field_contents_Page_headMeta_hreflangLinks_hreflang",
+                "name": "hreflang",
+                "label": "hreflang",
+                "instructions": null,
+                "required": 0,
+                "type": "text"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "page"
+        }
+      ]
+    ],
+    "position": "acf_after_title",
+    "style": "seamless",
+    "hide_on_screen": [
+      "the_content",
+      "excerpt",
+      "discussion",
+      "comments",
+      "revisions",
+      "slug",
+      "author",
+      "format",
+      "page_attributes",
+      "featured_image",
+      "categories",
+      "tags",
+      "send-trackbacks"
+    ]
+  }
+]

@@ -58,8 +58,8 @@ export function createClient({
     },
 
     async getContent(request) {
-      const { data = []} = await this.getContents(request)
-      return data && data[0] || null
+      const { data = [] } = await this.getContents(request)
+      return (data && data[0]) || null
     },
 
     async getContentPreview({ lang, id }) {

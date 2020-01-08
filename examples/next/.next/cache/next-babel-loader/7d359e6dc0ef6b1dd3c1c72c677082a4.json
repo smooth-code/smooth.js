@@ -1,0 +1,1 @@
+{"ast":null,"code":"export default function Index() {\n  return 'Hello';\n}","map":{"version":3,"sources":["/Users/neoziro/Projects/smooth.js/examples/next/pages/index.js"],"names":["Index"],"mappings":"AAAA,eAAe,SAASA,KAAT,GAAiB;AAC9B,SAAO,OAAP;AACD","sourcesContent":["export default function Index() {\n  return 'Hello'\n}\n"]},"metadata":{},"sourceType":"module"}

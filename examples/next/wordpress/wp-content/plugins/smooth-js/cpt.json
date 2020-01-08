@@ -1,0 +1,30 @@
+[
+  {
+    "name": "book",
+    "config": {
+      "label": "Books",
+      "public": true,
+      "show_in_rest": true,
+      "menu_icon": null,
+      "supports": [
+        "title",
+        "editor",
+        "revisions"
+      ]
+    }
+  },
+  {
+    "name": "author",
+    "config": {
+      "label": "Authors",
+      "public": true,
+      "show_in_rest": true,
+      "menu_icon": null,
+      "supports": [
+        "title",
+        "editor",
+        "revisions"
+      ]
+    }
+  }
+]
