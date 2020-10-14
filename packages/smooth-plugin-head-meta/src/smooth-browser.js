@@ -38,14 +38,17 @@ function HeadMeta({ headMeta }) {
           <meta key={index} name={meta.name} content={meta.content} />
         ))}
       {headMeta.hreflangLinks &&
-        headMeta.hreflangLinks.map((link, index) => (
-          <link
-            key={index}
-            rel={link.rel}
-            href={link.href}
-            hrefLang={link.hreflang}
-          />
-        ))}
+        headMeta.hreflangLinks.map(
+          (link, index) =>
+            link.rel && (
+              <link
+                key={index}
+                rel={link.rel}
+                href={link.href}
+                hrefLang={link.hreflang}
+              />
+            ),
+        )}
     </Helmet>
   )
 }
