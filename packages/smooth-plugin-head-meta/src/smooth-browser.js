@@ -41,7 +41,7 @@ function HeadMeta({ headMeta }) {
         headMeta.hreflangLinks.map((link, index) => (
           <link
             key={index}
-            rel={link.rel}
+            rel={link.rel || ''}
             href={link.href}
             hrefLang={link.hreflang}
           />
